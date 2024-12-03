@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.HomeController">
+    <top>
+        <VBox alignment="CENTER" spacing="10">
+            <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Home" />
+        </VBox>
+    </top>
+    <left>
+        <VBox alignment="CENTER" spacing="10">
+            <Text style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Friends List" />
+            <ListView fx:id="friendsList" prefWidth="200" />
+        </VBox>
+    </left>
+    <center>
+        <ScrollPane fx:id="postsScrollPane" fitToWidth="true">
+            <VBox fx:id="postsContainer" spacing="10" />
+        </ScrollPane>
+    </center>
+    <bottom>
+        <VBox alignment="CENTER" spacing="10">
+            <Button onAction="#goToProfile" prefHeight="26.0" prefWidth="106.0" style="-fx-background-color: #464648; -fx-background-radius: 2mm;" text="Profile Settings" textFill="WHITE" />
+        </VBox>
+    </bottom>
+</BorderPane>
