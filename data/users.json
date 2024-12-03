@@ -46,5 +46,13 @@
         "email": "a.samehmepsn@gfm.com",
         "username": "amr khaled",
         "status": "offline"
+    },
+    {
+        "password": "LX5uqiVZ66s2GKjJn/AibLBu2zQIrtaHU21w28mC9L4=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U7",
+        "email": "a.samehmepsn@gfmx.com",
+        "username": "ahmed",
+        "status": "online"
     }
 ]

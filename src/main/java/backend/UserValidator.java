@@ -2,6 +2,8 @@ package backend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class UserValidator implements Validation {
     private final ILoadUsers loadUsers;
@@ -46,5 +48,8 @@ public class UserValidator implements Validation {
     public boolean isPasswordValid(String password, String storedPasswordHash) {
         return PasswordUtils.hashPassword(password).equals(storedPasswordHash);
     }
+
+
+
 }
 
