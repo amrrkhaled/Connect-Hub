@@ -15,7 +15,7 @@ public class Post implements IContentCreation {
         this.contentFiles = contentFiles;
     }
     @Override
-    public void createContent(String authorId, String contentId, String content, String timestamp, List<String> images) {
+    public void createContent(String authorId, String content, String timestamp, List<String> images) {
         JSONObject newPost = new JSONObject();
         JSONArray posts = contentFiles.loadContent(FILEPATH);
         newPost.put("authorId", authorId);

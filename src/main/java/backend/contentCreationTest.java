@@ -13,6 +13,6 @@ public class contentCreationTest {
         String timestamp = "2024-12-03T12:00:00Z";
         List<String> images = List.of("image1.jpg", "image2.jpg");
         IContentCreation contentCreation = new Post(new ContentFiles());
-        contentCreation.createContent(authorId, contentId, content, timestamp, null);
+        contentCreation.createContent(authorId, content, timestamp, null);
     }
 }

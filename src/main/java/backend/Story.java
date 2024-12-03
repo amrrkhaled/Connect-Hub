@@ -13,7 +13,7 @@ public class Story implements IContentCreation {
     }
 
     @Override
-    public void createContent(String authorId, String contentId, String content, String timestamp, List<String> images) {
+    public void createContent(String authorId,  String content, String timestamp, List<String> images) {
         JSONObject newStory = new JSONObject();
         JSONArray stories = contentFiles.loadContent(FILEPATH);
         newStory.put("authorId", authorId);
