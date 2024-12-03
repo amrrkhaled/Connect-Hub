@@ -7,33 +7,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.StoryController" style="-fx-background-color: #f2f2f2;">
+<AnchorPane prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #f2f2f2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.StoryController">
 
     <!-- Title -->
-    <Label layoutX="200.0" layoutY="20.0" text="Create Your Story" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+    <Label layoutX="200.0" layoutY="20.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333;" text="Create Your Story" />
 
     <!-- Content Input -->
-    <TextArea fx:id="contentArea" layoutX="50.0" layoutY="70.0" prefHeight="100.0" prefWidth="500.0"
-              promptText="Write your story here..."
-              style="-fx-font-size: 14px; -fx-border-color: #bbb; -fx-border-radius: 5; -fx-control-inner-background: white; -fx-text-fill: #333;"
-              wrapText="true" />
+    <TextArea fx:id="contentArea" layoutX="50.0" layoutY="70.0" prefHeight="100.0" prefWidth="500.0" promptText="Write your story here..." style="-fx-font-size: 14px; -fx-border-color: #bbb; -fx-border-radius: 5; -fx-control-inner-background: white; -fx-text-fill: #333;" wrapText="true" />
 
     <!-- Image Selection -->
-    <Button fx:id="uploadImage" layoutX="50.0" layoutY="200.0" prefWidth="180.0"
-            style="-fx-background-color: #333; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;"
-            text="Add Images" />
+    <Button fx:id="uploadImage" layoutX="50.0" layoutY="200.0" prefWidth="180.0" style="-fx-background-color: #333; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Add Images" />
 
     <!-- Submit Button -->
-    <Button fx:id="createStory" layoutX="250.0" layoutY="530.0" prefWidth="180.0"
-            style="-fx-background-color: #000; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;"
-            text="Share Story" />
+    <Button fx:id="createStory" layoutX="210.0" layoutY="529.0" prefWidth="180.0" style="-fx-background-color: #000; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Share Story" />
 
     <!-- Scrollable Image Container -->
-    <ScrollPane fx:id="scrollPane" layoutX="50.0" layoutY="250.0" prefHeight="260.0" prefWidth="500.0"
-                style="-fx-border-color: #bbb; -fx-background-color: transparent;">
+    <ScrollPane fx:id="scrollPane" layoutX="50.0" layoutY="250.0" prefHeight="260.0" prefWidth="500.0" style="-fx-border-color: #bbb; -fx-background-color: transparent;">
         <content>
-            <VBox fx:id="imageContainer" alignment="TOP_LEFT" spacing="15.0"
-                  style="-fx-padding: 10; -fx-background-color: #e6e6e6;" />
+            <VBox fx:id="imageContainer" alignment="TOP_LEFT" spacing="15.0" style="-fx-padding: 10; -fx-background-color: #e6e6e6;" />
         </content>
     </ScrollPane>
 

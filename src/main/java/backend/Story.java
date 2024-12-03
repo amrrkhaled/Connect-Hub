@@ -2,6 +2,9 @@ package backend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Story implements IContentCreation {
@@ -20,7 +23,18 @@ public class Story implements IContentCreation {
         newStory.put("contentId", "S" + (stories.length()+1));
         newStory.put("content", content);
         newStory.put("timestamp", timestamp);
-        newStory.put("images", images);
+        List<String> newImages= new ArrayList<>();
+        for(String imagePath : images) {
+            String newPath = null;
+            try {
+                newPath = SaveImage.saveImageToFolder(imagePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            newImages.add(newPath);
+        }
+        newStory.put("images", newImages);
+
         stories.put(stories.length(),newStory);
         contentFiles.saveContent(stories,FILEPATH);
 

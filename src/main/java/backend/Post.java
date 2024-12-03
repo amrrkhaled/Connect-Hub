@@ -2,9 +2,11 @@ package backend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class Post implements IContentCreation {
 
@@ -22,7 +24,17 @@ public class Post implements IContentCreation {
         newPost.put("contentId", "P" + (posts.length()+1));
         newPost.put("content", content);
         newPost.put("timestamp", timestamp);
-        newPost.put("images", images);
+        List<String> newImages= new ArrayList<>();
+        for(String imagePath : images) {
+            String newPath = null;
+            try {
+                newPath = SaveImage.saveImageToFolder(imagePath);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            newImages.add(newPath);
+        }
+        newPost.put("images", newImages);
         posts.put(posts.length(),newPost);
         contentFiles.saveContent(posts,FILEPATH);
 
