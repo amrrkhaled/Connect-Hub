@@ -39,11 +39,11 @@ public class SignupController {
 
     @FXML
     public void initialize() {
-        signupButton.setOnAction(event -> handleSignup());
+        signupButton.setOnAction(event -> handleSignup(event));
         loginPageButton.setOnAction(event -> navigateToLogin(event));
     }
 
-    private void handleSignup() {
+    private void handleSignup(javafx.event.ActionEvent event) {
         String username = usernameField.getText().trim();
         String email = emailField.getText().trim();
         String password = passwordField.getText();
@@ -66,12 +66,12 @@ public class SignupController {
                 if (age.getYears() < 14) {
                     showAlert("User must be at least 14 years old.");
                 } else {
-                    showSuccess("Signup successful! Welcome, " + username + "!");
-                    clearFields();
+
                     UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()));
-                    String msg = manager.signup(email, username, password, dob);
+                    String msg = manager.signup(username, password,email, dob);
                     if(msg.equals("User created")){
                         showSuccess("Signup successful! Welcome, " + username + "!");
+                        navigateToLogin(event);
                     }
                     else {
                         showAlert(msg);
