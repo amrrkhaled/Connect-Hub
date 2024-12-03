@@ -5,18 +5,15 @@ import java.io.IOException;
 
 public class jsonExample {
     public static void main(String[] args) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", "John");
-        jsonObject.put("age", 30);
-        jsonObject.put("city", "New York");
-
-        String filePath = "data/test.json";
-
-        try (FileWriter file = new FileWriter(filePath)) {
-            file.write(jsonObject.toString(4)); // The '4' specifies indentation level
-            System.out.println("Successfully written to the file.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       String username = "amr khaled";
+       String password ="123454678";
+       String dof ="2004-10-12";
+       String email ="a.samehmepsn@gfm.com";
+       ILoadUsers loadUsers = new LoadUsers();
+       IAddUser user = new AddUser(loadUsers);
+       Validation valid = new UserValidator(loadUsers);
+       UserManager manager = new UserManager(user , loadUsers , valid);
+       String msg=manager.login(username,password);
+       System.out.println(msg);
     }
 }
