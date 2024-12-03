@@ -41,7 +41,7 @@ public class LoginController {
         if (usernameOrEmail.isEmpty() || password.isEmpty()) {
             showAlert("All fields are required!");
         } else {
-            UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()));
+            UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()),new UpdateUser());
             String msg = manager.login(usernameOrEmail, password);
             if (msg.equals("Login successful!")) {
                 showSuccess(msg);

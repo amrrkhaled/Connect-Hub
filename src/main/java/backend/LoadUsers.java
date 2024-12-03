@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONTokener;
 
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,7 +18,7 @@ public class LoadUsers implements ILoadUsers {
         File file = new File(filePath);
 
         // Initialize file with an empty array if it doesn't exist
-        if (!file.exists()) {
+        if (file.length() == 0 || !file.exists()) {
             try (FileWriter fileWriter = new FileWriter(filePath)) {
                 fileWriter.write("[]");
                 System.out.println("File initialized with an empty array.");

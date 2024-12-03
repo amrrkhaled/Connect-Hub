@@ -1,58 +1,8 @@
-[
-    {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2007-12-12",
-        "userId": "U1",
-        "email": "omarhany@gmail.com",
-        "username": "omarhany",
-        "status": "offline"
-    },
-    {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2007-12-06",
-        "userId": "U2",
-        "email": "amrkhaled@gmail.com",
-        "username": "amrkhaled",
-        "status": "offline"
-    },
-    {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2007-12-06",
-        "userId": "U3",
-        "email": "amrkhaledd@gmail.com",
-        "username": "amrkhaledd",
-        "status": "offline"
-    },
-    {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2009-12-09",
-        "userId": "U4",
-        "email": "a@gmail.com",
-        "username": "ahmedsameh",
-        "status": "offline"
-    },
-    {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2008-12-04",
-        "userId": "U5",
-        "email": "john@gmail.com",
-        "username": "johndoe",
-        "status": "offline"
-    },
-    {
-        "password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
-        "dateOfBirth": "2009-12-24",
-        "userId": "U6",
-        "email": "mark@gmail.com",
-        "username": "mark",
-        "status": "offline"
-    },
-    {
-        "password": "LX5uqiVZ66s2GKjJn/AibLBu2zQIrtaHU21w28mC9L4=",
-        "dateOfBirth": "2004-10-12",
-        "userId": "U7",
-        "email": "a.samehmepsn@gfmx.com",
-        "username": "ahmed",
-        "status": "online"
-    }
-]
+[{
+    "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+    "dateOfBirth": "2006-12-13",
+    "userId": "U1",
+    "email": "ahmed@gmail.com",
+    "username": "ahmed",
+    "status": "online"
+}]

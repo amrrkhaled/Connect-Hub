@@ -1,9 +1,6 @@
 package frontend;
 
-import backend.AddUser;
-import backend.LoadUsers;
-import backend.UserManager;
-import backend.UserValidator;
+import backend.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -67,7 +64,7 @@ public class SignupController {
                     showAlert("User must be at least 14 years old.");
                 } else {
 
-                    UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()));
+                    UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()),new UpdateUser());
                     String msg = manager.signup(username, password,email, dob);
                     if(msg.equals("User created")){
                         showSuccess("Signup successful! Welcome, " + username + "!");
