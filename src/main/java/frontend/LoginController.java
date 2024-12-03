@@ -12,11 +12,12 @@ import java.util.Objects;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import backend.*;
 
 public class LoginController {
 
     @FXML
-    private TextField usernameOrEmailField;
+    private TextField usernameField;
 
     @FXML
     private PasswordField passwordField;
@@ -34,13 +35,19 @@ public class LoginController {
     }
 
     private void handleLogin() {
-        String usernameOrEmail = usernameOrEmailField.getText().trim();
+        String usernameOrEmail = usernameField.getText().trim();
         String password = passwordField.getText();
 
         if (usernameOrEmail.isEmpty() || password.isEmpty()) {
             showAlert("All fields are required!");
         } else {
-            showSuccess("Login successful!");
+            UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()));
+            String msg = manager.login(usernameOrEmail, password);
+            if (msg.equals("Login successful!")) {
+                showSuccess(msg);
+            }
+            else showAlert(msg);
+
         }
     }
 

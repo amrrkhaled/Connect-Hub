@@ -1,5 +1,9 @@
 package frontend;
 
+import backend.AddUser;
+import backend.LoadUsers;
+import backend.UserManager;
+import backend.UserValidator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -64,6 +68,14 @@ public class SignupController {
                 } else {
                     showSuccess("Signup successful! Welcome, " + username + "!");
                     clearFields();
+                    UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()));
+                    String msg = manager.signup(email, username, password, dob);
+                    if(msg.equals("User created")){
+                        showSuccess("Signup successful! Welcome, " + username + "!");
+                    }
+                    else {
+                        showAlert(msg);
+                    }
                 }
             }
         }

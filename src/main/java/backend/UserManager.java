@@ -32,7 +32,7 @@ public class UserManager {
             if (validation.isPasswordValid(password, storedPasswordHash)) {
                 JSONObject user = validation.findUserByUsername(username);
                 user.put("status", "online");
-                return "Login successful";
+                return "Login successful!";
             } else {
                 return "Incorrect password";
             }
