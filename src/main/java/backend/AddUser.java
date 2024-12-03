@@ -27,11 +27,8 @@ public class AddUser implements IAddUser {
         newUser.put("email", email);
         newUser.put("dateOfBirth", dob);
         newUser.put("status", "offline");
-
-
         JSONArray usersArray = userLoader.loadUsers();
         usersArray.put(newUser);
-
         // Write the updated array back to the file
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(usersArray.toString(4));
