@@ -19,7 +19,7 @@ public class Post implements IContentCreation {
         JSONObject newPost = new JSONObject();
         JSONArray posts = contentFiles.loadContent(FILEPATH);
         newPost.put("authorId", authorId);
-        newPost.put("contentId", posts.length()+1);
+        newPost.put("contentId", "P" + (posts.length()+1));
         newPost.put("content", content);
         newPost.put("timestamp", timestamp);
         newPost.put("images", images);

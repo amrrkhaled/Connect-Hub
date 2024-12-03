@@ -17,7 +17,7 @@ public class Story implements IContentCreation {
         JSONObject newStory = new JSONObject();
         JSONArray stories = contentFiles.loadContent(FILEPATH);
         newStory.put("authorId", authorId);
-        newStory.put("contentId", stories.length()+1);
+        newStory.put("contentId", "S" + (stories.length()+1));
         newStory.put("content", content);
         newStory.put("timestamp", timestamp);
         newStory.put("images", images);

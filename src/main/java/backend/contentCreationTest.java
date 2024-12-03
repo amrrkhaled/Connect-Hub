@@ -12,7 +12,7 @@ public class contentCreationTest {
         String content = "This is a new post";
         String timestamp = "2024-12-03T12:00:00Z";
         List<String> images = List.of("image1.jpg", "image2.jpg");
-        IContentCreation contentCreation = new Story(new ContentFiles());
-        contentCreation.createContent(authorId, contentId, content, timestamp, images);
+        IContentCreation contentCreation = new Post(new ContentFiles());
+        contentCreation.createContent(authorId, contentId, content, timestamp, null);
     }
 }

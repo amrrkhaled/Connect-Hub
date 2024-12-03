@@ -16,6 +16,14 @@ public class ContentFiles implements IContentFiles{
     public JSONArray loadContent(String filePath){
 
         File file = new File(filePath);
+        if (file.length() == 0 || !file.exists()) {
+            try (FileWriter fileWriter = new FileWriter(filePath)) {
+                fileWriter.write("[]");
+                System.out.println("File initialized with an empty array.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         try (FileReader reader = new FileReader(file)) {
             return new JSONArray(new JSONTokener(reader));

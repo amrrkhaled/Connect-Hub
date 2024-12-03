@@ -4,7 +4,7 @@
             "image1.jpg",
             "image2.jpg"
         ],
-        "contentId": 1,
+        "contentId": "P1",
         "authorId": "authorId123",
         "content": "This is a new post",
         "timestamp": "2024-12-03T12:00:00Z"
@@ -14,37 +14,14 @@
             "image1.jpg",
             "image2.jpg"
         ],
-        "contentId": 2,
+        "contentId": "P2",
         "authorId": "authorId123",
         "content": "This is a new post",
         "timestamp": "2024-12-03T12:00:00Z"
     },
     {
-        "images": [
-            "image1.jpg",
-            "image2.jpg"
-        ],
-        "contentId": 3,
-        "authorId": "authorId123",
-        "content": "This is a new post",
-        "timestamp": "2024-12-03T12:00:00Z"
-    },
-    {
-        "images": [
-            "image1.jpg",
-            "image2.jpg"
-        ],
-        "contentId": 4,
-        "authorId": "authorId123",
-        "content": "This is a new post",
-        "timestamp": "2024-12-03T12:00:00Z"
-    },
-    {
-        "images": [
-            "image1.jpg",
-            "image2.jpg"
-        ],
-        "contentId": 5,
+        "images": [],
+        "contentId": "P3",
         "authorId": "authorId123",
         "content": "This is a new post",
         "timestamp": "2024-12-03T12:00:00Z"
