@@ -12,8 +12,6 @@ public interface Validation {
 
     public JSONObject findUserByUsername(String username);
 
-    public JSONObject findProfileByUserId(String userId);
 
-    public String findUsernameByUserId(String userId);
 }
 

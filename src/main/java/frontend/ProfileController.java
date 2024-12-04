@@ -39,11 +39,8 @@ public class ProfileController {
         if (selectedFile != null) {
             Image ProfileImage = new Image(selectedFile.toURI().toString());
             ILoadProfiles loadProfiles = new LoadProfiles();
-            IAddProfile addProfile = new AddProfile(loadProfiles);
-            ILoadUsers loadUsers = new LoadUsers();
             IUpdateProfile updateProfile = new UpdateProfile();
-            Validation validation = new UserValidator(loadUsers,loadProfiles);
-            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
+            ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
              manager.updateProfilePhoto(selectedFile.getAbsolutePath());
              profilePhotoImageView.setImage(ProfileImage);
 
@@ -58,11 +55,13 @@ public class ProfileController {
         if (selectedFile != null) {
             Image coverImage = new Image(selectedFile.toURI().toString());
             ILoadProfiles loadProfiles = new LoadProfiles();
-            IAddProfile addProfile = new AddProfile(loadProfiles);
-            ILoadUsers loadUsers = new LoadUsers();
             IUpdateProfile updateProfile = new UpdateProfile();
+<<<<<<< HEAD
             Validation validation = new UserValidator(loadUsers,loadProfiles);
             ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
+=======
+            ProfileManager manager = new ProfileManager(loadProfiles,"U1",updateProfile);
+>>>>>>> c4e53d438bfe3dd35c9863779f3ef1879e59ea94
             manager.updateCoverPhoto(selectedFile.getAbsolutePath());
             coverPhotoImageView.setImage(coverImage);
         }
@@ -72,11 +71,13 @@ public class ProfileController {
     public void editBio() {
         String newBio = bioTextArea.getText();
         ILoadProfiles loadProfiles = new LoadProfiles();
-        IAddProfile addProfile = new AddProfile(loadProfiles);
-        ILoadUsers loadUsers = new LoadUsers();
         IUpdateProfile updateProfile = new UpdateProfile();
+<<<<<<< HEAD
         Validation validation = new UserValidator(loadUsers,loadProfiles);
         ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
+=======
+        ProfileManager manager = new ProfileManager(loadProfiles,"U1",updateProfile);
+>>>>>>> c4e53d438bfe3dd35c9863779f3ef1879e59ea94
         manager.updateBio(newBio);
         bioTextArea.clear();
         bioTextArea.appendText(newBio);
@@ -85,15 +86,17 @@ public class ProfileController {
 
     @FXML
     public void updatePassword() {
-
         String newPassword = passwordField.getText();
         ILoadUsers loadUsers = new LoadUsers();
         IUpdateUser updateUser = new UpdateUser();
-        ILoadProfiles loadProfiles = new LoadProfiles();
         PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
+<<<<<<< HEAD
         UserValidator validator = new UserValidator(loadUsers,loadProfiles);
         String username = validator.findUsernameByUserId(userId);
         passwordUtils.updatePasswordHashForUser(username, newPassword);
+=======
+        passwordUtils.updatePasswordHashForUser("U1", newPassword);
+>>>>>>> c4e53d438bfe3dd35c9863779f3ef1879e59ea94
     }
 
     @FXML
