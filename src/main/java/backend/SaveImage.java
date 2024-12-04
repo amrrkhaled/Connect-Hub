@@ -23,7 +23,7 @@ public class SaveImage {
 
         // Generate a unique name for the image to avoid conflicts
         String fileExtension = getFileExtension(sourceFile.getName());
-        String newFileName = "image" + imageCounter++ + fileExtension;
+        String newFileName = "I" + imageCounter++ + fileExtension;
         Path destinationPath = Paths.get(IMAGES_FOLDER + newFileName);
 
         // Copy the file to the images folder

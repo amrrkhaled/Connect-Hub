@@ -2,14 +2,15 @@ package backend;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.io.FileWriter;
-import java.io.IOException;
+
 
 public class UserValidator implements Validation {
     private final ILoadUsers loadUsers;
+    private final ILoadProfiles loadProfiles;
+    public UserValidator(ILoadUsers loadUsers , ILoadProfiles loadProfiles) {
 
-    public UserValidator(ILoadUsers loadUsers) {
         this.loadUsers = loadUsers;
+        this.loadProfiles = loadProfiles;
     }
 
     public boolean doesUsernameExist(String username) {
@@ -44,11 +45,30 @@ public class UserValidator implements Validation {
         }
         return null;
     }
+    public String findUsernameByUserId(String userId) {
+        JSONArray usersArray = loadUsers.loadUsers();
+        for (int i = 0; i < usersArray.length(); i++) {
+            JSONObject user = usersArray.getJSONObject(i);
+            if (user.getString("userId").equals(userId)) {
+                return user.getString("username");
+            }
+        }
+        return null;
+    }
 
     public boolean isPasswordValid(String password, String storedPasswordHash) {
         return PasswordUtils.hashPassword(password).equals(storedPasswordHash);
     }
-
+    public JSONObject findProfileByUserId(String userId) {
+        JSONArray profiles = loadProfiles.loadProfiles();
+        for (int i = 0; i < profiles.length(); i++) {
+            JSONObject profile = profiles.getJSONObject(i);
+            if (profile.getString("userId").equals(userId)) {
+                return profile;
+            }
+        }
+    return null;
+    }
 
 
 }
