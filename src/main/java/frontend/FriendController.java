@@ -44,8 +44,8 @@ public class FriendController {
     }
 
     @FXML
-    protected void onNotifications() {
-        showAlert("Notifications", "Navigating to Notifications...");
+    protected void onNewsFeed() {
+        showAlert("NewsFeed", "Navigating to NewsFeed...");
     }
 
     @FXML
