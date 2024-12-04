@@ -28,7 +28,8 @@ public class ProfileController {
     private ListView<String> postsListView;
     @FXML
     private ListView<String> friendsListView;
-    private String userId ;
+
+    private final String userId = User.getUserId();
 
     @FXML
     public void changeProfilePhoto() throws IOException {
@@ -42,7 +43,7 @@ public class ProfileController {
             ILoadUsers loadUsers = new LoadUsers();
             IUpdateProfile updateProfile = new UpdateProfile();
             Validation validation = new UserValidator(loadUsers,loadProfiles);
-            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,"U1",validation,updateProfile);
+            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
              manager.updateProfilePhoto(selectedFile.getAbsolutePath());
              profilePhotoImageView.setImage(ProfileImage);
 
@@ -61,7 +62,7 @@ public class ProfileController {
             ILoadUsers loadUsers = new LoadUsers();
             IUpdateProfile updateProfile = new UpdateProfile();
             Validation validation = new UserValidator(loadUsers,loadProfiles);
-            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,"U1",validation,updateProfile);
+            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
             manager.updateCoverPhoto(selectedFile.getAbsolutePath());
             coverPhotoImageView.setImage(coverImage);
         }
@@ -75,7 +76,7 @@ public class ProfileController {
         ILoadUsers loadUsers = new LoadUsers();
         IUpdateProfile updateProfile = new UpdateProfile();
         Validation validation = new UserValidator(loadUsers,loadProfiles);
-        ProfileManager manager = new ProfileManager(addProfile,loadProfiles,"U1",validation,updateProfile);
+        ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
         manager.updateBio(newBio);
         bioTextArea.clear();
         bioTextArea.appendText(newBio);
@@ -91,7 +92,7 @@ public class ProfileController {
         ILoadProfiles loadProfiles = new LoadProfiles();
         PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
         UserValidator validator = new UserValidator(loadUsers,loadProfiles);
-        String username = validator.findUsernameByUserId("U1");
+        String username = validator.findUsernameByUserId(userId);
         passwordUtils.updatePasswordHashForUser(username, newPassword);
     }
 

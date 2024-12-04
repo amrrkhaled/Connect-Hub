@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,9 @@ public class HomeController {
 
     @FXML
     private VBox postsContainer;
+
+    private final String userId = User.getUserId();
+
 
     @FXML
     public void initialize() {
