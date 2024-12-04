@@ -38,7 +38,7 @@ public class UserManager {
                 user.put("status", "online");
                 updateUser.updateUser(username,usersArray,user);
                 updateUser.saveUsers(usersArray);
-                return "Login successful!";
+                return user.getString("userId");
             } else {
                 return "Incorrect password";
             }
