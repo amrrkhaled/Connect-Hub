@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import backend.*;
 
 public class FriendController {
     @FXML
@@ -14,35 +13,28 @@ public class FriendController {
     @FXML
     private ListView<String> friendRequestListView;
     @FXML
+    private ListView<String> pendingFriendRequestListView;
+    @FXML
     private ListView<String> suggestionListView;
     @FXML
     private TextField searchTextField;
 
     private final ObservableList<String> friends = FXCollections.observableArrayList();
     private final ObservableList<String> friendRequests = FXCollections.observableArrayList();
+    private final ObservableList<String> pendingFriendRequests = FXCollections.observableArrayList();
     private final ObservableList<String> friendSuggestions = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         friends.addAll("Omar", "Hany", "Hussein");
         friendRequests.addAll("Amr", "Sameh");
-        friendSuggestions.addAll("Khaled", "Franco");
-
-
-        ILoadUsers loadUsers = new LoadUsers();
-        Validation valid = new UserValidator(loadUsers);
-        IFriendShipValidation fsv = new FriendShipValidation();
-        ILoadFriendShips loadFriendShips = new LoadFriendShips();
-        IFriendShipManager manager = new FriendShipManager();
-        FriendShip manager1 = new FriendShip(valid ,loadFriendShips,fsv,manager);
-     //    manager1.addFriend(userId1,username1);
-        //manager1.acceptFriend("U6","ahmed");
-    //    manager1.BlockFriendship(userId1,username1);
+        pendingFriendRequests.addAll("Khaled (Pending)");
+        friendSuggestions.addAll("Franco");
 
         friendListView.setItems(friends);
         friendRequestListView.setItems(friendRequests);
+        pendingFriendRequestListView.setItems(pendingFriendRequests);
         suggestionListView.setItems(friendSuggestions);
-
     }
 
     @FXML
@@ -102,7 +94,7 @@ public class FriendController {
     protected void onAddFriendFromSuggestions() {
         String selectedSuggestion = suggestionListView.getSelectionModel().getSelectedItem();
         if (selectedSuggestion != null) {
-            friends.add(selectedSuggestion + " (Pending)");
+            pendingFriendRequests.add(selectedSuggestion + " (Pending)");
             friendSuggestions.remove(selectedSuggestion);
         }
     }
