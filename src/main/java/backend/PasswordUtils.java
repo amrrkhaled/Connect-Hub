@@ -33,14 +33,14 @@ public class PasswordUtils{
         return null;
     }
 
-    public void updatePasswordHashForUser(String username, String newPassword) {
+    public void updatePasswordHashForUser(String userId, String newPassword) {
         JSONArray usersArray =loadUsers.loadUsers();
         for (int i = 0; i < usersArray.length(); i++) {
-            if (usersArray.getJSONObject(i).getString("username").equals(username) &&usersArray.getJSONObject(i).getString("status").equals("online")) {
+            if (usersArray.getJSONObject(i).getString("userId").equals(userId) &&usersArray.getJSONObject(i).getString("status").equals("online")) {
                 JSONObject user = usersArray.getJSONObject(i);
                 newPassword=hashPassword(newPassword);
                 user.put("password", newPassword);
-                updateUser.updateUser(username , usersArray , user);
+                updateUser.updateUser(userId , usersArray , user);
                 updateUser.saveUsers(usersArray);
                 break;
             }

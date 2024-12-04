@@ -14,15 +14,15 @@ public class jsonExample {
         ILoadUsers loadUsers = new LoadUsers();
         ILoadProfiles loadProfiles = new LoadProfiles();
         IAddUser user = new AddUser(loadUsers);
-        Validation valid = new UserValidator(loadUsers,loadProfiles);
+        Validation valid = new UserValidator(loadUsers);
         IUpdateUser updateUser = new UpdateUser();
         UserManager manager = new UserManager(user, loadUsers, valid, updateUser);
         String msg = manager.signup(username, password,email,dof);
         msg = manager.login(username, password);
         System.out.println(msg);
         String newPassword = "12345567";
-        String username1 = valid.findUsernameByUserId("U1");
-        System.out.println(username1);
+//        String username1 = valid.findUsernameByUserId("U1");
+//        System.out.println(username1);
 //        PasswordUtils passwordManager = new PasswordUtils(loadUsers, updateUser);
 //        passwordManager.updatePasswordHashForUser(username, newPassword);
 //        IAddProfile addProfile = new AddProfile(loadProfiles);
