@@ -56,12 +56,7 @@ public class ProfileController {
             Image coverImage = new Image(selectedFile.toURI().toString());
             ILoadProfiles loadProfiles = new LoadProfiles();
             IUpdateProfile updateProfile = new UpdateProfile();
-<<<<<<< HEAD
-            Validation validation = new UserValidator(loadUsers,loadProfiles);
-            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
-=======
-            ProfileManager manager = new ProfileManager(loadProfiles,"U1",updateProfile);
->>>>>>> c4e53d438bfe3dd35c9863779f3ef1879e59ea94
+            ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
             manager.updateCoverPhoto(selectedFile.getAbsolutePath());
             coverPhotoImageView.setImage(coverImage);
         }
@@ -72,12 +67,7 @@ public class ProfileController {
         String newBio = bioTextArea.getText();
         ILoadProfiles loadProfiles = new LoadProfiles();
         IUpdateProfile updateProfile = new UpdateProfile();
-<<<<<<< HEAD
-        Validation validation = new UserValidator(loadUsers,loadProfiles);
-        ProfileManager manager = new ProfileManager(addProfile,loadProfiles,userId,validation,updateProfile);
-=======
-        ProfileManager manager = new ProfileManager(loadProfiles,"U1",updateProfile);
->>>>>>> c4e53d438bfe3dd35c9863779f3ef1879e59ea94
+        ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
         manager.updateBio(newBio);
         bioTextArea.clear();
         bioTextArea.appendText(newBio);
@@ -90,13 +80,8 @@ public class ProfileController {
         ILoadUsers loadUsers = new LoadUsers();
         IUpdateUser updateUser = new UpdateUser();
         PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
-<<<<<<< HEAD
-        UserValidator validator = new UserValidator(loadUsers,loadProfiles);
-        String username = validator.findUsernameByUserId(userId);
-        passwordUtils.updatePasswordHashForUser(username, newPassword);
-=======
-        passwordUtils.updatePasswordHashForUser("U1", newPassword);
->>>>>>> c4e53d438bfe3dd35c9863779f3ef1879e59ea94
+
+        passwordUtils.updatePasswordHashForUser(userId, newPassword);
     }
 
     @FXML
