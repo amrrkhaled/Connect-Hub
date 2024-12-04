@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import backend.*;
 
 public class FriendController {
     @FXML
@@ -27,10 +28,21 @@ public class FriendController {
         friendRequests.addAll("Amr", "Sameh");
         friendSuggestions.addAll("Khaled", "Franco");
 
-        // Set the lists to the ListView components
+
+        ILoadUsers loadUsers = new LoadUsers();
+        Validation valid = new UserValidator(loadUsers);
+        IFriendShipValidation fsv = new FriendShipValidation();
+        ILoadFriendShips loadFriendShips = new LoadFriendShips();
+        IFriendShipManager manager = new FriendShipManager();
+        FriendShip manager1 = new FriendShip(valid ,loadFriendShips,fsv,manager);
+     //    manager1.addFriend(userId1,username1);
+        //manager1.acceptFriend("U6","ahmed");
+    //    manager1.BlockFriendship(userId1,username1);
+
         friendListView.setItems(friends);
         friendRequestListView.setItems(friendRequests);
         suggestionListView.setItems(friendSuggestions);
+
     }
 
     @FXML
