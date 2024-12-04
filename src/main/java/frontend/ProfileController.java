@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ProfileController {
 
@@ -26,26 +28,40 @@ public class ProfileController {
     private ListView<String> postsListView;
     @FXML
     private ListView<String> friendsListView;
-
+    private String userId ;
 
     @FXML
-    public void changeProfilePhoto() {
+    public void changeProfilePhoto() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
-            Image profileImage = new Image(selectedFile.toURI().toString());
-            profilePhotoImageView.setImage(profileImage);
+            Image ProfileImage = new Image(selectedFile.toURI().toString());
+            ILoadProfiles loadProfiles = new LoadProfiles();
+            IAddProfile addProfile = new AddProfile(loadProfiles);
+            ILoadUsers loadUsers = new LoadUsers();
+            IUpdateProfile updateProfile = new UpdateProfile();
+            Validation validation = new UserValidator(loadUsers,loadProfiles);
+            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,"U1",validation,updateProfile);
+             manager.updateProfilePhoto(selectedFile.getAbsolutePath());
+             profilePhotoImageView.setImage(ProfileImage);
         }
     }
 
     @FXML
-    public void changeCoverPhoto() {
+    public void changeCoverPhoto() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
             Image coverImage = new Image(selectedFile.toURI().toString());
+            ILoadProfiles loadProfiles = new LoadProfiles();
+            IAddProfile addProfile = new AddProfile(loadProfiles);
+            ILoadUsers loadUsers = new LoadUsers();
+            IUpdateProfile updateProfile = new UpdateProfile();
+            Validation validation = new UserValidator(loadUsers,loadProfiles);
+            ProfileManager manager = new ProfileManager(addProfile,loadProfiles,"U1",validation,updateProfile);
+            manager.updateCoverPhoto(selectedFile.getAbsolutePath());
             coverPhotoImageView.setImage(coverImage);
         }
     }
@@ -53,12 +69,29 @@ public class ProfileController {
     @FXML
     public void editBio() {
         String newBio = bioTextArea.getText();
+        ILoadProfiles loadProfiles = new LoadProfiles();
+        IAddProfile addProfile = new AddProfile(loadProfiles);
+        ILoadUsers loadUsers = new LoadUsers();
+        IUpdateProfile updateProfile = new UpdateProfile();
+        Validation validation = new UserValidator(loadUsers,loadProfiles);
+        ProfileManager manager = new ProfileManager(addProfile,loadProfiles,"U1",validation,updateProfile);
+        manager.updateBio(newBio);
+        bioTextArea.clear();
+        bioTextArea.appendText(newBio);
     }
 
 
     @FXML
     public void updatePassword() {
+
         String newPassword = passwordField.getText();
+        ILoadUsers loadUsers = new LoadUsers();
+        IUpdateUser updateUser = new UpdateUser();
+        ILoadProfiles loadProfiles = new LoadProfiles();
+        PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
+        UserValidator validator = new UserValidator(loadUsers,loadProfiles);
+        String username = validator.findUsernameByUserId("U1");
+        passwordUtils.updatePasswordHashForUser(username, newPassword);
     }
 
     @FXML
