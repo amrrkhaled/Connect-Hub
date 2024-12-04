@@ -62,6 +62,7 @@ public class HomeController {
             Scene profileScene = new Scene(loader.load());
             Stage stage = (Stage) postsContainer.getScene().getWindow();
             stage.setScene(profileScene);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

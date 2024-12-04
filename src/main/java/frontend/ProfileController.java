@@ -45,6 +45,7 @@ public class ProfileController {
             ProfileManager manager = new ProfileManager(addProfile,loadProfiles,"U1",validation,updateProfile);
              manager.updateProfilePhoto(selectedFile.getAbsolutePath());
              profilePhotoImageView.setImage(ProfileImage);
+
         }
     }
 
