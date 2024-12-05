@@ -8,7 +8,7 @@ import backend.friendship.*;
 import java.util.List;
 
 public class jsonExample {
- public static void main(String[] args) {
+    public static void main(String[] args) {
 //      String username1 = "asser";
 //      String password1 = "123454678";
 //      String dof1 = "2004-10-12";
@@ -92,7 +92,7 @@ public class jsonExample {
 //        for (String friend : friends6) {
 //            System.out.println (friend);
 //        }
-      // Initialize dependencies
+        // Initialize dependencies
 //          ILoadFriendShips loadFriendShips = new LoadFriendShips();
 //          ILoadUsers loadUsers = new LoadUsers();
 //          IUserRepository userRepository = new UserRepository(loadUsers);
@@ -125,8 +125,7 @@ public class jsonExample {
 //       List<String> friendRequests = manager.getFriendRequests("U1");
 //       List<String> pendingFriendRequests = manager.getPendingFriends("U1");
 //       List<String> friendSuggestions = manager.getFriendSuggestions("U1");
-   }
+    }
 
 
-
-
+}

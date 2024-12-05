@@ -1,6 +1,8 @@
 package backend.contentCreation;
 
 import backend.SaveImage;
+import backend.friendship.FriendShip;
+import backend.friendship.FriendShipFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 public class Story implements IContent {
     private final IContentFiles contentFiles;
     private final String FILEPATH = "data/stories.json";
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
 
     public Story(IContentFiles contentFiles) {
         this.contentFiles = contentFiles;
@@ -80,7 +83,7 @@ public class Story implements IContent {
 
     @Override
     public JSONArray getNewsFeedContent(String userId) {
-        List<String> friendsIDs = List.of("friend1", "friend2", "friend3"); // Get the list of friend IDs 
+        List<String> friendsIDs = friendShip.getManager().getFriends(userId);  // Get the list of friend IDs
         JSONArray feedStories = new JSONArray();
 
         if (friendsIDs == null || friendsIDs.isEmpty()) {

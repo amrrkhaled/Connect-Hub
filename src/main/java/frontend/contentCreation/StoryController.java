@@ -1,7 +1,12 @@
 package frontend.contentCreation;
 
 import backend.contentCreation.ContentFiles;
+import backend.user.User;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,10 +17,12 @@ import backend.contentCreation.IContent;
 import backend.contentCreation.Story;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class StoryController {
 
@@ -29,8 +36,7 @@ public class StoryController {
     @FXML
     private VBox imageContainer;
     private List<String> selectedImagePaths = new ArrayList<>(); // Holds paths of selected images
-    //    private final String userId = User.getUserId();
-    private final String userId = "U1";
+    private final String userId = User.getUserId();
 
     @FXML
     public void initialize() {
@@ -75,22 +81,26 @@ public class StoryController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         contentCreation.createContent(userId,content, now.format(formatter), selectedImagePaths);
-        //navigateToNewsFeed();
+        navigateToNewsFeed();
     }
 
-//    private void navigateToNewsFeed() {
-//        try {
-//            Parent newsFeedPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("newsfeed.fxml")));
-//            Scene newsFeedScene = new Scene(newsFeedPage);
-//            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//            stage.setScene(newsFeedScene);
-//            stage.setTitle("News Feed");
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            showAlert("Error navigating to the Newsfeed page.");
-//        }
-//    }
+    private void navigateToNewsFeed() {
+        try {
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/NewsFeed.fxml"));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) imageContainer.getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("NewsFeed");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

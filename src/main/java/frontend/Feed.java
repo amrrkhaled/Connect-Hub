@@ -7,14 +7,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-
-public class Friend extends Application {
+public class Feed extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Friend.class.getResource("friend.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 700);
-        stage.setTitle("Friend");
-
+        FXMLLoader fxmlLoader = new FXMLLoader(Feed.class.getResource("Newsfeed.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
     }
@@ -23,4 +21,3 @@ public class Friend extends Application {
         launch();
     }
 }
-
