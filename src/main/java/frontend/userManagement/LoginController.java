@@ -1,5 +1,6 @@
-package frontend;
+package frontend.userManagement;
 
+import backend.user.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -12,7 +13,6 @@ import java.util.Objects;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import backend.*;
 
 public class LoginController {
 

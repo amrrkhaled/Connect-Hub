@@ -1,4 +1,4 @@
-package backend;
+package backend.user;
 
 import org.json.JSONArray;
 

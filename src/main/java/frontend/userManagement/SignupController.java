@@ -1,6 +1,6 @@
-package frontend;
+package frontend.userManagement;
 
-import backend.*;
+import backend.user.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -13,6 +13,7 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
 
 public class SignupController {
 
@@ -80,12 +81,16 @@ public class SignupController {
 
     private void navigateToLogin(javafx.event.ActionEvent event) {
         try {
-            Parent loginPage = FXMLLoader.load(getClass().getResource("Login.fxml"));
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/login.fxml"));
             Scene loginScene = new Scene(loginPage);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(loginScene);
-            stage.setTitle("Login");
-            stage.show();
+
+            // Get current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Login");
+            currentStage.show();
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error navigating to the Login page.");

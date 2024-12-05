@@ -1,7 +1,5 @@
 package backend;
-import org.json.JSONObject;
-import java.io.FileWriter;
-import java.io.IOException;
+import backend.user.*;
 
 public class jsonExample {
    public static void main(String[] args) {
