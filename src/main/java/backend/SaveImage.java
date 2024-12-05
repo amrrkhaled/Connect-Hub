@@ -23,7 +23,9 @@ public class SaveImage {
 
         // Generate a unique name for the image to avoid conflicts
         String fileExtension = getFileExtension(sourceFile.getName());
+
         String newFileName = "I" + imageCounter++ + fileExtension;
+
         Path destinationPath = Paths.get(IMAGES_FOLDER + newFileName);
 
         // Copy the file to the images folder
@@ -37,4 +39,6 @@ public class SaveImage {
         int lastDotIndex = fileName.lastIndexOf('.');
         return (lastDotIndex > 0) ? fileName.substring(lastDotIndex) : ""; // Return the extension, or empty if none
     }
+
 }
+
