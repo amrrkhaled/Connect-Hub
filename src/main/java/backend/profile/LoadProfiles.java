@@ -1,4 +1,4 @@
-package backend;
+package backend.profile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import org.json.JSONArray;
+
 public class LoadProfiles implements ILoadProfiles{
     private final String filePath = "data/profiles.json";
     public JSONArray loadProfiles(){

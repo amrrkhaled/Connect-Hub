@@ -1,5 +1,6 @@
-package backend;
+package backend.profile;
 
+import backend.SaveImage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

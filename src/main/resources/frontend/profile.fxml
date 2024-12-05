@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="666.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.ProfileController">
+<AnchorPane prefHeight="666.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.profileManagement.ProfileController">
     <Button layoutX="46.0" layoutY="178.0" onAction="#changeProfilePhoto" text="Change Profile Photo" />
     <Button layoutX="48.0" layoutY="346.0" onAction="#changeCoverPhoto" text="Change Cover Photo" />
 
@@ -23,17 +23,13 @@
 
 
     <ImageView fx:id="profilePhotoImageView" fitHeight="88.0" fitWidth="94.0" layoutX="46.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
-        <image>
-            <Image url="https://i.ibb.co/3m2JgbX/Screenshot-2024-12-05-022015.png" />
-        </image>
+
     </ImageView>
 
     
 
     <ImageView fx:id="coverPhotoImageView" fitHeight="118.0" fitWidth="327.0" layoutX="50.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true">
-        <image>
-            <Image url="https://i.ibb.co/ncFw9Wj/Screenshot-2024-12-05-021708.png" />
-        </image>
+
     </ImageView>
 
     <Label layoutX="150.0" layoutY="29.0" text="Profile Settings">

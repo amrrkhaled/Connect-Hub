@@ -1,6 +1,7 @@
-package frontend;
+package frontend.profileManagement;
 
-import backend.*;
+import backend.profile.*;
+import backend.user.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +34,23 @@ public class ProfileController {
     private final String userId = User.getUserId();
 
     @FXML
+    public void initialize(){
+        ILoadProfiles loadProfiles = new LoadProfiles();
+        IUpdateProfile updateProfile = new UpdateProfile();
+        ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
+        JSONObject profile =manager.findProfileByUserId(userId);
+
+        String pP = (profile.get("ProfilePicture").toString());
+        String cP = (profile.get("CoverPhoto").toString());
+        String bio = (profile.get("Bio").toString());
+
+        profilePhotoImageView.setImage(new Image(new File(pP).toURI().toString()));
+        coverPhotoImageView.setImage(new Image(new File(cP).toURI().toString()));
+        bioTextArea.clear();
+        bioTextArea.appendText(bio);
+
+    }
+    @FXML
     public void changeProfilePhoto() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
@@ -41,7 +60,8 @@ public class ProfileController {
             ILoadProfiles loadProfiles = new LoadProfiles();
             IUpdateProfile updateProfile = new UpdateProfile();
             ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
-             manager.updateProfilePhoto(selectedFile.getAbsolutePath());
+            manager.updateProfilePhoto(selectedFile.getAbsolutePath());
+
              profilePhotoImageView.setImage(ProfileImage);
 
         }
@@ -93,7 +113,7 @@ public class ProfileController {
     public void goToHome(ActionEvent event) {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/home.fxml"));
             Scene homeScene = new Scene(loader.load());
             Stage stage = (Stage) bioTextArea.getScene().getWindow();
             stage.setScene(homeScene);

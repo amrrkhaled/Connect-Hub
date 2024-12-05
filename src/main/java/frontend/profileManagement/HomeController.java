@@ -1,6 +1,6 @@
-package frontend;
+package frontend.profileManagement;
 
-import backend.User;
+import backend.user.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class HomeController {
 
@@ -28,14 +30,13 @@ public class HomeController {
     public void initialize() {
         String[] texts = {
                 "Post 1: Beautiful view!",
-                "Post 2: Delicious meals!",
-                "Post 3: A new design!"
+                "Post 2: Delicious meals!"
+
         };
 
         String[][] imageUrls = {
-                {"https://images.unsplash.com/photo-1537769060554-b41893a07504?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"},
-                {"https://media.istockphoto.com/id/588595864/photo/steaming-mixed-vegetables-in-the-wok-asian-style-cooking.jpg?s=612x612&w=0&k=20&c=NZWe4QUwFmEqPAwHa3s0u3Zak6JjlRm36gMgmXx8roA=", "https://media.istockphoto.com/id/1472680285/photo/healthy-meal-with-grilled-chicken-rice-salad-and-vegetables-served-by-woman.jpg?s=612x612&w=0&k=20&c=E4Y94oLIj8lXYk0OovBhsah3s_sC--WF95xPDvbJPlU="},
-                {"https://media.istockphoto.com/id/1422735620/vector/the-graphic-design-element-and-abstract-geometric-background-with-isometric-vector-blocks.jpg?s=612x612&w=0&k=20&c=50x5ASx6AVhZcOzoNnj8z7FlWG2T3Ls_Ov3AEOgcz_k="}
+                {"images/I1.png", "images/I2.png"},
+                {"images/I3.png", "images/I4.png"}
         };
 
         for (int i = 0; i < texts.length; i++) {
@@ -54,7 +55,8 @@ public class HomeController {
 
         HBox imagesBox = new HBox(10);
         for (String imageUrl : imageUrls) {
-            ImageView imageView = new ImageView(new Image(imageUrl));
+            ImageView imageView = new ImageView(new Image(new File(imageUrl).toURI().toString()));
+//            System.out.println(new File(imageUrl).toURI().toString());
             imageView.setFitWidth(100);
             imageView.setFitHeight(100);
             imageView.setPreserveRatio(true);
@@ -68,7 +70,7 @@ public class HomeController {
     @FXML
     public void goToProfile(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/profile.fxml"));
             Scene profileScene = new Scene(loader.load());
             Stage stage = (Stage) postsContainer.getScene().getWindow();
             stage.setScene(profileScene);
