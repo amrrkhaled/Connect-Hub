@@ -21,7 +21,7 @@ public class StoryPageController {
                 {"storei 2: Another post with images", "images\\image3.png,images\\image4.png"},
                 {"storei 3: Another text-only post", "images\\image5.png"}
         };
-        
+
         if (imagePath != null && !imagePath.isEmpty()) {
             storyImageView.setImage(new Image("file:" + imagePath));
         } else {
