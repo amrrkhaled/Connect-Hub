@@ -8,28 +8,36 @@ import javafx.scene.image.ImageView;
 public class StoryPageController {
 
     @FXML
-    private ImageView storyImageView;
+    private Label captionLabel;
 
     @FXML
-    private Label storyCaptionLabel;
+    private ImageView storyImage;
 
-    public void setStoryImage(String imagePath) {
-        Image image = new Image("file:" + imagePath);
-        storyImageView.setImage(image);
-    }
-
-    public void setStoryContent(String imagePath) {
-
-
-
-     // Set the image if the path is valid
-        if (imagePath != null && !imagePath.isEmpty()) {
-            storyImageView.setImage(new Image("file:" + imagePath));
+    /**
+     * Set the content of the story page.
+     *
+     * @param imagePath The path to the story image.
+     * @param caption   The caption text for the story.
+     */
+    public void setStoryContent(String imagePath, String caption) {
+        // Set the caption
+        if (caption != null && !caption.isEmpty()) {
+            captionLabel.setText(caption);
         } else {
-            storyImageView.setImage(null); // Remove image if none provided
+            captionLabel.setText("No caption available.");
         }
 
-
+        // Load and display the image
+        if (imagePath != null && !imagePath.isEmpty()) {
+            try {
+                Image image = new Image("file:" + imagePath);
+                storyImage.setImage(image);
+            } catch (Exception e) {
+                System.out.println("Could not load image: " + imagePath);
+                storyImage.setImage(null);
+            }
+        } else {
+            storyImage.setImage(null);
+        }
+    }
 }
-
-

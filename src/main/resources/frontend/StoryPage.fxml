@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.StoryPageController">
-    <ImageView fx:id="storyImageView" fitHeight="334.0" fitWidth="400.0" preserveRatio="true" />
-    <Label style="-fx-font-size: 18.0; -fx-font-weight: bold;" text="Caption" />
-   <Button onAction="#onback" id="back" mnemonicParsing="false" text="back">
-      <font>
-         <Font name="System Bold" size="12.0" />
-      </font>
-   </Button>
-</VBox>
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.StoryPageController">
+    <!-- Top: User ID -->
+    <top>
+        <Label fx:id="userIdLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: #3b5998;" text="User ID" BorderPane.alignment="CENTER" />
+    </top>
+
+    <!-- Center: Image -->
+    <center>
+        <ImageView fx:id="storyImage" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: #d3d3d3; -fx-border-width: 2; -fx-padding: 10;" BorderPane.alignment="CENTER" />
+    </center>
+
+    <!-- Bottom: Caption -->
+    <bottom>
+        <VBox spacing="10.0" style="-fx-padding: 20.0;">
+            <Label fx:id="captionLabel" style="-fx-font-size: 16px; -fx-text-fill: #333333;" text="Caption:" wrapText="true" />
+        </VBox>
+    </bottom>
+</BorderPane>
