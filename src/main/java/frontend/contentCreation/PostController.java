@@ -82,7 +82,7 @@ public class PostController {
 
 //    private void navigateToNewsFeed() {
 //        try {
-//            Parent newsFeedPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("newsfeed.fxml")));
+//            Parent newsFeedPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/frontend/newsfeed.fxml")));
 //            Scene newsFeedScene = new Scene(newsFeedPage);
 //            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 //            stage.setScene(newsFeedScene);
