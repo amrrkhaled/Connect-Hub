@@ -16,7 +16,7 @@
     <left>
         <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
             <Text style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Friends List" />
-            <ListView fx:id="friendsList" prefWidth="200" />
+            <ListView fx:id="friendsListView" prefWidth="200" />
         </VBox>
     </left>
     <center>

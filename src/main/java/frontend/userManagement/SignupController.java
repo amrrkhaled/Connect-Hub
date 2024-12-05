@@ -65,8 +65,8 @@ public class SignupController {
                 if (age.getYears() < 14) {
                     showAlert("User must be at least 14 years old.");
                 } else {
-
-                    UserManager manager = new UserManager(new AddUser(new LoadUsers()),new LoadUsers(), new UserValidator(new LoadUsers()),new UpdateUser());
+                    ILoadUsers loadUser = LoadUsers.getInstance();
+                    UserManager manager = new UserManager(new AddUser(loadUser),loadUser, new UserValidator(loadUser),new UpdateUser());
                     String msg = manager.signup(username, password,email, dob);
                     if(msg.equals("User created")){
                         showSuccess("Signup successful! Welcome, " + username + "!");

@@ -3,11 +3,16 @@ package frontend.profileManagement;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
+import backend.friendship.FriendShip;
+import backend.friendship.FriendShipFactory;
 import backend.user.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.List;
 
 public class HomeController {
 
@@ -28,21 +34,20 @@ public class HomeController {
     @FXML
     private VBox postsContainer;
 
+    @FXML
+    private ListView<String> friendsListView;
+
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
+
 //    private final String userId = User.getUserId();
     private final String userId = "U1";
 
+    private final ObservableList<String> friends = FXCollections.observableArrayList();
+
+
     @FXML
     public void initialize() {
-        String[] texts = {
-                "Post 1: Beautiful view!",
-                "Post 2: Delicious meals!"
 
-        };
-
-        String[][] imageUrls = {
-                {"images/I1.png", "images/I2.png"},
-                {"images/I3.png", "images/I4.png"}
-        };
         IContent contentManager = new Post(new ContentFiles());
         JSONArray userPosts = contentManager.getUserContent(userId);
         System.out.println(userPosts);
@@ -58,6 +63,11 @@ public class HomeController {
            VBox post = createPost(content, imagePaths);
            postsContainer.getChildren().add(post);
         }
+        String currentUserId = "U1";
+        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(currentUserId);
+        friends.addAll(friendsList);  // Add all elements to the ObservableList
+
+        friendsListView.setItems(friends);
     }
 
     private VBox createPost(String text, String[] imageUrls) {

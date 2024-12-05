@@ -31,7 +31,8 @@ public class ProfileController {
     @FXML
     private ListView<String> friendsListView;
 
-    private final String userId = User.getUserId();
+//    private final String userId = User.getUserId();
+    private final String userId = "U1";
 
 
 
@@ -99,7 +100,8 @@ public class ProfileController {
     @FXML
     public void updatePassword() {
         String newPassword = passwordField.getText();
-        ILoadUsers loadUsers = new LoadUsers();
+        ILoadUsers loadUsers = LoadUsers.getInstance();
+
         IUpdateUser updateUser = new UpdateUser();
         PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
 
