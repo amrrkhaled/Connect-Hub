@@ -92,6 +92,8 @@ public class FriendController {
         if (selectedSuggestion != null) {
             friends.add(selectedSuggestion + " (Pending)");
             friendSuggestions.remove(selectedSuggestion);
+            String username = searchTextField.getText();
+            
         }
     }
 
