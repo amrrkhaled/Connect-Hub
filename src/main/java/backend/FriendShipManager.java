@@ -22,7 +22,7 @@ public class FriendShipManager implements IFriendShipManager {
         this.loadUsers = loadUsers;
     }
     // Public method to access the single instance
-    public static FriendShipManager getInstance(ILoadFriendShips loadFriendShips, IUserRepository userRepository, ILoadUsers loadUsers) {
+    public static synchronized FriendShipManager getInstance(ILoadFriendShips loadFriendShips, IUserRepository userRepository, ILoadUsers loadUsers) {
         if (instance == null) {
             instance = new FriendShipManager(loadFriendShips, userRepository, loadUsers);
         }

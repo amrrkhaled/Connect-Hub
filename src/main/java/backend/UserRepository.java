@@ -12,7 +12,7 @@ public class UserRepository implements IUserRepository {
         this.loadUsers = loadUsers;
     }
 
-    public static UserRepository getInstance(ILoadUsers loadUsers) {
+    public static synchronized UserRepository getInstance(ILoadUsers loadUsers) {
         if (instance == null) {
             instance = new UserRepository(loadUsers);
         }

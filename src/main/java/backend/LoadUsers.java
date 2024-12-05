@@ -15,7 +15,7 @@ public class LoadUsers implements ILoadUsers {
     private LoadUsers() {
 
     }
-    public static LoadUsers getInstance() {
+    public static synchronized LoadUsers getInstance() {
         if (instance == null) {
             instance = new LoadUsers();
         }
