@@ -45,7 +45,6 @@ public class UserValidator implements Validation {
         return null;
     }
 
-
     public boolean isPasswordValid(String password, String storedPasswordHash) {
         return PasswordUtils.hashPassword(password).equals(storedPasswordHash);
     }
