@@ -1,10 +1,17 @@
-[{
+[
+  {
     "userId1": "U7",
     "userId2": "U6",
     "status": "blocked"
-},{
+  },
+  {
     "userId1": "U1",
     "userId2": "U5",
     "status": "accepted"
-}
+  },
+  {
+    "userId1": "U6",
+    "userId2": "U5",
+    "status": "accepted"
+  }
 ]
