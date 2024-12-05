@@ -1,0 +1,26 @@
+[
+    {
+        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+        "dateOfBirth": "2006-12-13",
+        "userId": "U1",
+        "email": "ahmed@gmail.com",
+        "username": "ahmed",
+        "status": "online"
+    },
+    {
+        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+        "dateOfBirth": "2005-12-21",
+        "userId": "U2",
+        "email": "amr@gmail.com",
+        "username": "amr",
+        "status": "offline"
+    },
+    {
+        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+        "dateOfBirth": "2000-12-23",
+        "userId": "U3",
+        "email": "amrr@gmail.com",
+        "username": "amrrr",
+        "status": "offline"
+    }
+]
