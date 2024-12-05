@@ -8,8 +8,8 @@ public interface Validation {
     public boolean doesEmailExist(String email);
 
     public boolean isPasswordValid(String password, String storedPasswordHash);
-
     public JSONObject findUserByUsername(String username);
+
 
 
 }

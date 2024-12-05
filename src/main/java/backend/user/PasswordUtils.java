@@ -10,10 +10,12 @@ import org.json.JSONObject;
 public class PasswordUtils{
     ILoadUsers loadUsers;
     IUpdateUser updateUser;
-    public PasswordUtils(ILoadUsers loadUsers , IUpdateUser updateUser) {
-        this.loadUsers = loadUsers;
-        this.updateUser = updateUser;
-    }
+
+   public PasswordUtils(ILoadUsers loadUsers , IUpdateUser updateUser) {
+       this.loadUsers = loadUsers;
+       this.updateUser = updateUser;
+   }
+
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -47,3 +49,4 @@ public class PasswordUtils{
         }
     }
 }
+

@@ -9,6 +9,10 @@ module com.example.connecthub {
     opens frontend to javafx.fxml;
     exports frontend;
 
+    exports frontend.friendshipManagement;
+    opens frontend.friendshipManagement to javafx.fxml;
+   
+
     exports frontend.contentCreation;
     opens frontend.contentCreation to javafx.fxml;
 
@@ -18,5 +22,6 @@ module com.example.connecthub {
 
     exports frontend.userManagement;
     opens frontend.userManagement to javafx.fxml;
+
 
 }
