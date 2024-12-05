@@ -13,23 +13,27 @@ public class FriendController {
     @FXML
     private ListView<String> friendRequestListView;
     @FXML
+    private ListView<String> pendingFriendRequestListView;
+    @FXML
     private ListView<String> suggestionListView;
     @FXML
     private TextField searchTextField;
 
     private final ObservableList<String> friends = FXCollections.observableArrayList();
     private final ObservableList<String> friendRequests = FXCollections.observableArrayList();
+    private final ObservableList<String> pendingFriendRequests = FXCollections.observableArrayList();
     private final ObservableList<String> friendSuggestions = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         friends.addAll("Omar", "Hany", "Hussein");
         friendRequests.addAll("Amr", "Sameh");
-        friendSuggestions.addAll("Khaled", "Franco");
+        pendingFriendRequests.addAll("Khaled (Pending)");
+        friendSuggestions.addAll("Franco");
 
-        // Set the lists to the ListView components
         friendListView.setItems(friends);
         friendRequestListView.setItems(friendRequests);
+        pendingFriendRequestListView.setItems(pendingFriendRequests);
         suggestionListView.setItems(friendSuggestions);
     }
 
@@ -90,7 +94,7 @@ public class FriendController {
     protected void onAddFriendFromSuggestions() {
         String selectedSuggestion = suggestionListView.getSelectionModel().getSelectedItem();
         if (selectedSuggestion != null) {
-            friends.add(selectedSuggestion + " (Pending)");
+            pendingFriendRequests.add(selectedSuggestion + " (Pending)");
             friendSuggestions.remove(selectedSuggestion);
             String username = searchTextField.getText();
             
