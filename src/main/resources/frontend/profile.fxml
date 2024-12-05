@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="666.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.ProfileController">
+<AnchorPane prefHeight="666.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.profileManagement.ProfileController">
     <Button layoutX="46.0" layoutY="178.0" onAction="#changeProfilePhoto" text="Change Profile Photo" />
     <Button layoutX="48.0" layoutY="346.0" onAction="#changeCoverPhoto" text="Change Cover Photo" />
 

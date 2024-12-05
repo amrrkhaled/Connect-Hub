@@ -1,5 +1,7 @@
-package backend;
+package backend.friendship;
 
+import backend.user.ILoadUsers;
+import backend.user.IUserRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.Set;

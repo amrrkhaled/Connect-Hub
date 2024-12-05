@@ -1,5 +1,6 @@
-package backend;
+package backend.friendship;
 
+import backend.user.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

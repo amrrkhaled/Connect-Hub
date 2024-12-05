@@ -1,10 +1,7 @@
-package backend;
+package backend.user;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.FileWriter;
-import java.io.IOException;
 
 public class UserManager {
     private final IAddUser addUser;

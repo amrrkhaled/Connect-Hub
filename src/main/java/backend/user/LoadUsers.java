@@ -1,4 +1,4 @@
-package backend;
+package backend.user;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -9,10 +9,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class LoadFriendShips implements ILoadFriendShips{
-    private final String filePath = "data/friendships.json";
-    public JSONArray loadFriendships(){
+public class LoadUsers implements ILoadUsers {
+    private final String filePath = "data/users.json";
+    private static LoadUsers instance;
+    private LoadUsers() {
+
+    }
+    public static synchronized LoadUsers getInstance() {
+        if (instance == null) {
+            instance = new LoadUsers();
+        }
+        return instance;
+    }
+    @Override
+    public JSONArray loadUsers() {
         File file = new File(filePath);
+
         // Initialize file with an empty array if it doesn't exist
         if (!file.exists()) {
             try (FileWriter fileWriter = new FileWriter(filePath)) {

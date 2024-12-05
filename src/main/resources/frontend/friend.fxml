@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.FriendController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.friendshipManagement.FriendController">
     <top>
         <HBox spacing="20.0" style="-fx-background-color: #3b5998; -fx-padding: 10.0;">
             <TextField fx:id="searchTextField" promptText="Search for friends..." style="-fx-pref-width: 300.0;"/>

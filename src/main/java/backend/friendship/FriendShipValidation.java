@@ -1,4 +1,4 @@
-package backend;
+package backend.friendship;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

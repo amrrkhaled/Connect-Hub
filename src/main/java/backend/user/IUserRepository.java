@@ -1,6 +1,5 @@
-package backend;
+package backend.user;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 public interface IUserRepository {

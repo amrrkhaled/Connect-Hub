@@ -1,11 +1,9 @@
-package backend;
+package backend.friendship;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public interface IFriendShipManager {
     public boolean RemoveFriendShip(String userId1, String userId2, JSONArray friendships);

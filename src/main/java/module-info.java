@@ -8,4 +8,8 @@ module com.example.connecthub {
 
     opens frontend to javafx.fxml;
     exports frontend;
+    exports frontend.friendshipManagement;
+    opens frontend.friendshipManagement to javafx.fxml;
+    exports frontend.profileManagement;
+    opens frontend.profileManagement to javafx.fxml;
 }

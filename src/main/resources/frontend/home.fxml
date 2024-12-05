@@ -7,7 +7,7 @@
 
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Button?>
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.HomeController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.profileManagement.HomeController">
     <top>
         <VBox alignment="CENTER" spacing="10">
             <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Home" />

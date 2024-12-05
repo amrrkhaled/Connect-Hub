@@ -1,4 +1,9 @@
-package backend;
+package backend.friendship;
+
+import backend.user.ILoadUsers;
+import backend.user.IUserRepository;
+import backend.user.LoadUsers;
+import backend.user.UserRepository;
 
 public class FriendShipFactory {
     public static FriendShip createFriendShip() {
