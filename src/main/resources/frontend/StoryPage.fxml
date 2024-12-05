@@ -16,7 +16,8 @@
       </font>
    </Label>
    <ImageView fitHeight="258.0" fitWidth="265.0" pickOnBounds="true" preserveRatio="true" />
-   <Label fx:id="caption" maxHeight="1.7976931348623157E308" prefHeight="36.0" prefWidth="60.0" text="cap">
+   
+    <Label fx:id="caption" maxHeight="1.7976931348623157E308" prefHeight="36.0" prefWidth="60.0" text="cap">
       <font>
          <Font size="18.0" />
       </font>
