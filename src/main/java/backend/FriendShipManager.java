@@ -12,13 +12,22 @@ public class FriendShipManager implements IFriendShipManager {
     ILoadFriendShips loadFriendShips;
     IUserRepository userRepository;
     ILoadUsers loadUsers;
-
-    public FriendShipManager(ILoadFriendShips loadFriendShips, IUserRepository userRepository, ILoadUsers loadUsers) {
+    // for singelton designPattern
+    private static FriendShipManager instance;
+    // Private constructor to prevent instantiation from outside
+    private FriendShipManager(ILoadFriendShips loadFriendShips, IUserRepository userRepository, ILoadUsers loadUsers) {
+        // Initialization logic here
         this.loadFriendShips = loadFriendShips;
         this.userRepository = userRepository;
         this.loadUsers = loadUsers;
     }
-
+    // Public method to access the single instance
+    public static FriendShipManager getInstance(ILoadFriendShips loadFriendShips, IUserRepository userRepository, ILoadUsers loadUsers) {
+        if (instance == null) {
+            instance = new FriendShipManager(loadFriendShips, userRepository, loadUsers);
+        }
+        return instance;
+    }
     @Override
     public boolean RemoveFriendShip(String userId1, String userId2, JSONArray friendships) {
         for (int i = 0; i < friendships.length(); i++) {

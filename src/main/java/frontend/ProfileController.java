@@ -76,7 +76,7 @@ public class ProfileController {
     @FXML
     public void updatePassword() {
         String newPassword = passwordField.getText();
-        ILoadUsers loadUsers = new LoadUsers();
+        ILoadUsers loadUsers = LoadUsers.getInstance();
         IUpdateUser updateUser = new UpdateUser();
         PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
         passwordUtils.updatePasswordHashForUser("U1", newPassword);

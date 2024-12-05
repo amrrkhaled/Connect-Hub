@@ -12,13 +12,25 @@ public class FriendShip {
     IFriendShipValidation friendShipValidation;
     IFriendShipManager friendShipManager;
     IUserRepository userRepository;
+    ILoadUsers loadUsers;
     private final String filePath = "data/friendships.json";
 
-    public FriendShip(IUserRepository userRepository, ILoadFriendShips loadFriendShips, IFriendShipValidation friendShipValidation, IFriendShipManager friendShipManager) {
+    public FriendShip(IUserRepository userRepository, ILoadFriendShips loadFriendShips, IFriendShipValidation friendShipValidation, IFriendShipManager friendShipManager,ILoadUsers loadUsers) {
         this.loadFriendShips = loadFriendShips;
         this.friendShipValidation = friendShipValidation;
         this.friendShipManager = friendShipManager;
         this.userRepository = userRepository;
+        this.loadUsers = loadUsers;
+    }
+    public FriendShipManager getManager() {
+        // Use the Singleton instance of FriendShipManager
+        return FriendShipManager.getInstance(loadFriendShips, userRepository, loadUsers);
+    }
+    public UserRepository getUserRepository() {
+        return UserRepository.getInstance(loadUsers);
+    }
+    public LoadUsers getLoadUsers() {
+        return LoadUsers.getInstance();
     }
 
     public void addFriend(String userId1, String username) {

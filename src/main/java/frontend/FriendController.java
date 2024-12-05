@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.util.List;
 
 public class FriendController {
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
     @FXML
     private ListView<String> friendListView;
     @FXML
@@ -33,17 +34,12 @@ public class FriendController {
     @FXML
     public void initialize() {
         // Initialize dependencies
-        ILoadFriendShips loadFriendShips = new LoadFriendShips();
-        ILoadUsers loadUsers = new LoadUsers();
-        IUserRepository userRepository = new UserRepository(loadUsers);
-        IFriendShipManager manager = new FriendShipManager(loadFriendShips, userRepository, loadUsers);
-
         // Populate lists from the backend
-        List<String> friendsList = manager.getFriendsWithStatus("U1");
-        List<String> friendRequestsList = manager.getFriendRequests("U1");
-        List<String> pendingFriendsList = manager.getPendingFriends("U1");
-        List<String> suggestionsList = manager.getFriendSuggestions("U1");
-
+        String currentUserId = "U1";
+        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(currentUserId);
+        List<String> friendRequestsList = friendShip.getManager().getFriendRequests(currentUserId);
+        List<String> pendingFriendsList = friendShip.getManager().getPendingFriends(currentUserId);
+        List<String> suggestionsList = friendShip.getManager().getFriendSuggestions(currentUserId);
         // Set the ListView items with the populated ObservableLists
         friends.addAll(friendsList);  // Add all elements to the ObservableList
         friendRequests.addAll(friendRequestsList);
@@ -82,23 +78,15 @@ public class FriendController {
     protected void onAcceptRequest() {
         String selectedRequest = friendRequestListView.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
-            ILoadFriendShips loadFriendShips = new LoadFriendShips();
-            ILoadUsers loadUsers = new LoadUsers();
-            IUserRepository userRepository = new UserRepository(loadUsers);
-            IFriendShipManager manager = new FriendShipManager(loadFriendShips, userRepository, loadUsers);
-            IFriendShipValidation managerValidation = new FriendShipValidation();
-            FriendShip friendShip = new FriendShip(userRepository, loadFriendShips, managerValidation, manager);
             String currentUserId = "U1";
-            String newFriendId = userRepository.findUserIdByUsername(selectedRequest);
+            String newFriendId = friendShip.getUserRepository().findUserIdByUsername(selectedRequest);
             friendShip.acceptFriend(currentUserId, selectedRequest);
-            String status = userRepository.getStatusByUserId(newFriendId);
+            String status = friendShip.getUserRepository().getStatusByUserId(newFriendId);
             friends.add(selectedRequest + "(" + status + ")");
             // Remove from friend requests
             friendRequests.remove(selectedRequest);
             friendSuggestions.remove(selectedRequest);
             // Update ListView
-//            friendListView.setItems(FXCollections.observableArrayList(friends));
-//            friendRequestListView.setItems(FXCollections.observableArrayList(friendRequests));
         }
     }
 
@@ -107,13 +95,6 @@ public class FriendController {
     protected void onRejectRequest() {
         String selectedRequest = friendRequestListView.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
-
-            ILoadFriendShips loadFriendShips = new LoadFriendShips();
-            ILoadUsers loadUsers = new LoadUsers();
-            IUserRepository userRepository = new UserRepository(loadUsers);
-            IFriendShipManager manager = new FriendShipManager(loadFriendShips, userRepository, loadUsers);
-            IFriendShipValidation managerValidation = new FriendShipValidation();
-            FriendShip friendShip = new FriendShip(userRepository, loadFriendShips, managerValidation, manager);
             String currentUserId = "U1";
             friendShip.removeFriend(currentUserId, selectedRequest);
             friendRequests.remove(selectedRequest);
@@ -124,15 +105,8 @@ public class FriendController {
     protected void onBlockFriend() {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
-
-            ILoadFriendShips loadFriendShips = new LoadFriendShips();
-            ILoadUsers loadUsers = new LoadUsers();
-            IUserRepository userRepository = new UserRepository(loadUsers);
-            IFriendShipManager manager = new FriendShipManager(loadFriendShips, userRepository, loadUsers);
-            IFriendShipValidation managerValidation = new FriendShipValidation();
-            FriendShip friendShip = new FriendShip(userRepository, loadFriendShips, managerValidation, manager);
             String currentUserId = "U1";
-            String selectedFriendUsername = manager.extractUsername(selectedFriend);
+            String selectedFriendUsername = friendShip.getManager().extractUsername(selectedFriend);
             friendShip.BlockFriendship(currentUserId, selectedFriendUsername);
             // Remove from the friends list
             friends.remove(selectedFriend);
@@ -147,16 +121,9 @@ public class FriendController {
     protected void onRemoveFriend() {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
-
-            ILoadFriendShips loadFriendShips = new LoadFriendShips();
-            ILoadUsers loadUsers = new LoadUsers();
-            IUserRepository userRepository = new UserRepository(loadUsers);
-            IFriendShipManager manager = new FriendShipManager(loadFriendShips, userRepository, loadUsers);
-            IFriendShipValidation managerValidation = new FriendShipValidation();
-            FriendShip friendShip = new FriendShip(userRepository, loadFriendShips, managerValidation, manager);
             String currentUserId = "U1";
-           String selectedFriendUsername = manager.extractUsername(selectedFriend);
-           System.out.println(selectedFriend);
+            String selectedFriendUsername = friendShip.getManager().extractUsername(selectedFriend);
+            System.out.println(selectedFriend);
             friendShip.removeFriend(currentUserId, selectedFriendUsername);
 
             // Remove from the local friends list
@@ -165,17 +132,11 @@ public class FriendController {
     }
 
 
-
     @FXML
     protected void onAddFriendFromSuggestions() {
         String selectedSuggestion = suggestionListView.getSelectionModel().getSelectedItem();
         if (selectedSuggestion != null) {
-            ILoadFriendShips loadFriendShips = new LoadFriendShips();
-            ILoadUsers loadUsers = new LoadUsers();
             String currentUserId = "U1"; // Replace with the actual method to get the current user ID
-            IUserRepository userRepository = new UserRepository(loadUsers);
-            FriendShip friendShip = new FriendShip(userRepository, loadFriendShips, new FriendShipValidation(),
-                    new FriendShipManager(loadFriendShips, userRepository, loadUsers));
             friendShip.addFriend(currentUserId, selectedSuggestion);
             // Update UI Lists
             pendingFriendRequests.add(selectedSuggestion + " (pending)"); // Add to pending

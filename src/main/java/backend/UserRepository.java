@@ -5,11 +5,19 @@ import org.json.JSONObject;
 
 public class UserRepository implements IUserRepository {
     ILoadUsers loadUsers;
+    private static UserRepository instance;
 
-    public UserRepository(ILoadUsers loadUsers){
+    private UserRepository(ILoadUsers loadUsers) {
+        // Private constructor to prevent direct instantiation
         this.loadUsers = loadUsers;
     }
 
+    public static UserRepository getInstance(ILoadUsers loadUsers) {
+        if (instance == null) {
+            instance = new UserRepository(loadUsers);
+        }
+        return instance;
+    }
     private JSONArray getUsersArray() {
         return loadUsers.loadUsers();
     }

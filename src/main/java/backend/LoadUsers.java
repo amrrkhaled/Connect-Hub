@@ -11,7 +11,16 @@ import java.io.IOException;
 
 public class LoadUsers implements ILoadUsers {
     private final String filePath = "data/users.json";
+    private static LoadUsers instance;
+    private LoadUsers() {
 
+    }
+    public static LoadUsers getInstance() {
+        if (instance == null) {
+            instance = new LoadUsers();
+        }
+        return instance;
+    }
     @Override
     public JSONArray loadUsers() {
         File file = new File(filePath);
