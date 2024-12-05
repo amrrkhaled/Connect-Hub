@@ -22,7 +22,8 @@ import javafx.stage.Stage;
 public class FeedController {
     @FXML
     private HBox storiesBox;
-
+    @FXML
+    private HBox imageContainer;
     @FXML
     private ListView<VBox> postsListView;
 
@@ -35,19 +36,19 @@ public class FeedController {
     // Initialize the newsfeed
     @FXML
     public void initialize() {
-        loadStories();
+     loadStories();
         loadPosts();
         // Ensure the ScrollPanes resize with the window
         storiesScrollPane.setFitToWidth(true);
-        postsScrollPane.setFitToWidth(true);
+//       postsScrollPane.setFitToWidth(true);
     }
 /// //////////////////////////////////////////////////////////////////////////////
     private void loadStories() {
         // Example stories
         String[][] storyTitles = {
-                {"omar", "C:/Users/franc/Desktop/me.jpg"},
-                {"ahmed", null},
-                {"ana", "C:/Users/franc/Desktop/me.jpg"}, {"sayed", null}
+                {"omar", "images\\image1.png"},
+                {"ahmed", "images\\image1.png"},
+                {"ana", "images\\image1.png"}
         };
 
         for (String[] title : storyTitles) {
@@ -106,44 +107,56 @@ public class FeedController {
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void loadPosts() {
-        // Example posts
-
         String[][] posts = {
-
-                {"Post 1 for omar: This is a text-only post","C:\\Users\\franc\\Desktop\\me.jpg" },
-                {"Post 2: This is a text-only post", null},
-                {"Post 3: This is a 222222222222222222222222222222222-only post", null},
-
+                {"Post 1 for Omar: This is a text-only post", "images\\image1.png,images\\image2.png,images\\image2.png,images\\image2.png,images\\image2.png,images\\image2.png,images\\image2.png,images\\image2.png,images\\image2.png"},
+                {"Post 2: Another post with images", "images\\image3.png,images\\image4.png"},
+                {"Post 3: Another text-only post", "images\\image5.png"}
         };
-List<String> imagePaths = new ArrayList<>();
-imagePaths.add("C:\\Users\\franc\\Desktop\\me.jpg");
-        imagePaths.add("C:\\Users\\franc\\Desktop\\me.jpg");
-
-        imagePaths.add("C:\\Users\\franc\\Desktop\\me.jpg");
 
         for (String[] post : posts) {
             VBox postBox = new VBox();
             postBox.setSpacing(10);
 
-            if (post[0] != null) { // Text exists
+            // Add post text
+            if (post[0] != null) {
                 Text postText = new Text(post[0]);
                 postText.setStyle("-fx-font-size: 14px;");
                 postBox.getChildren().add(postText);
             }
-            if (post[1] != null) { // Image path exists
-                ImageView imageView = new ImageView(new Image(post[1]));
-                imageView.setFitWidth(200);
-                imageView.setPreserveRatio(true);
-                postBox.getChildren().add(imageView);
 
+            // Add images for the post
+            if (post[1] != null) {
+                String[] imagePaths = post[1].split(","); // Split image paths by comma
+                HBox imageContainer = new HBox();
+                imageContainer.setSpacing(10);
+                imageContainer.setStyle("-fx-padding: 10;");
+
+                // Load images into the container
+                for (String path : imagePaths) {
+                    try {
+                        Image image = new Image("file:" + path.trim());
+                        ImageView imageView = new ImageView(image);
+                        imageView.setFitWidth(200);
+                        imageView.setPreserveRatio(true);
+                        imageContainer.getChildren().add(imageView);
+                    } catch (Exception e) {
+                        System.out.println("Could not load image: " + path);
+                    }
+                }
+
+
+
+                // Add the ScrollPane with images to the postBox
+                postBox.getChildren().add(imageContainer);
             }
 
-
-
+            // Add the postBox to the ListView
             postsListView.getItems().add(postBox);
         }
     }
-/// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FXML
     private void onCreatePost() {
         // Placeholder for creating a post

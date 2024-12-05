@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="762.0" prefWidth="674.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="frontend.FeedController">
+    <top>
+        <HBox prefHeight="24.0" prefWidth="456.0" spacing="20.0" style="-fx-background-color: #3b5998; -fx-padding: 10.0;">
+            <Button onAction="#onHome" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Home" />
+            <Button onAction="#onProfile" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Profile" />
+            <Button onAction="#onFriends" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Friends" />
+            <Button onAction="#onLogout" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Logout" />
+        </HBox>
+    </top>
+
+    <center>
+        <VBox prefHeight="608.0" prefWidth="674.0" spacing="20.0" style="-fx-padding: 10.0;">
+            <!-- Stories Section -->
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Stories" />
+            <ScrollPane id="storiesScrollPane" fx:id="storiesScrollPane" fitToHeight="false" fitToWidth="true" hbarPolicy="ALWAYS" prefHeight="175.0" prefWidth="654.0" style="-fx-padding: 10.0;" vbarPolicy="NEVER">
+                <AnchorPane prefHeight="67.0" prefWidth="633.0">
+                    <HBox fx:id="storiesBox" layoutX="-4.8" layoutY="-9.6" prefHeight="67.2" prefWidth="632.8" spacing="15.0" style="-fx-padding: 10.0; -fx-background-color: #f0f2f5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                </AnchorPane>
+            </ScrollPane>
+            <!-- Posts Section -->
+            <Label style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Posts" />
+                <AnchorPane>
+                    <ListView fx:id="postsListView" layoutY="14.0" prefHeight="381.0" prefWidth="401.0" style="-fx-background-color: #ffffff; -fx-padding: 10.0; -fx-border-color: #d3d3d3; -fx-border-width: 1.0;" AnchorPane.bottomAnchor="-21.19999999999999" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0" />
+
+                </AnchorPane>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox prefHeight="67.0" prefWidth="456.0" spacing="10.0" style="-fx-padding: 10.0; -fx-background-color: #ffffff;">
+            <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Post" />
+            <Button onAction="#onRefreshNewsfeed" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Refresh" />
+            <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Story" />
+        </HBox>
+    </bottom>
+</BorderPane>
