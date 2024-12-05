@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Post implements IContentCreation {
+public class Post implements IContent {
 
     private final IContentFiles contentFiles;
     private final String FILEPATH = "data/posts.json";
@@ -40,5 +40,51 @@ public class Post implements IContentCreation {
 
     }
 
+    @Override
+    public JSONArray getUserContent(String userId) {
+        JSONArray posts = contentFiles.loadContent(FILEPATH);
+        JSONArray userPosts = new JSONArray();
+        if (posts == null) {
+            System.err.println("Error: Content file could not be loaded.");
+            return userPosts; // Return empty array if no content
+        }
+
+        for (int i = 0; i < posts.length(); i++) {
+            try {
+                JSONObject post = posts.getJSONObject(i);
+                if (post.getString("userId").equals(userId)) {
+                    userPosts.put(post);
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing post at index " + i + ": " + e.getMessage());
+            }
+        }
+
+        return userPosts;
+    }
+
+    @Override
+    public JSONArray getNewsFeedContent(String userId) {
+        List<String> friendsIDs = List.of("friend1", "friend2", "friend3");  // Get the list of friend IDs
+        JSONArray feedPosts = new JSONArray();
+
+        if (friendsIDs == null || friendsIDs.isEmpty()) {
+            System.err.println("Error: No friends found for userId " + userId);
+            return feedPosts; // Return empty feed if no friends
+        }
+
+        for (String friendId : friendsIDs) {
+            try {
+                JSONArray friendPosts = getUserContent(friendId); // Get content for each friend
+                for (int i = 0; i < friendPosts.length(); i++) {
+                    feedPosts.put(friendPosts.getJSONObject(i)); // Add each post to the feed
+                }
+            } catch (Exception e) {
+                System.err.println("Error fetching posts for friendId " + friendId + ": " + e.getMessage());
+            }
+        }
+
+        return feedPosts;
+    }
 
 }

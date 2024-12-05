@@ -4,10 +4,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
-public class Story implements IContentCreation {
+public class Story implements IContent {
     private final IContentFiles contentFiles;
     private final String FILEPATH = "data/stories.json";
 
@@ -39,6 +43,69 @@ public class Story implements IContentCreation {
         contentFiles.saveContent(stories,FILEPATH);
 
     }
+
+    @Override
+    public JSONArray getUserContent(String userId) {
+        JSONArray stories = contentFiles.loadContent(FILEPATH); // Load stories
+        JSONArray userStories = new JSONArray();
+
+        if (stories == null) {
+            System.err.println("Error: Content file could not be loaded.");
+            return userStories; // Return empty array if no content
+        }
+
+        LocalDateTime now = LocalDateTime.now(); // Current local time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Define time format
+
+        for (int i = 0; i < stories.length(); i++) {
+            try {
+                JSONObject story = stories.getJSONObject(i);
+                if (story.getString("userId").equals(userId)) {
+                    String storyTimestampStr = story.getString("timestamp"); // Assuming "timestamp" is in the formatted string
+                    LocalDateTime storyTime = LocalDateTime.parse(storyTimestampStr, formatter);
+
+                    // Calculate hours since story was posted
+                    long hoursSincePosted = Duration.between(storyTime, now).toHours();
+                    if (hoursSincePosted <= 24) { // Check if story is within the last 24 hours
+                        userStories.put(story);
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing story at index " + i + ": " + e.getMessage());
+            }
+        }
+
+        return userStories;
+    }
+
+    @Override
+    public JSONArray getNewsFeedContent(String userId) {
+        List<String> friendsIDs = List.of("friend1", "friend2", "friend3"); // Get the list of friend IDs 
+        JSONArray feedStories = new JSONArray();
+
+        if (friendsIDs == null || friendsIDs.isEmpty()) {
+            System.err.println("Error: No friends found for userId " + userId);
+            return feedStories; // Return empty feed if no friends
+        }
+
+        LocalDateTime now = LocalDateTime.now(); // Current local time
+
+        for (String friendId : friendsIDs) {
+            try {
+                JSONArray friendStories = getUserContent(friendId); // Get stories for each friend
+                for (int i = 0; i < friendStories.length(); i++) {
+                    JSONObject story = friendStories.getJSONObject(i);
+                        feedStories.put(story);
+
+                }
+            } catch (Exception e) {
+                System.err.println("Error fetching stories for friendId " + friendId + ": " + e.getMessage());
+            }
+        }
+
+        return feedStories;
+    }
+
 
 
 }

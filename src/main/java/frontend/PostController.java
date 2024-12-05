@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import backend.IContentCreation;
+import backend.IContent;
 import backend.Post;
 import javafx.scene.control.*;
 
@@ -74,7 +74,7 @@ public class PostController {
 
 
         showSuccess("Post created successfully!");
-        IContentCreation contentCreation = new Post(new ContentFiles());
+        IContent contentCreation = new Post(new ContentFiles());
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

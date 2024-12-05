@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import backend.IContentCreation;
+import backend.IContent;
 import backend.Story;
 import javafx.scene.control.*;
 
@@ -72,7 +72,7 @@ public class StoryController {
 
 
         showSuccess("Story shared successfully!");
-        IContentCreation contentCreation = new Story(new ContentFiles());
+        IContent contentCreation = new Story(new ContentFiles());
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
