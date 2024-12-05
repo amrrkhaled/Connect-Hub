@@ -3,8 +3,10 @@ package frontend;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -68,7 +70,7 @@ public class FeedController {
                 imageView.setPreserveRatio(false); // Force fit
                 imageView.setClip(new Circle(30, 30, 30)); // Clip to match circle
                 storyItem.getChildren().add(imageView);
-                imageView.setOnMouseClicked(event -> openStoryPage(imagePath,text));
+                imageView.setOnMouseClicked(event -> openStoryPage(imagePath));
             } else {
                 storyCircle.setFill(Color.LIGHTBLUE);
                 storyCircle.setStroke(Color.DARKBLUE);
@@ -83,27 +85,31 @@ public class FeedController {
 
             // Add the story to the HBox
             storiesBox.getChildren().add(storyItem);
-            storyCircle.setOnMouseClicked(event -> openStoryPage(imagePath, text));
-
+            storyCircle.setOnMouseClicked(event -> openStoryPage(imagePath));
 
         }
     }
     ///  ////////////////////////////////////////////////////////////////////////////////////////////////
-    private void openStoryPage(String imagePath, String text) {
+    private void openStoryPage(String imagePath) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("StoryPage.fxml"));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(loader.load()));
+            // Load the FXML for the Story Page
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("storyPage.fxml"));
+            Parent storyPageRoot = loader.load();
 
-//            StoryPageController controller = loader.getController();
-//            controller.setStory(imagePath, text);
+            // Get the controller of StoryPage
+            StoryPageController storyPageController = loader.getController();
 
-            stage.setTitle("Story Page");
-            stage.show();
+            // Pass the image path to the StoryPageController
+            storyPageController.setStoryImage(imagePath);
+
+            // Replace the current scene's center with the StoryPage
+            BorderPane root = (BorderPane) storiesScrollPane.getScene().getRoot();
+            root.setCenter(storyPageRoot);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void loadPosts() {
         // Example posts

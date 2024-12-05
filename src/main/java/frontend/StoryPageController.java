@@ -12,20 +12,24 @@ public class StoryPageController {
 
     @FXML
     private Label storyCaptionLabel;
- public void initialize() {
-//     setStoryContent(imagepath,caption);
- }
-    public void setStoryContent(String imagePath, String caption) {
-        // Set the image if the path is valid
+
+    public void setStoryImage(String imagePath) {
+        Image image = new Image("file:" + imagePath);
+        storyImageView.setImage(image);
+    }
+
+    public void setStoryContent(String imagePath) {
+
+
+
+     // Set the image if the path is valid
         if (imagePath != null && !imagePath.isEmpty()) {
             storyImageView.setImage(new Image("file:" + imagePath));
         } else {
             storyImageView.setImage(null); // Remove image if none provided
         }
 
-        // Set the caption
-        storyCaptionLabel.setText(caption != null ? caption : ""); // Show empty text if caption is null
-    }
+
 }
 
 
