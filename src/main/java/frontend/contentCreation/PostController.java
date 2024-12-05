@@ -1,43 +1,42 @@
-package frontend;
+package frontend.contentCreation;
 
-import backend.ContentFiles;
+import backend.contentCreation.ContentFiles;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import backend.IContent;
-import backend.Story;
-import javafx.scene.control.*;
+import backend.contentCreation.IContent;
+import backend.contentCreation.Post;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class StoryController {
+public class PostController {
 
     @FXML
     private TextArea contentArea;
     @FXML
     private Button uploadImage;
     @FXML
-    private Button createStory;
-
+    private Button createPost;
     @FXML
-    private VBox imageContainer;
+    private ImageView imageView;
+    @FXML
+    private VBox imageContainer; // Container for displaying images
+
     private List<String> selectedImagePaths = new ArrayList<>(); // Holds paths of selected images
 
 
     @FXML
     public void initialize() {
         uploadImage.setOnAction(event -> handleUploadImages());
-        createStory.setOnAction(event -> handleCreateStory());
+        createPost.setOnAction(event -> handleCreatePost());
     }
     @FXML
     private void handleUploadImages() {
@@ -62,7 +61,7 @@ public class StoryController {
     }
 
     @FXML
-    private void handleCreateStory() {
+    private void handleCreatePost() {
         String content = contentArea.getText();
 
         if (content.isEmpty()) {
@@ -71,8 +70,8 @@ public class StoryController {
         }
 
 
-        showSuccess("Story shared successfully!");
-        IContent contentCreation = new Story(new ContentFiles());
+        showSuccess("Post created successfully!");
+        IContent contentCreation = new Post(new ContentFiles());
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

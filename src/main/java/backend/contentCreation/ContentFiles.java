@@ -1,4 +1,4 @@
-package backend;
+package backend.contentCreation;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,10 +1,10 @@
-package backend;
+package backend.contentCreation;
 
+import backend.SaveImage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 

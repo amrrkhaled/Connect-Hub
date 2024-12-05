@@ -1,7 +1,8 @@
 package backend;
-import org.json.JSONObject;
-import java.io.FileWriter;
-import java.io.IOException;
+import backend.contentCreation.ContentFiles;
+import backend.contentCreation.IContent;
+import backend.contentCreation.Post;
+
 import java.util.List;
 
 public class contentCreationTest {

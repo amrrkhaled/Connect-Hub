@@ -1,5 +1,6 @@
-package backend;
+package backend.contentCreation;
 
+import backend.SaveImage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 public class Story implements IContent {
     private final IContentFiles contentFiles;

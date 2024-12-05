@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.PostController">
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.contentCreation.PostController">
 
      <!-- Content Input -->
      <TextArea fx:id="contentArea" layoutX="59.0" layoutY="33.0" prefHeight="150.0" prefWidth="500.0" promptText="Write your post here..." style="-fx-font-size: 14px; -fx-border-color: #ccc; -fx-border-radius: 5;" wrapText="true" />
