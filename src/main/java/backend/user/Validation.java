@@ -9,5 +9,8 @@ public interface Validation {
 
     public boolean isPasswordValid(String password, String storedPasswordHash);
     public JSONObject findUserByUsername(String username);
+
+
+
 }
 

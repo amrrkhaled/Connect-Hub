@@ -2,6 +2,9 @@ package backend;
 import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
+import backend.user.*;
+import backend.profile.*;
+import backend.friendship.*;
 import java.util.List;
 
 public class jsonExample {
@@ -123,4 +126,7 @@ public class jsonExample {
 //       List<String> pendingFriendRequests = manager.getPendingFriends("U1");
 //       List<String> friendSuggestions = manager.getFriendSuggestions("U1");
    }
-}
+
+
+
+
