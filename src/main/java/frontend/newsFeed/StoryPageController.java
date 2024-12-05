@@ -1,5 +1,7 @@
-package frontend;
+package frontend.newsFeed;
 
+import backend.friendship.FriendShip;
+import backend.friendship.FriendShipFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -30,6 +32,7 @@ public class StoryPageController {
     @FXML
     private VBox imageContainer;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
 
     public void setStoryContent(JSONObject story) {
         // Extract story details
@@ -38,8 +41,9 @@ public class StoryPageController {
         String timestamp = story.optString("timestamp", "");
         JSONArray images = story.optJSONArray("images");
 
+        String userName = friendShip.getUserRepository().getUsernameByUserId(userId);
         // Set the user ID and caption
-        userIdLabel.setText("User: " + userId);
+        userIdLabel.setText("User: " + userName);
         captionLabel.setText(caption);
 
         // Calculate and display remaining time

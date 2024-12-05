@@ -31,8 +31,7 @@ public class ProfileController {
     @FXML
     private ListView<String> friendsListView;
 
-//    private final String userId = User.getUserId();
-    private final String userId = "U1";
+  private final String userId = User.getUserId();
 
 
 

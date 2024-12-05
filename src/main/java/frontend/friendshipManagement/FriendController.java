@@ -2,13 +2,23 @@ package frontend.friendshipManagement;
 
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
+import backend.user.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class FriendController {
@@ -23,6 +33,8 @@ public class FriendController {
     private ListView<String> suggestionListView;
     @FXML
     private TextField searchTextField;
+
+    private final String userId = User.getUserId();
 
     // Class-level variables
     private final ObservableList<String> friends = FXCollections.observableArrayList();
@@ -53,24 +65,86 @@ public class FriendController {
     }
 
 
-    @FXML
-    protected void onHome() {
-        showAlert("Home", "Navigating to the Home Page...");
+
+
+
+    public void onHome(ActionEvent event) {
+        try {
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/home.fxml"));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Home");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    protected void onProfile() {
-        showAlert("Profile", "Navigating to your Profile Page...");
+    public void onProfile(ActionEvent event) {
+        try {
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/profile.fxml"));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Profile");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
-    protected void onNewsFeed() {
-        showAlert("NewsFeed", "Navigating to NewsFeed...");
+    public void onNewsFeed(ActionEvent event) {
+        try {
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/NewsFeed.fxml"));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("NewsFeed");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    @FXML
-    protected void onLogout() {
-        showAlert("Logout", "Logging out...");
+    public void onLogout(ActionEvent event) {
+        try {
+            ILoadUsers loadUsers = LoadUsers.getInstance();
+            IAddUser user = new AddUser(loadUsers);
+            Validation valid = new UserValidator(loadUsers);
+            IUpdateUser updateUser = new UpdateUser();
+            UserManager manager = new UserManager(user, loadUsers, valid, updateUser);
+            manager.logout(userId);
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/login.fxml"));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Login");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

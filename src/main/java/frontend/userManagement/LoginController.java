@@ -1,6 +1,7 @@
 package frontend.userManagement;
 
 import backend.user.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -30,11 +31,11 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        loginButton.setOnAction(event -> handleLogin());
+        loginButton.setOnAction(event -> handleLogin(null));
         signupPageButton.setOnAction(this::navigateToSignup);
     }
 
-    private void handleLogin() {
+    private void handleLogin(javafx.event.ActionEvent event) {
         String usernameOrEmail = usernameField.getText().trim();
         String password = passwordField.getText();
 
@@ -47,9 +48,35 @@ public class LoginController {
             User.setUserId(msg);
             if (msg.matches("U\\d+")) {
                 showSuccess("Login successful!");
+                navigateToNewsFeed();
+
             }
             else showAlert(msg);
 
+        }
+    }
+
+    private void navigateToNewsFeed() {
+        try {
+            // Load the FXML file for the NewsFeed page
+            Parent newsFeedParent = FXMLLoader.load(getClass().getResource("/frontend/NewsFeed.fxml"));
+
+            // Create a new Scene with the loaded Parent (FXML)
+            Scene newsFeedScene = new Scene(newsFeedParent);
+
+            // Get the current Stage (window)
+            Stage currentStage = (Stage) loginButton.getScene().getWindow();
+
+            // Set the new Scene and update the Stage's title
+            currentStage.setScene(newsFeedScene);
+            currentStage.setTitle("NewsFeed");
+
+            // Show the updated Stage
+            currentStage.show();
+        } catch (IOException e) {
+            // Handle exceptions in case the FXML file cannot be loaded
+            e.printStackTrace();
+            showAlert("Error navigating to the NewsFeed page.");
         }
     }
 

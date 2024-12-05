@@ -1,14 +1,6 @@
 [
     {
         "password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
-        "dateOfBirth": "2003-12-11",
-        "userId": "U1",
-        "email": "aaa@gmail.com",
-        "username": "adad",
-        "status": "offline"
-    },
-    {
-        "password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
         "dateOfBirth": "2003-12-18",
         "userId": "U2",
         "email": "a@gmail.com",
@@ -22,5 +14,13 @@
         "email": "aa@gmail.com",
         "username": "adaSada",
         "status": "offline"
+    },
+    {
+        "password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
+        "dateOfBirth": "2005-12-08",
+        "userId": "U1",
+        "email": "amr@gmail.com",
+        "username": "amr",
+        "status": "online"
     }
 ]

@@ -11,7 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -24,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class HomeController {
@@ -36,17 +39,18 @@ public class HomeController {
 
     @FXML
     private ListView<String> friendsListView;
-
+    @FXML
+    private Button newsFeed;
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
 
-//    private final String userId = User.getUserId();
-    private final String userId = "U1";
+private final String userId = User.getUserId();
 
     private final ObservableList<String> friends = FXCollections.observableArrayList();
 
 
     @FXML
     public void initialize() {
+        newsFeed.setOnAction(event -> navigateToNewsFeed());
 
         IContent contentManager = new Post(new ContentFiles());
         JSONArray userPosts = contentManager.getUserContent(userId);
@@ -69,7 +73,28 @@ public class HomeController {
 
         friendsListView.setItems(friends);
     }
+    private void navigateToNewsFeed() {
+        try {
+            // Load the FXML file for the NewsFeed page
+            Parent newsFeedParent = FXMLLoader.load(getClass().getResource("/frontend/NewsFeed.fxml"));
 
+            // Create a new Scene with the loaded Parent (FXML)
+            Scene newsFeedScene = new Scene(newsFeedParent);
+
+            // Get the current Stage (window)
+            Stage currentStage = (Stage) newsFeed.getScene().getWindow();
+
+            // Set the new Scene and update the Stage's title
+            currentStage.setScene(newsFeedScene);
+            currentStage.setTitle("NewsFeed");
+
+            // Show the updated Stage
+            currentStage.show();
+        } catch (IOException e) {
+            // Handle exceptions in case the FXML file cannot be loaded
+            e.printStackTrace();
+        }
+    }
     private VBox createPost(String text, String[] imageUrls) {
         VBox postBox = new VBox(10);
         postBox.setStyle("-fx-border-color: gray; -fx-padding: 10; -fx-background-color: #f9f9f9;");

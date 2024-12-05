@@ -1,6 +1,20 @@
-[{
-    "Bio": "dsfdsf",
-    "userId": "U1",
-    "ProfilePicture": "images\\I13.jpg",
-    "CoverPhoto": "images\\I14.jpg"
-}]
+[
+    {
+        "Bio": "dsfdsf",
+        "userId": "U1",
+        "ProfilePicture": "images\\I34.jpg",
+        "CoverPhoto": "images\\I14.jpg"
+    },
+    {
+        "Bio": "dsfdsf",
+        "userId": "U2",
+        "ProfilePicture": "images\\I13.jpg",
+        "CoverPhoto": "images\\I14.jpg"
+    },
+    {
+        "Bio": "dsfdsf",
+        "userId": "U3",
+        "ProfilePicture": "images\\I13.jpg",
+        "CoverPhoto": "images\\I14.jpg"
+    }
+]

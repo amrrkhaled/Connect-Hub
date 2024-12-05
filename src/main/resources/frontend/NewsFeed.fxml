@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="762.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.FeedController">
+<BorderPane prefHeight="762.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.newsFeed.FeedController">
    <top>
       <HBox prefHeight="24.0" prefWidth="456.0" spacing="20.0" style="-fx-background-color: #3b5998; -fx-padding: 10.0;">
          <Button onAction="#onHome" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Home" />
@@ -42,7 +42,7 @@
       <HBox prefHeight="67.0" prefWidth="456.0" spacing="10.0" style="-fx-padding: 10.0; -fx-background-color: #ffffff;">
          <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Post" />
          <Button onAction="#onRefreshNewsfeed" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Refresh" />
-         <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Story" />
+         <Button onAction="#onCreateStory" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Story" />
       </HBox>
    </bottom>
 

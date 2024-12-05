@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ScrollPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.StoryPageController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.newsFeed.StoryPageController">
     <!-- Top: User ID -->
     <top>
         <Label fx:id="userIdLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: #3b5998;" text="User ID" BorderPane.alignment="CENTER" />
