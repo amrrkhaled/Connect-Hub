@@ -1,16 +1,6 @@
 [
 
     {
-        "userId1": "U1",
-        "userId2": "U2",
-        "status": "accepted"
-    },
-    {
-        "userId1": "U1",
-        "userId2": "U3",
-        "status": "accepted"
-    },
-    {
         "userId1": "U2",
         "userId2":"U4",
         "status": "accepted"

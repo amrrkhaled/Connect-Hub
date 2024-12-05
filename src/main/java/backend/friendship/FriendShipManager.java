@@ -117,7 +117,8 @@ public class FriendShipManager implements IFriendShipManager {
             for (int i = 0; i < users.length(); i++) {
                 JSONObject userJson = users.getJSONObject(i);
                 String suggestion = userJson.getString("username");
-                if(!usernames.contains(suggestion) && !friendRequests.contains(suggestion)) {
+                String myself = userRepository.getUsernameByUserId(userId);
+                if(!usernames.contains(suggestion) && !friendRequests.contains(suggestion) && !(myself.equals(suggestion))) {
                     friendSuggestions.add(suggestion);
 //                    System.out.println(suggestion);
 //                    System.out.println(usernames);
