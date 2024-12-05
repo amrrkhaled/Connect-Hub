@@ -7,6 +7,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static javafx.application.Application.launch;
+
 public class StoryPage {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Feed.class.getResource("StoryPage.fxml"));
@@ -15,4 +17,5 @@ public class StoryPage {
         stage.setScene(scene);
         stage.show();
     }
+
 }
