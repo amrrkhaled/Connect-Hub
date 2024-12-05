@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="762.0" prefWidth="674.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="frontend.FeedController">
+<BorderPane prefHeight="762.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.FeedController">
    <top>
       <HBox prefHeight="24.0" prefWidth="456.0" spacing="20.0" style="-fx-background-color: #3b5998; -fx-padding: 10.0;">
          <Button onAction="#onHome" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Home" />
@@ -28,13 +28,13 @@
                <HBox fx:id="storiesBox" layoutX="-4.8" layoutY="-9.6" prefHeight="67.2" prefWidth="632.8" spacing="15.0" style="-fx-padding: 10.0; -fx-background-color: #f0f2f5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             </AnchorPane>
          </ScrollPane>
+
          <!-- Posts Section -->
          <Label style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Posts" />
-         <ScrollPane fx:id="postsScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefHeight="411.0" prefWidth="435.0" style="-fx-padding: 10.0;" vbarPolicy="ALWAYS">
-            <AnchorPane>
-               <ListView fx:id="postsListView" layoutY="14.0" prefHeight="381.0" prefWidth="401.0" style="-fx-background-color: #ffffff; -fx-padding: 10.0; -fx-border-color: #d3d3d3; -fx-border-width: 1.0;" AnchorPane.bottomAnchor="-21.19999999999999" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0" />
-            </AnchorPane>
-         </ScrollPane>
+         <AnchorPane>
+            <ListView fx:id="postsListView" layoutY="14.0" prefHeight="314.0" prefWidth="508.0" style="-fx-background-color: #ffffff; -fx-padding: 10.0; -fx-border-color: #d3d3d3; -fx-border-width: 1.0;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0" />
+         </AnchorPane>
+
       </VBox>
    </center>
 
@@ -45,4 +45,15 @@
          <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Story" />
       </HBox>
    </bottom>
+
+   <left>
+      <AnchorPane prefHeight="645.0" prefWidth="223.0" BorderPane.alignment="CENTER">
+         <children>
+            <ScrollPane layoutX="12.0" layoutY="57.0" prefHeight="578.0" prefWidth="200.0">
+               <ListView fx:id="friendsListView" prefHeight="595.0" prefWidth="200.0" />
+            </ScrollPane>
+            <Label layoutX="14.0" layoutY="14.0" style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Friends" />
+         </children>
+      </AnchorPane>
+   </left>
 </BorderPane>

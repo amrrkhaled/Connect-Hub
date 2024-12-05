@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -14,14 +15,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class FeedController {
     @FXML
     private HBox storiesBox;
-
+    @FXML
+    private ListView<String> friendsListView;
     @FXML
     private ListView<VBox> postsListView;
 
@@ -35,25 +40,61 @@ public class FeedController {
     public void initialize() {
         loadStories();
         loadPosts();
+        loadFriendsList();
         storiesScrollPane.setFitToWidth(true);
     }
+    private void loadFriendsList() {
+        // Example friends array
+        String[] friends = {"John Doe", "Jane Smith", "Amr Ali", "Omar Ahmed", "Sara Ahmed","John Doe", "Jane Smith", "Amr Ali", "Omar Ahmed", "Sara Ahmed","John Doe", "Jane Smith", "Amr Ali", "Omar Ahmed", "Sara Ahmed"};
 
+        // Add friends to the ListView
+        friendsListView.getItems().clear(); // Clear existing items (if any)
+        friendsListView.getItems().addAll(friends); // Add all friends from the array
+    }
     private void loadStories() {
         String[][] storyTitles = {
                 {"omar", "images/image1.png"},
                 {"ahmed", "images/image2.png"},
                 {"ana", "images/image3.png"},
-                {"hiiii", null}
-        };
 
-        for (String[] story : storyTitles) {
-            String userName = story[0];
-            String imagePath = story[1];
+        };
+        JSONArray stories = new JSONArray();
+
+        // Add mock posts
+        JSONObject story1 = new JSONObject();
+        story1.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
+        story1.put("contentId", "P1");
+        story1.put("authorId", "amr");
+        story1.put("content", "s1 i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
+        story1.put("timestamp", "2024-12-05 01:32:22");
+
+        JSONObject story2 = new JSONObject();
+        story2.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
+        story2.put("contentId", "P2");
+        story2.put("authorId", "ahmed");
+        story2.put("content", "s2,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
+        story2.put("timestamp", "2024-12-04 01:32:22");
+        JSONObject story3 = new JSONObject();
+        story3.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
+        story3.put("contentId", "P2");
+        story3.put("authorId", "omar");
+        story3.put("content", "s3 sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
+        story3.put("timestamp", "2024-12-04 01:32:22");
+
+        // Add posts to the JSONArray
+        stories.put(story1);
+        stories.put(story2);
+        stories.put(story3);
+        int count = 0;
+        for (int i = 0; i < stories.length(); i++){
+            String userName = storyTitles[i][0];  // Get the username (first element of each sub-array)
+            String imagePath = storyTitles[i][1];
             VBox storyItem = new VBox();
             storyItem.setSpacing(5);
             storyItem.setStyle("-fx-alignment: center;");
 
             Circle storyCircle = new Circle(30);
+            int finalCount = count;
 
             if (imagePath != null && isFileValid(imagePath)) {
                 ImageView imageView = new ImageView(new Image("file:" + imagePath));
@@ -62,13 +103,13 @@ public class FeedController {
                 imageView.setPreserveRatio(false);
                 imageView.setClip(new Circle(30, 30, 30));
                 storyItem.getChildren().add(imageView);
-                imageView.setOnMouseClicked(event -> openStoryPage(imagePath, userName));
+                imageView.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
             } else {
                 storyCircle.setFill(Color.LIGHTBLUE);
                 storyCircle.setStroke(Color.DARKBLUE);
                 storyCircle.setStrokeWidth(2);
                 storyItem.getChildren().add(storyCircle);
-                storyCircle.setOnMouseClicked(event -> openStoryPage(null, userName));
+                storyCircle.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
             }
 
             Text storyLabel = new Text(userName);
@@ -76,20 +117,77 @@ public class FeedController {
             storyItem.getChildren().add(storyLabel);
 
             storiesBox.getChildren().add(storyItem);
-        }
+            count ++;
+       }
+
+
+
+
+
+
+
+
+//        for (String[] story : storyTitles) {
+//            String userName = story[0];
+//            String imagePath = story[1];
+//            VBox storyItem = new VBox();
+//            storyItem.setSpacing(5);
+//            storyItem.setStyle("-fx-alignment: center;");
+//
+//            Circle storyCircle = new Circle(30);
+//            int finalCount = count;
+//
+//            if (imagePath != null && isFileValid(imagePath)) {
+//                ImageView imageView = new ImageView(new Image("file:" + imagePath));
+//                imageView.setFitWidth(60);
+//                imageView.setFitHeight(60);
+//                imageView.setPreserveRatio(false);
+//                imageView.setClip(new Circle(30, 30, 30));
+//                storyItem.getChildren().add(imageView);
+//                imageView.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
+//            } else {
+//                storyCircle.setFill(Color.LIGHTBLUE);
+//                storyCircle.setStroke(Color.DARKBLUE);
+//                storyCircle.setStrokeWidth(2);
+//                storyItem.getChildren().add(storyCircle);
+//                storyCircle.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
+//            }
+//
+//            Text storyLabel = new Text(userName);
+//            storyLabel.setStyle("-fx-font-size: 12px; -fx-fill: #333333;");
+//            storyItem.getChildren().add(storyLabel);
+//
+//            storiesBox.getChildren().add(storyItem);
+//            count ++;
+//        }
     }
 
-    private void openStoryPage(String imagePath, String caption) {
+    private void openStoryPage(JSONObject story) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("StoryPage.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
 
             StoryPageController controller = loader.getController();
-            controller.setStoryContent(imagePath, caption);
 
             stage.setTitle("Story Page");
             stage.show();
+//            JSONObject story = new JSONObject();
+
+            // Add the images array
+//            JSONArray images = new JSONArray();
+//            images.put("images\\image4.png");
+//            images.put("images\\image5.png");
+//            images.put("images\\image4.png");
+//            images.put("images\\image5.png");
+//            images.put("images\\image3.png");
+//            story.put("images", images);
+//
+//            story.put("authorName", "authorId");
+//            story.put("content",caption);
+//            story.put("timestamp", "2024-12-05 01:32:22");
+            controller.setStoryContent(story);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,43 +198,110 @@ public class FeedController {
     }
 
     private void loadPosts() {
-        String[][] posts = {
-                {"Post 1 for Omar: This is a text-only post", "images/image1.png,images/image2.png"},
-                {"Post 2: Another post with images", "images/image3.png,images/image4.png"},
-                {"Post 3: Another text-only post", null}
-        };
+        // Creating a mock JSONArray
+        JSONArray posts = new JSONArray();
 
-        for (String[] post : posts) {
+        // Add mock posts
+        JSONObject post1 = new JSONObject();
+        post1.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
+        post1.put("contentId", "P1");
+        post1.put("authorId", "authorId");
+        post1.put("content", "Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
+        post1.put("timestamp", "2024-12-04 01:32:22");
+
+        JSONObject post2 = new JSONObject();
+        post2.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
+        post2.put("contentId", "P2");
+        post2.put("authorId", "authorId");
+        post2.put("content", "Hello,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
+        post2.put("timestamp", "2024-12-04 01:32:22");
+
+        // Add posts to the JSONArray
+        posts.put(post1);
+        posts.put(post2);
+
+        // Iterate over the posts JSONArray
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);  // Get each post
+
             VBox postBox = new VBox();
             postBox.setSpacing(10);
 
-            if (post[0] != null) {
-                Text postText = new Text(post[0]);
+            // Add content (caption)
+
+            String author = post.optString("authorId", "");
+            if (!author.isEmpty()) {
+                Label authorLabel = new Label("Author: " + author);
+
+                // Apply enhanced styles
+                authorLabel.setStyle("-fx-font-size: 12px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-text-fill: #3b5998; " +
+                        "-fx-background-color: #e7f3ff; " +
+                        "-fx-border-radius: 5px; " +
+                        "-fx-padding: 8px 15px; " +
+                        "-fx-border-color: #a1c4e9; " +
+                        "-fx-border-width: 1px; " +
+                        "-fx-background-insets: 0, 1;");
+
+                authorLabel.setEffect(new javafx.scene.effect.DropShadow(5, Color.GRAY));
+
+                postBox.getChildren().add(authorLabel);
+            }
+
+            String content = post.optString("content", "");
+            if (!content.isEmpty()) {
+                Text postText = new Text(content);
                 postText.setStyle("-fx-font-size: 14px;");
                 postBox.getChildren().add(postText);
             }
 
-            if (post[1] != null) {
-                String[] imagePaths = post[1].split(",");
+            // Add images
+            JSONArray images = post.optJSONArray("images");
+            if (images != null) {
                 HBox imageContainer = new HBox();
                 imageContainer.setSpacing(10);
                 imageContainer.setStyle("-fx-padding: 10;");
 
-                for (String path : imagePaths) {
-                    if (isFileValid(path)) {
-                        Image image = new Image("file:" + path.trim());
+                for (int j = 0; j < images.length(); j++) {
+                    String imagePath = images.getString(j); // Get the image path
+                    if (isFileValid(imagePath)) {
+                        Image image = new Image("file:" + imagePath.trim());
                         ImageView imageView = new ImageView(image);
                         imageView.setFitWidth(200);
                         imageView.setPreserveRatio(true);
                         imageContainer.getChildren().add(imageView);
                     } else {
-                        System.out.println("Could not load image: " + path);
+                        System.out.println("Could not load image: " + imagePath);
                     }
                 }
 
                 postBox.getChildren().add(imageContainer);
             }
+            String time = post.optString("timestamp", "");
+            if (!time.isEmpty()) {
+                // Create a Label for the time
+                Label timeLabel = new Label(time);
 
+                // Style the Label for a distinct look
+                timeLabel.setStyle("-fx-font-size: 12px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-text-fill: #555555; " +
+                        "-fx-background-color: #f2f2f2; " +  // Light background
+                        "-fx-border-radius: 5px; " +           // Rounded corners
+                        "-fx-padding: 5px 10px; " +            // Padding inside the label
+                        "-fx-border-color: #dddddd; " +        // Border color
+                        "-fx-border-width: 1px;");             // Border width
+
+                // Optional: Add a subtle shadow effect
+                timeLabel.setEffect(new javafx.scene.effect.DropShadow(10, Color.GRAY));
+
+                // Add the styled time label to the postBox
+                postBox.getChildren().add(timeLabel);
+            }
+
+
+            // Add the post box to the posts list view
             postsListView.getItems().add(postBox);
         }
     }
