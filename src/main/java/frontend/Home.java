@@ -14,6 +14,8 @@ public class Home extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Profile");
         stage.setScene(scene);
+
+        
         stage.show();
     }
 
