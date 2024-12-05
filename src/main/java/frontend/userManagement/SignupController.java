@@ -4,6 +4,7 @@ import backend.user.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import java.time.LocalDate;
@@ -86,6 +87,7 @@ public class SignupController {
 
             // Get current stage
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             // Set new scene and show the stage
             currentStage.setScene(loginScene);
