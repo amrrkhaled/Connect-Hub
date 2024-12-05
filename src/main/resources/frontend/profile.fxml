@@ -22,16 +22,16 @@
     <Button layoutX="48.0" layoutY="591.0" onAction="#updatePassword" text="Update Password" />
 
 
-    <ImageView fx:id="profilePhotoImageView" fitHeight="106.0" fitWidth="129.0" layoutX="46.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
+    <ImageView fx:id="profilePhotoImageView" fitHeight="88.0" fitWidth="94.0" layoutX="46.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
         <image>
-            <Image url="@../../../../Picture.png" />
+            <Image url="https://i.ibb.co/3m2JgbX/Screenshot-2024-12-05-022015.png" />
         </image>
     </ImageView>
 
 
-    <ImageView fx:id="coverPhotoImageView" fitHeight="170.0" fitWidth="400.0" layoutX="50.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true">
+    <ImageView fx:id="coverPhotoImageView" fitHeight="118.0" fitWidth="327.0" layoutX="50.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true">
         <image>
-            <Image url="@../../../../PictureBanner.png" />
+            <Image url="https://i.ibb.co/ncFw9Wj/Screenshot-2024-12-05-021708.png" />
         </image>
     </ImageView>
 
