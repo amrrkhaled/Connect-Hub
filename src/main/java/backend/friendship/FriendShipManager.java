@@ -124,7 +124,7 @@ public class FriendShipManager implements IFriendShipManager {
                 }
             }
         }
-            return new ArrayList<>(friendSuggestions);
+        return new ArrayList<>(friendSuggestions);
     }
     public String extractUsername(String friendUsernameWithStatus) {  if (friendUsernameWithStatus != null) {
         // Check if the username contains a status in parentheses
@@ -154,8 +154,8 @@ public class FriendShipManager implements IFriendShipManager {
         List<String> oldFriendFriends = getFriends(myId);
         List<String> newFriendFriends = getFriends(FriendId);
         List<String> friendsOfFriends = new ArrayList<>();
-        for (String friend : oldFriendFriends) {
-            if (!newFriendFriends.contains(friend) && !friend.equals(FriendId)) {
+        for (String friend : newFriendFriends) {
+            if (!oldFriendFriends.contains(friend) && !friend.equals(myId) &&!friend.equals(FriendId)) {
                 friendsOfFriends.add(friend);
             }
         }
