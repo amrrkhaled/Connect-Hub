@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="666.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.profileManagement.ProfileController">
+    <Button layoutX="46.0" layoutY="178.0" onAction="#changeProfilePhoto" text="Change Profile Photo" />
+    <Button layoutX="48.0" layoutY="346.0" onAction="#changeCoverPhoto" text="Change Cover Photo" />
+
+
+    <TextArea fx:id="bioTextArea" layoutX="50.0" layoutY="392.0" prefHeight="100" prefWidth="400" />
+    <Button layoutX="48.0" layoutY="509.0" onAction="#editBio" text="Save Bio" />
+
+
+    <TextField fx:id="passwordField" layoutX="48.0" layoutY="553.0" promptText="Enter new password" />
+    <Button layoutX="48.0" layoutY="591.0" onAction="#updatePassword" text="Update Password" />
+
+
+    <ImageView fx:id="profilePhotoImageView" fitHeight="88.0" fitWidth="94.0" layoutX="46.0" layoutY="78.0" pickOnBounds="true" preserveRatio="true">
+
+    </ImageView>
+
+    
+
+    <ImageView fx:id="coverPhotoImageView" fitHeight="118.0" fitWidth="327.0" layoutX="50.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true">
+
+    </ImageView>
+
+    <Label layoutX="150.0" layoutY="29.0" text="Profile Settings">
+        <font>
+            <Font name="Times New Roman Bold" size="26.0" />
+        </font>
+    </Label>
+    <Button layoutX="182.0" layoutY="625.0" onAction="#goToHome" prefHeight="26.0" prefWidth="106.0" style="-fx-background-color: #464648; -fx-background-radius: 2mm;" text="Profile Home" textFill="WHITE" />
+</AnchorPane>

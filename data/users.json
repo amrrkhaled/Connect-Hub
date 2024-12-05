@@ -1,26 +1,58 @@
 [
     {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2006-12-13",
+        "password": "1R8fjGsEexB87LdFA0mvaVwbemLQV7DQvw+k2CgZew4=",
+        "dateOfBirth": "2004-10-12",
         "userId": "U1",
-        "email": "ahmed@gmail.com",
+        "email": "a.samehmepsn@dgmail.com",
+        "username": "ahmeddd",
+        "status": "offline"
+    },
+    {
+        "password": "1R8fjGsEexB87LdFA0mvaVwbemLQV7DQvw+k2CgZew4=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U1",
+        "email": "a.samehmepsn@dssgmail.com",
+        "username": "ahmeddssd",
+        "status": "offline"
+    },
+    {
+        "password": "1R8fjGsEexB87LdFA0mvaVwbemLQV7DQvw+k2CgZew4=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U1",
+        "email": "a.samehmepsn@dssgdmail.com",
+        "username": "ahmeddshhsd",
+        "status": "offline"
+    },
+    {
+        "password": "1R8fjGsEexB87LdFA0mvaVwbemLQV7DQvw+k2CgZew4=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U1",
+        "email": "a.samehmepsn@dssgddmail.com",
+        "username": "ahmeddshhsssd",
+        "status": "offline"
+    },
+    {
+        "password": "1R8fjGsEexB87LdFA0mvaVwbemLQV7DQvw+k2CgZew4=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U5",
+        "email": "a.samehmepsn@dssgdsddmail.com",
+        "username": "ahmeddshhssddsd",
+        "status": "offline"
+    },
+    {
+        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U6",
+        "email": "a.samehmepsn@gfm.com",
+        "username": "amr khaled",
+        "status": "offline"
+    },
+    {
+        "password": "LX5uqiVZ66s2GKjJn/AibLBu2zQIrtaHU21w28mC9L4=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U7",
+        "email": "a.samehmepsn@gfmx.com",
         "username": "ahmed",
         "status": "online"
-    },
-    {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2005-12-21",
-        "userId": "U2",
-        "email": "amr@gmail.com",
-        "username": "amr",
-        "status": "offline"
-    },
-    {
-        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2000-12-23",
-        "userId": "U3",
-        "email": "amrr@gmail.com",
-        "username": "amrrr",
-        "status": "offline"
     }
 ]

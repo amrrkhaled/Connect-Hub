@@ -11,7 +11,7 @@ public class UpdateUser implements IUpdateUser{
         for (int i = 0; i < usersArray.length(); i++) {
             JSONObject existingUser = usersArray.getJSONObject(i);
             if (existingUser.getString("username").equals(username)) {
-                usersArray.put(i, user);  // Replace the old user object with the updated one
+                usersArray.put(i, user);
                 break;
             }
         }
