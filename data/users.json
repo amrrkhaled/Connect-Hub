@@ -1,8 +1,34 @@
-[{
-    "password": "TaEnI1DzlKqvOxSNAXx4ujTvDU5eW9thCt21sUvFa94=",
-    "dateOfBirth": "2004-10-12",
-    "userId": "U1",
-    "email": "a.samehmepsn@ssgfmx.com",
-    "username": "ahmedddd",
-    "status": "online"
-}]
+[
+    {
+        "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U1",
+        "email": "a.samehmepsn@gmail.com",
+        "username": "ahmed",
+        "status": "offline"
+    },
+    {
+        "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U2",
+        "email": "a.samehmepsn@mil.com",
+        "username": "omar",
+        "status": "online"
+    },
+    {
+        "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U3",
+        "email": "mohamed@mss.com",
+        "username": "mohamed",
+        "status": "offline"
+    },
+    {
+        "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U4",
+        "email": "mohamed@mere.com",
+        "username": "eid",
+        "status": "offline"
+    }
+]

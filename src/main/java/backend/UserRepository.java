@@ -3,10 +3,10 @@ package backend;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class UserRepository {
+public class UserRepository implements IUserRepository {
     ILoadUsers loadUsers;
     public UserRepository(ILoadUsers loadUsers){
-        loadUsers = loadUsers;
+        this.loadUsers = loadUsers;
     }
     public String getUsernameByUserId(String userId) {
         JSONArray usersArray = loadUsers.loadUsers();
@@ -28,5 +28,6 @@ public class UserRepository {
         }
         return null;
     }
+
 
 }

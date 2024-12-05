@@ -1,17 +1,32 @@
 [
-  {
-    "userId1": "U7",
-    "userId2": "U6",
-    "status": "blocked"
-  },
-  {
-    "userId1": "U1",
-    "userId2": "U5",
-    "status": "accepted"
-  },
-  {
-    "userId1": "U6",
-    "userId2": "U5",
-    "status": "accepted"
-  }
+    {
+        "userId1": "U2",
+        "userId2": "U3",
+        "status": "pending"
+    },
+    {
+        "userId1": "U2",
+        "userId2": "U4",
+        "status": "pending"
+    },
+    {
+        "userId1": "U3",
+        "userId2": "U4",
+        "status": "pending"
+    },
+    {
+        "userId1": "U2",
+        "userId2": "U1",
+        "status": "accepted"
+    },
+    {
+        "userId1": "U3",
+        "userId2": "U1",
+        "status": "accepted"
+    },
+    {
+        "userId1": "U4",
+        "userId2": "U1",
+        "status": "accepted"
+    }
 ]
