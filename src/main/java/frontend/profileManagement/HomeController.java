@@ -1,6 +1,9 @@
 package frontend.profileManagement;
 
-import backend.user.User;
+import backend.contentCreation.ContentFiles;
+import backend.contentCreation.IContent;
+import backend.contentCreation.Post;
+import backend.user.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +15,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 
@@ -23,8 +28,8 @@ public class HomeController {
     @FXML
     private VBox postsContainer;
 
-    private final String userId = User.getUserId();
-
+//    private final String userId = User.getUserId();
+    private final String userId = "U1";
 
     @FXML
     public void initialize() {
@@ -38,10 +43,20 @@ public class HomeController {
                 {"images/I1.png", "images/I2.png"},
                 {"images/I3.png", "images/I4.png"}
         };
+        IContent contentManager = new Post(new ContentFiles());
+        JSONArray userPosts = contentManager.getUserContent(userId);
+        System.out.println(userPosts);
+        for (int i = 0; i < userPosts.length(); i++) {
 
-        for (int i = 0; i < texts.length; i++) {
-            VBox post = createPost(texts[i], imageUrls[i]);
-            postsContainer.getChildren().add(post);
+            JSONArray postImages=userPosts.getJSONObject(i).getJSONArray("images");
+            String[] imagePaths = new String[postImages.length()];
+            for (int j = 0; j < postImages.length(); j++) {
+                imagePaths[j] = postImages.getString(j);
+            }
+
+            String content = userPosts.getJSONObject(i).getString("content");
+           VBox post = createPost(content, imagePaths);
+           postsContainer.getChildren().add(post);
         }
     }
 

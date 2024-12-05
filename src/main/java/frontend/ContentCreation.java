@@ -14,7 +14,7 @@ public class ContentCreation extends Application {
     }
 
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(ContentCreation.class.getResource("story.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ContentCreation.class.getResource("post.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 600);
         stage.setTitle("story");
         stage.setScene(scene);

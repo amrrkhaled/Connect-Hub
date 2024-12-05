@@ -29,7 +29,8 @@ public class PostController {
     private ImageView imageView;
     @FXML
     private VBox imageContainer; // Container for displaying images
-
+    //    private final String userId = User.getUserId();
+    private final String userId = "U1";
     private List<String> selectedImagePaths = new ArrayList<>(); // Holds paths of selected images
 
 
@@ -75,7 +76,7 @@ public class PostController {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        contentCreation.createContent("authorId",content, now.format(formatter), selectedImagePaths);
+        contentCreation.createContent(userId,content, now.format(formatter), selectedImagePaths);
         //navigateToNewsFeed();
     }
 

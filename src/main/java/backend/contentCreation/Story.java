@@ -60,7 +60,7 @@ public class Story implements IContent {
         for (int i = 0; i < stories.length(); i++) {
             try {
                 JSONObject story = stories.getJSONObject(i);
-                if (story.getString("userId").equals(userId)) {
+                if (story.getString("authorId").equals(userId)) {
                     String storyTimestampStr = story.getString("timestamp"); // Assuming "timestamp" is in the formatted string
                     LocalDateTime storyTime = LocalDateTime.parse(storyTimestampStr, formatter);
 

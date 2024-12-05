@@ -42,7 +42,9 @@ public class Post implements IContent {
 
     @Override
     public JSONArray getUserContent(String userId) {
+
         JSONArray posts = contentFiles.loadContent(FILEPATH);
+
         JSONArray userPosts = new JSONArray();
         if (posts == null) {
             System.err.println("Error: Content file could not be loaded.");
@@ -52,7 +54,7 @@ public class Post implements IContent {
         for (int i = 0; i < posts.length(); i++) {
             try {
                 JSONObject post = posts.getJSONObject(i);
-                if (post.getString("userId").equals(userId)) {
+                if (post.getString("authorId").equals(userId)) {
                     userPosts.put(post);
                 }
             } catch (Exception e) {

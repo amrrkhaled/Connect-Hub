@@ -29,7 +29,8 @@ public class StoryController {
     @FXML
     private VBox imageContainer;
     private List<String> selectedImagePaths = new ArrayList<>(); // Holds paths of selected images
-
+    //    private final String userId = User.getUserId();
+    private final String userId = "U1";
 
     @FXML
     public void initialize() {
@@ -73,7 +74,7 @@ public class StoryController {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        contentCreation.createContent("authorId",content, now.format(formatter), selectedImagePaths);
+        contentCreation.createContent(userId,content, now.format(formatter), selectedImagePaths);
         //navigateToNewsFeed();
     }
 

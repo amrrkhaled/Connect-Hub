@@ -33,6 +33,8 @@ public class ProfileController {
 
     private final String userId = User.getUserId();
 
+
+
     @FXML
     public void initialize(){
         ILoadProfiles loadProfiles = new LoadProfiles();
