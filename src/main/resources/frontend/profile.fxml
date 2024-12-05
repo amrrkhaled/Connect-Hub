@@ -28,6 +28,7 @@
         </image>
     </ImageView>
 
+    
 
     <ImageView fx:id="coverPhotoImageView" fitHeight="118.0" fitWidth="327.0" layoutX="50.0" layoutY="222.0" pickOnBounds="true" preserveRatio="true">
         <image>
