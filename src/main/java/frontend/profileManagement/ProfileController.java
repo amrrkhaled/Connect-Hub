@@ -115,7 +115,9 @@ public class ProfileController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/home.fxml"));
             Scene homeScene = new Scene(loader.load());
+
             Stage stage = (Stage) bioTextArea.getScene().getWindow();
+
             stage.setScene(homeScene);
         } catch (Exception e) {
             e.printStackTrace();
