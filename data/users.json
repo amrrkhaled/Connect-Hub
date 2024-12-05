@@ -30,5 +30,36 @@
         "email": "mohamed@mere.com",
         "username": "eid",
         "status": "offline"
-    }
+    },
+    {
+        "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U5",
+        "email": "a.freepsn@gmail.com",
+        "username": "asser",
+        "status": "offline"
+    },
+    {
+        "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U6",
+        "email": "a.fdfsfs@mil.com",
+        "username": "ali",
+        "status": "offline"
+    },
+    {
+        "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+        "dateOfBirth": "2004-10-12",
+        "userId": "U7",
+        "email": "mohamddded@mss.com",
+        "username": "yamal",
+        "status": "offline"
+    },   {
+    "password": "nAk9otZ18/btopEXe+XV5DShhLgqUgHBN4VXcaXhAAM=",
+    "dateOfBirth": "2004-10-12",
+    "userId": "U8",
+    "email": "mohamddded@mssas.com",
+    "username": "jordan",
+    "status": "offline"
+}
 ]

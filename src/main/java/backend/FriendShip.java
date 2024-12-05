@@ -11,17 +11,18 @@ public class FriendShip {
     ILoadFriendShips loadFriendShips;
     IFriendShipValidation friendShipValidation;
     IFriendShipManager friendShipManager;
+    IUserRepository userRepository;
     private final String filePath = "data/friendships.json";
 
-    public FriendShip(Validation validation, ILoadFriendShips loadFriendShips, IFriendShipValidation friendShipValidation, IFriendShipManager friendShipManager) {
-        this.validation = validation;
+    public FriendShip(IUserRepository userRepository, ILoadFriendShips loadFriendShips, IFriendShipValidation friendShipValidation, IFriendShipManager friendShipManager) {
         this.loadFriendShips = loadFriendShips;
         this.friendShipValidation = friendShipValidation;
         this.friendShipManager = friendShipManager;
+        this.userRepository = userRepository;
     }
 
     public void addFriend(String userId1, String username) {
-        JSONObject user = validation.findUserByUsername(username);
+        JSONObject user = userRepository.findUserByUsername(username);
         String userId2 = user.getString("userId");
         JSONObject FriendShip = new JSONObject();
         FriendShip.put("userId1", userId1);
@@ -42,12 +43,12 @@ public class FriendShip {
     }
 
     public void acceptFriend(String userId1, String username) {
-        JSONObject user = validation.findUserByUsername(username);
+        JSONObject user = userRepository.findUserByUsername(username);
         boolean friendshipFound = false;
         String userId2 = user.getString("userId");
         JSONObject FriendShip = new JSONObject();
-        FriendShip.put("userId1", userId1);
-        FriendShip.put("userId2", userId2);
+        FriendShip.put("userId1", userId2);
+        FriendShip.put("userId2", userId1);
         FriendShip.put("status", "accepted");
         JSONArray friendships = loadFriendShips.loadFriendships();
         if (friendShipValidation.checkDuplicates(userId1, userId2, friendships)) {
@@ -63,7 +64,8 @@ public class FriendShip {
     }
 
     public void removeFriend(String userId1, String username) {
-        JSONObject user = validation.findUserByUsername(username);
+        JSONObject user = userRepository.findUserByUsername(username);
+        System.out.println(username);
         String userId2 = user.getString("userId");
         JSONArray friendships = loadFriendShips.loadFriendships();
         boolean friendshipFound = friendShipManager.RemoveFriendShip(userId1, userId2, friendships);
@@ -80,19 +82,35 @@ public class FriendShip {
     }
 
     public void BlockFriendship(String userId1, String username) {
-        JSONObject user = validation.findUserByUsername(username);
-        String userId2 = user.getString("userId");
+        JSONObject user = userRepository.findUserByUsername(username);
+        String userId2="";
+        if(user != null) {
+             userId2 = user.getString("userId");
+        }else{
+            System.out.println("User not found!");
+            return;
+        }
         JSONObject friendship = null;
         JSONArray friendships = loadFriendShips.loadFriendships();
         boolean friendshipFound = friendShipValidation.checkDuplicates(userId1, userId2, friendships);
         if (friendshipFound) {
             friendship = friendShipManager.FindFriendShip(userId1, userId2, friendships);
-            friendShipManager.RemoveFriendShip(userId1, userId2, friendships);
+            if(friendship != null) {
+                friendShipManager.RemoveFriendShip(userId1, userId2, friendships);
+                friendship.put("userId1", userId1);
+                friendship.put("userId2", userId2);
+                friendship.put("status", "blocked");
+                friendships.put(friendship);
+            }else{
+                System.out.println("Friendship not found.");
+                return;
+            }
+
+        }else{
+            System.out.println("No existing friendship found.");
+            return; // Exit if no friendship exists
         }
-        friendship.put("userId1", userId1);
-        friendship.put("userId2", userId2);
-        friendship.put("status", "blocked");
-        friendships.put(friendship);
+
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(friendships.toString(4));
             System.out.println("Friendship successfully blocked.");

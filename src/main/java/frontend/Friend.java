@@ -13,7 +13,8 @@ public class Friend extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Friend.class.getResource("friend.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 700);
         stage.setTitle("Friend");
-
+        stage.setScene(scene);
+        stage.show();
     }
 
     public static void main(String[] args) {

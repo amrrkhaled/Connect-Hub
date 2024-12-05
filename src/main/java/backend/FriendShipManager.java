@@ -11,10 +11,12 @@ import java.util.ArrayList;
 public class FriendShipManager implements IFriendShipManager {
     ILoadFriendShips loadFriendShips;
     IUserRepository userRepository;
+    ILoadUsers loadUsers;
 
-    public FriendShipManager(ILoadFriendShips loadFriendShips, IUserRepository userRepository) {
+    public FriendShipManager(ILoadFriendShips loadFriendShips, IUserRepository userRepository, ILoadUsers loadUsers) {
         this.loadFriendShips = loadFriendShips;
         this.userRepository = userRepository;
+        this.loadUsers = loadUsers;
     }
 
     @Override
@@ -29,7 +31,6 @@ public class FriendShipManager implements IFriendShipManager {
         }
         return false;
     }
-
     @Override
     public JSONObject FindFriendShip(String userId1, String userId2, JSONArray friendships) {
         for (int i = 0; i < friendships.length(); i++) {
@@ -90,20 +91,60 @@ public class FriendShipManager implements IFriendShipManager {
         JSONArray friendships = loadFriendShips.loadFriendships();
         Set<String> friendSuggestions = new HashSet<>(); // Use Set to avoid duplicates
         List<String> userFriends = getFriends(userId);
-        for (String friend : userFriends) {
-            // Find mutual friends who are not already direct friends
-            List<String> friendsOfFriends = getFriendsOfFriends(friend, userId);
-            friendSuggestions.addAll(friendsOfFriends);
+        if(userFriends.size() > 0) {
+            for (String friend : userFriends) {
+                // Find mutual friends who are not already direct friends
+                List<String> friendsOfFriends = getFriendsOfFriends(friend, userId);
+                friendSuggestions.addAll(friendsOfFriends);
+            }
         }
-
-        return new ArrayList<>(friendSuggestions);
+        else{
+            List<String> pendingFriends=getPendingFriends(userId);
+            List<String> usernames = extractUsernames(pendingFriends);
+            List<String> friendRequests = getFriendRequests(userId);
+            JSONArray users = loadUsers.loadUsers();
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject userJson = users.getJSONObject(i);
+                String suggestion = userJson.getString("username");
+                if(!usernames.contains(suggestion) && !friendRequests.contains(suggestion)) {
+                    friendSuggestions.add(suggestion);
+//                    System.out.println(suggestion);
+//                    System.out.println(usernames);
+                }
+            }
+        }
+            return new ArrayList<>(friendSuggestions);
     }
-    public List<String> getFriendsOfFriends(String oldFriendId, String newFriendId) {
-        List<String> oldFriendFriends = getFriends(oldFriendId);
-        List<String> newFriendFriends = getFriends(newFriendId);
+    public String extractUsername(String friendUsernameWithStatus) {  if (friendUsernameWithStatus != null) {
+        // Check if the username contains a status in parentheses
+        int statusStartIndex = friendUsernameWithStatus.lastIndexOf("(");
+        int statusEndIndex = friendUsernameWithStatus.lastIndexOf(")");
+
+        if (statusStartIndex != -1 && statusEndIndex != -1 && statusEndIndex > statusStartIndex) {
+            // Extract the username by removing the status
+            return friendUsernameWithStatus.substring(0, statusStartIndex).trim();
+        }
+    }
+        return null;
+    }
+
+    public List<String> extractUsernames(List<String> pendingFriends) {
+        List<String> usernames = new ArrayList<>();
+        for (String friend : pendingFriends) {
+            if (friend.endsWith("(pending)")) {
+                usernames.add(friend.substring(0, friend.length() - "(pending)".length()));
+            } else {
+                usernames.add(friend);
+            }
+        }
+        return usernames;
+    }
+    public List<String> getFriendsOfFriends(String FriendId, String myId) {
+        List<String> oldFriendFriends = getFriends(myId);
+        List<String> newFriendFriends = getFriends(FriendId);
         List<String> friendsOfFriends = new ArrayList<>();
         for (String friend : oldFriendFriends) {
-            if (!newFriendFriends.contains(friend) && !friend.equals(newFriendId)) {
+            if (!newFriendFriends.contains(friend) && !friend.equals(FriendId)) {
                 friendsOfFriends.add(friend);
             }
         }

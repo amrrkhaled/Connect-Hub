@@ -16,6 +16,7 @@ public interface IFriendShipManager {
     public List<String> getPendingFriends(String userId);
     public List<String> getFriendSuggestions(String userId);
     public List<String> getFriendRequests(String userId);
-
+    public List<String> extractUsernames(List<String> pendingFriends);
+    public String extractUsername(String friendUsernameWithStatus);
 
 }
