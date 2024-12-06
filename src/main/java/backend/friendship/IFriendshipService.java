@@ -9,4 +9,5 @@ public interface IFriendshipService {
     public JSONObject FindFriendShip(String userId1, String userId2, JSONArray friendships) ;
     public List<String> getPendingFriends(String userId);
     public List<String> extractUsernames(List<String> pendingFriends);
+    public List<String> getBlockedFriends(String userId);
 }

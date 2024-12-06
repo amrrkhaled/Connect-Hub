@@ -51,6 +51,7 @@ public class FriendRequestService implements IFriendRequestService {
         }
         return null;
     }
+    // return friend suggestions
     public List<String> getFriendSuggestions(String userId) {
         JSONArray friendships = loadFriendShips.loadFriendships();
         Set<String> friendSuggestions = new HashSet<>(); // Use Set to avoid duplicates
@@ -65,9 +66,29 @@ public class FriendRequestService implements IFriendRequestService {
             List<String> pendingFriends = friendshipService.getPendingFriends(userId);
             List<String> usernames = friendshipService.extractUsernames(pendingFriends);
             List<String> friendRequests = getFriendRequests(userId);
-            System.out.println("usernames :");
+            List<String> BlockedFriends = friendshipService.getBlockedFriends(userId);
+            System.out.println("Pending friends: :");
             for (String username : usernames) {
                 System.out.println(username);
+            }
+            System.out.println("FriendsUsernames :");
+            for (int i = 0; i < userFriends.size(); i++) {
+                String friendId = userFriends.get(i);
+                String username = userRepository.getUsernameByUserId(friendId);
+                System.out.println(username);
+                userFriends.set(i, username);
+            }
+            System.out.println("FriendRequests :");
+            for (int i = 0; i < friendRequests.size(); i++) {
+                String usernameFriendRequest = friendRequests.get(i);
+                System.out.println(usernameFriendRequest);
+            }
+           System.out.println("BlockedFriends :");
+            for (int i = 0; i < BlockedFriends.size(); i++) {
+                String friendId = BlockedFriends.get(i);
+                String username = userRepository.getUsernameByUserId(friendId);
+                System.out.println(username);
+                BlockedFriends.set(i, username);
             }
             JSONArray users = loadUsers.loadUsers();
             for (int i = 0; i < users.length(); i++) {
@@ -76,7 +97,7 @@ public class FriendRequestService implements IFriendRequestService {
                 String myself = userRepository.getUsernameByUserId(userId);
                 System.out.println("suggestion :");
                 System.out.println(suggestion);
-                if (!userFriends.contains(suggestion)&&!(usernames.contains(suggestion)) && !friendRequests.contains(suggestion) && !(myself.equals(suggestion))) {
+                if (!userFriends.contains(suggestion)&&!(usernames.contains(suggestion)) && !friendRequests.contains(suggestion) && !(myself.equals(suggestion))&& !BlockedFriends.contains(suggestion)) {
                     friendSuggestions.add(suggestion);
 //                    System.out.println(suggestion);
 //                    System.out.println(usernames);
@@ -89,7 +110,7 @@ public class FriendRequestService implements IFriendRequestService {
 
 
 
-
+    // return usernames of friend requests.
     public List<String> getFriendRequests(String userId) {
         JSONArray friendships = loadFriendShips.loadFriendships();
         List<String> friendRequests = new ArrayList<>();

@@ -38,7 +38,7 @@ public class FriendController {
     @FXML
     private TextField searchTextField;
 
-    private final String userId = User.getUserId();
+    private final String currentUserId = User.getUserId();
 
     // Class-level variables
     private final ObservableList<String> friends = FXCollections.observableArrayList();
@@ -50,7 +50,6 @@ public class FriendController {
     public void initialize() {
         // Initialize dependencies
         // Populate lists from the backend
-        String currentUserId = "U1";
         List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(currentUserId);
         List<String> friendRequestsList = service.getFriendRequests(currentUserId);
         List<String> pendingFriendsList = service.getFriendshipService().getPendingFriends(currentUserId);
@@ -137,7 +136,7 @@ public class FriendController {
 //            Validation valid = new UserValidator(loadUsers,passwordUtils);
 //            IUserRepository userRepository = UserRepository.getInstance(loadUsers);
 //            UserManager manager = new UserManager(user, loadUsers, valid, updateUser,userRepository);
-            manager.logout(userId);
+            manager.logout(currentUserId);
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/login.fxml"));
             Scene loginScene = new Scene(loginPage);
 

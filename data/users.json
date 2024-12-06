@@ -4,7 +4,7 @@
         "dateOfBirth": "2003-12-18",
         "userId": "U2",
         "email": "a@gmail.com",
-        "username": "adaada",
+        "username": "hany",
         "status": "offline"
     },
     {
@@ -12,7 +12,7 @@
         "dateOfBirth": "2003-12-18",
         "userId": "U3",
         "email": "aa@gmail.com",
-        "username": "adaSada",
+        "username": "omar",
         "status": "offline"
     },
     {
@@ -21,7 +21,7 @@
         "userId": "U1",
         "email": "amr@gmail.com",
         "username": "amr",
-        "status": "online"
+        "status": "offline"
     },
     {
         "password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
@@ -37,6 +37,22 @@
         "userId": "U5",
         "email": "amaarss@gmail.com",
         "username": "ali",
+        "status": "online"
+    },
+    {
+        "password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
+        "dateOfBirth": "2005-12-08",
+        "userId": "U6",
+        "email": "amssaarss@gmail.com",
+        "username": "youssef",
+        "status": "online"
+    },
+    {
+        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+        "dateOfBirth": "2009-12-04",
+        "userId": "U7",
+        "email": "j@gmail.com",
+        "username": "jordan",
         "status": "online"
     }
 ]

@@ -22,6 +22,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return instance;
     }
+    // return username(state)
     public List<String> getPendingFriends(String userId) {
         JSONArray friendships = loadFriendShips.loadFriendships();
         List<String> pendingFriends = new ArrayList<>();
@@ -37,20 +38,52 @@ public class FriendshipService implements IFriendshipService {
         }
         return pendingFriends;
     }
+    // return usernames of friends of friends.
     public List<String> getFriendsOfFriends(String FriendId, String myId) {
-        List<String> oldFriendFriends = getFriends(myId);
-        List<String> newFriendFriends = getFriends(FriendId);
-
+        List<String> myFriends = getFriends(myId);
+        List<String> FriendsOfmyFriend = getFriends(FriendId);
         List<String> friendsOfFriends = new ArrayList<>();
         List<String> pendingFriends = getPendingFriends(myId);
         List<String> usernames = extractUsernames(pendingFriends);
-        System.out.println("Usernames of pending friends:");
+        IFriendRequestService friendRequestService = FriendRequestServiceFactory.getInstance().createFriendRequestService();
+        List<String> friendRequests = friendRequestService.getFriendRequests(myId);
+        List<String> BlockedFriends = getBlockedFriends(myId);
+        System.out.println("Pending friends: :");
+        for (int i = 0; i < myFriends.size(); i++) {
+            String friendId = FriendsOfmyFriend.get(i);
+            String username = userRepository.getUsernameByUserId(friendId);
+            System.out.println(username);
+            FriendsOfmyFriend.set(i, username);
+        }
         for (String username : usernames) {
-            usernames.
+            System.out.println(username);
+        }
+        System.out.println("FriendsUsernames :");
+        for (int i = 0; i < myFriends.size(); i++) {
+            String friendId = myFriends.get(i);
+            String username = userRepository.getUsernameByUserId(friendId);
+            System.out.println(username);
+            myFriends.set(i, username);
+        }
+        System.out.println("FriendRequests :");
+        for (int i = 0; i < friendRequests.size(); i++) {
+            String usernameFriendRequest = friendRequests.get(i);
+            System.out.println(usernameFriendRequest);
+        }
+        System.out.println("BlockedFriends :");
+        for (int i = 0; i < BlockedFriends.size(); i++) {
+            String friendId = BlockedFriends.get(i);
+            String username = userRepository.getUsernameByUserId(friendId);
+            System.out.println(username);
+            BlockedFriends.set(i, username);
         }
 
-        for (String friend : newFriendFriends) {
-            if (!oldFriendFriends.contains(friend) && !friend.equals(myId) &&!friend.equals(FriendId) && !usernames.contains(friend)) {
+//        for (String username : usernames) {
+//            usernames.
+//        }
+
+        for (String friend : FriendsOfmyFriend) {
+            if (!myFriends.contains(friend) && !friend.equals(myId) &&!friend.equals(FriendId) && !usernames.contains(friend)&& !BlockedFriends.contains(friend) && !friendRequests.contains(friend)) {
                 System.out.println(friend);
                 friendsOfFriends.add(friend);
             }
@@ -62,6 +95,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return friendsOfFriends;
     }
+    // return usenames of pendingFriends
     public List<String> extractUsernames(List<String> pendingFriends) {
         List<String> usernames = new ArrayList<>();
         for (String friend : pendingFriends) {
@@ -73,14 +107,15 @@ public class FriendshipService implements IFriendshipService {
         }
         return usernames;
     }
-    public List<String> getFriends(String userId) {
+    // return ids of blocked friends
+    public List<String> getBlockedFriends(String userId) {
         JSONArray friendships = loadFriendShips.loadFriendships();
         List<String> friends = new ArrayList<>();
 
         for (int i = 0; i < friendships.length(); i++) {
             JSONObject friendship = friendships.getJSONObject(i);
 
-            if (friendship.getString("status").equals("accepted") || friendship.getString("status").equals("blocked")) {
+            if (friendship.getString("status").equals("blocked")) {
                 if (friendship.getString("userId1").equals(userId)) {
                     friends.add(friendship.getString("userId2"));
                 } else if (friendship.getString("userId2").equals(userId)) {
@@ -91,6 +126,26 @@ public class FriendshipService implements IFriendshipService {
 
         return friends;
     }
+    //return ids of friends
+    public List<String> getFriends(String userId) {
+        JSONArray friendships = loadFriendShips.loadFriendships();
+        List<String> friends = new ArrayList<>();
+
+        for (int i = 0; i < friendships.length(); i++) {
+            JSONObject friendship = friendships.getJSONObject(i);
+
+            if (friendship.getString("status").equals("accepted")) {
+                if (friendship.getString("userId1").equals(userId)) {
+                    friends.add(friendship.getString("userId2"));
+                } else if (friendship.getString("userId2").equals(userId)) {
+                    friends.add(friendship.getString("userId1"));
+                }
+            }
+        }
+
+        return friends;
+    }
+    // return usernames(status)
     @Override
     public List<String> getFriendsWithStatus(String userId) {
         List<String> friends = new ArrayList<>();
@@ -114,6 +169,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return friends;
     }
+    // remove friendShip
     @Override
     public boolean RemoveFriendShip(String userId1, String userId2, JSONArray friendships) {
         for (int i = 0; i < friendships.length(); i++) {
@@ -126,7 +182,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return false;
     }
-
+   // find friendShip
     @Override
     public JSONObject FindFriendShip(String userId1, String userId2, JSONArray friendships) {
         for (int i = 0; i < friendships.length(); i++) {
