@@ -3,6 +3,7 @@ package frontend.profileManagement;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
+import backend.contentCreation.PostFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.user.*;
@@ -52,7 +53,8 @@ private final String userId = User.getUserId();
     public void initialize() {
         newsFeed.setOnAction(event -> navigateToNewsFeed());
 
-        IContent contentManager = new Post(new ContentFiles());
+        PostFactory postFactory = PostFactory.getInstance();
+        IContent contentManager = postFactory.createPost();
         JSONArray userPosts = contentManager.getUserContent(userId);
         System.out.println(userPosts);
         for (int i = 0; i < userPosts.length(); i++) {

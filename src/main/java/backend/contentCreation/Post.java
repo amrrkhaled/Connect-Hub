@@ -3,6 +3,7 @@ package backend.contentCreation;
 import backend.SaveImage;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
+import backend.friendship.IFriendShipManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,14 +11,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Post implements IContent {
+public class Post implements IContent , IContentRepository{
 
     private final IContentFiles contentFiles;
+    private final IFriendShipManager friendShipManager;
     private final String FILEPATH = "data/posts.json";
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
-
-    public Post(IContentFiles contentFiles) {
+    private static Post instance;
+    private Post(IContentFiles contentFiles, IFriendShipManager friendShipManager) {
         this.contentFiles = contentFiles;
+        this.friendShipManager = friendShipManager;
+    }
+    public static synchronized Post getInstance(IContentFiles contentFiles, IFriendShipManager friendShipManager) {
+        if (instance == null) {
+            instance = new Post(contentFiles, friendShipManager);
+        }
+        return instance;
     }
     @Override
     public void createContent(String authorId, String content, String timestamp, List<String> images) {
@@ -70,7 +78,7 @@ public class Post implements IContent {
 
     @Override
     public JSONArray getNewsFeedContent(String userId) {
-        List<String> friendsIDs = friendShip.getManager().getFriends(userId);  // Get the list of friend IDs
+        List<String> friendsIDs = friendShipManager.getFriends(userId);
         JSONArray feedPosts = new JSONArray();
 
         if (friendsIDs == null || friendsIDs.isEmpty()) {

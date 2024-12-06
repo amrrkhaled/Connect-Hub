@@ -15,7 +15,7 @@ public class LoadProfiles implements ILoadProfiles{
     private LoadProfiles() {
 
     }
-    public static LoadProfiles getInstance() {
+    public static synchronized LoadProfiles getInstance() {
         if (instance == null) {
             instance = new LoadProfiles();
         }

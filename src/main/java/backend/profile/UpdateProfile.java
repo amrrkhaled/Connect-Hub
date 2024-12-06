@@ -11,7 +11,7 @@ public class UpdateProfile implements IUpdateProfile {
     private UpdateProfile() {
 
     }
-    public static UpdateProfile getInstance() {
+    public static synchronized UpdateProfile getInstance() {
         if (instance == null) {
             instance = new UpdateProfile();
         }

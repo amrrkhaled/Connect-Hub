@@ -1,6 +1,7 @@
 package frontend.contentCreation;
 
 import backend.contentCreation.ContentFiles;
+import backend.contentCreation.PostFactory;
 import backend.user.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -76,7 +77,8 @@ public class PostController {
 
 
         showSuccess("Post created successfully!");
-        IContent contentCreation = new Post(new ContentFiles());
+        PostFactory postFactory = PostFactory.getInstance();
+        IContent contentCreation = postFactory.createPost();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

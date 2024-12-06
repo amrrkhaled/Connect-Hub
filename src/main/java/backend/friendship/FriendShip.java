@@ -33,7 +33,12 @@ public class FriendShip {
     public LoadUsers getLoadUsers() {
         return LoadUsers.getInstance();
     }
-
+    public ILoadFriendShips getLoadFriendShips() {
+        return loadFriendShips;
+    }
+    public IFriendShipValidation getFriendShipValidation() {
+        return friendShipValidation;
+    }
     public void addFriend(String userId1, String username) {
         JSONObject user = userRepository.findUserByUsername(username);
         String userId2 = user.getString("userId");

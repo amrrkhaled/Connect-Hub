@@ -18,7 +18,7 @@ public class UserValidator implements Validation {
         this.passwordUtils = passwordUtils;
 
     }
-    public static UserValidator getInstance(ILoadUsers loadUsers,IPasswordUtils passwordUtils) {
+    public static synchronized UserValidator getInstance(ILoadUsers loadUsers,IPasswordUtils passwordUtils) {
         if (instance == null) {
             instance = new UserValidator(loadUsers,passwordUtils);
         }

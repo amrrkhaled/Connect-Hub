@@ -1,6 +1,7 @@
 package frontend.contentCreation;
 
 import backend.contentCreation.ContentFiles;
+import backend.contentCreation.StoryFactory;
 import backend.user.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -76,7 +77,9 @@ public class StoryController {
 
 
         showSuccess("Story shared successfully!");
-        IContent contentCreation = new Story(new ContentFiles());
+
+        StoryFactory storyFactory = StoryFactory.getInstance();
+        IContent contentCreation = storyFactory.createStory();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

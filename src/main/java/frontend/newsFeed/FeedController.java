@@ -3,6 +3,7 @@ package frontend.newsFeed;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
+import backend.contentCreation.PostFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.profile.*;
@@ -101,7 +102,8 @@ public class FeedController {
 //        stories.put(story2);
 //        stories.put(story3);
 
-        IContent contentManager = new Post(new ContentFiles());
+        PostFactory postFactory = PostFactory.getInstance();
+        IContent contentManager = postFactory.createPost();
         JSONArray stories = contentManager.getNewsFeedContent(userId);
 
         int count = 0;
@@ -227,8 +229,9 @@ public class FeedController {
 
 
 
-        IContent contentManager = new Post(new ContentFiles());
-        JSONArray posts = contentManager.getNewsFeedContent(userId);
+        PostFactory postFactory = PostFactory.getInstance();
+        IContent contentCreation = postFactory.createPost();
+        JSONArray posts = contentCreation.getNewsFeedContent(userId);
 
         // Iterate over the posts JSONArray
         for (int i = 0; i < posts.length(); i++) {

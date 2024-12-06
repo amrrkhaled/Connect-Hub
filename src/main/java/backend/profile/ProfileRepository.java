@@ -9,7 +9,7 @@ public class ProfileRepository implements IProfileRepository {
     private ProfileRepository(ILoadProfiles loadProfiles) {
         this.loadProfiles = loadProfiles;
     }
-    public static ProfileRepository getInstance(ILoadProfiles loadProfiles) {
+    public static synchronized ProfileRepository getInstance(ILoadProfiles loadProfiles) {
         if (instance == null) {
             instance = new ProfileRepository(loadProfiles);
         }

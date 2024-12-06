@@ -9,10 +9,26 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class LoadFriendShips implements ILoadFriendShips{
+public class LoadFriendShips implements ILoadFriendShips {
     private final String filePath = "data/friendships.json";
-    public JSONArray loadFriendships(){
+    private static LoadFriendShips instance;
+
+    // Private constructor to prevent instantiation
+    private LoadFriendShips() {
+    }
+
+    // Method to get the singleton instance
+    public static synchronized LoadFriendShips getInstance() {
+        if (instance == null) {
+            instance = new LoadFriendShips();
+        }
+        return instance;
+    }
+
+    // Method to load the friendships from the JSON file
+    public JSONArray loadFriendships() {
         File file = new File(filePath);
+
         // Initialize file with an empty array if it doesn't exist
         if (!file.exists()) {
             try (FileWriter fileWriter = new FileWriter(filePath)) {
