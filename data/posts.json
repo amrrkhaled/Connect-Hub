@@ -88,5 +88,16 @@
         "authorId": "U1",
         "content": "dsgsdg",
         "timestamp": "2024-12-05 23:32:04"
+    },
+    {
+        "images": [
+            "images\\I35.jpg",
+            "images\\I36.jpg",
+            "images\\I37.jpg"
+        ],
+        "contentId": "P10",
+        "authorId": "U1",
+        "content": "AA",
+        "timestamp": "2024-12-06 02:52:27"
     }
 ]
