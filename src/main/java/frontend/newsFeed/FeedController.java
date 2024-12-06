@@ -425,7 +425,8 @@ public class FeedController {
             IAddUser user = new AddUser(loadUsers);
             Validation valid = new UserValidator(loadUsers);
             IUpdateUser updateUser = new UpdateUser();
-            UserManager manager = new UserManager(user, loadUsers, valid, updateUser);
+            IUserRepository userRepository = UserRepository.getInstance(loadUsers);
+            UserManager manager = new UserManager(user, loadUsers, valid, updateUser,userRepository);
             manager.logout(userId);
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/login.fxml"));
             Scene loginScene = new Scene(loginPage);

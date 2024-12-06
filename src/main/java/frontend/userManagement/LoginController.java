@@ -43,7 +43,8 @@ public class LoginController {
             showAlert("All fields are required!");
         } else {
             ILoadUsers loadUser = LoadUsers.getInstance();
-            UserManager manager = new UserManager(new AddUser(loadUser),loadUser, new UserValidator(loadUser),new UpdateUser());
+            IUserRepository userRepository = UserRepository.getInstance(loadUser);
+            UserManager manager = new UserManager(new AddUser(loadUser),loadUser, new UserValidator(loadUser),new UpdateUser(), userRepository);
             String msg = manager.login(usernameOrEmail, password);
             User.setUserId(msg);
             if (msg.matches("U\\d+")) {
