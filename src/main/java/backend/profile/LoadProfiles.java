@@ -11,6 +11,16 @@ import java.io.IOException;
 
 public class LoadProfiles implements ILoadProfiles{
     private final String filePath = "data/profiles.json";
+    private static LoadProfiles instance;
+    private LoadProfiles() {
+
+    }
+    public static synchronized LoadProfiles getInstance() {
+        if (instance == null) {
+            instance = new LoadProfiles();
+        }
+        return instance;
+    }
     public JSONArray loadProfiles(){
             File file = new File(filePath);
             // Initialize file with an empty array if it doesn't exist

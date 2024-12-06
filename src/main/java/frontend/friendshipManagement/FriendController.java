@@ -1,5 +1,7 @@
 package frontend.friendshipManagement;
 
+import backend.friendship.FriendRequestService;
+import backend.friendship.FriendRequestServiceFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.user.*;
@@ -23,6 +25,8 @@ import java.util.List;
 
 public class FriendController {
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+    public FriendRequestService service = factory.createFriendRequestService();
     @FXML
     private ListView<String> friendListView;
     @FXML
@@ -34,7 +38,7 @@ public class FriendController {
     @FXML
     private TextField searchTextField;
 
-    private final String userId = User.getUserId();
+    private final String currentUserId = User.getUserId();
 
     // Class-level variables
     private final ObservableList<String> friends = FXCollections.observableArrayList();
@@ -46,11 +50,10 @@ public class FriendController {
     public void initialize() {
         // Initialize dependencies
         // Populate lists from the backend
-
-        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(userId);
-        List<String> friendRequestsList = friendShip.getManager().getFriendRequests(userId);
-        List<String> pendingFriendsList = friendShip.getManager().getPendingFriends(userId);
-        List<String> suggestionsList = friendShip.getManager().getFriendSuggestions(userId);
+        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(currentUserId);
+        List<String> friendRequestsList = service.getFriendRequests(currentUserId);
+        List<String> pendingFriendsList = service.getFriendshipService().getPendingFriends(currentUserId);
+        List<String> suggestionsList = service.getFriendSuggestions(currentUserId);
         // Set the ListView items with the populated ObservableLists
         friends.addAll(friendsList);  // Add all elements to the ObservableList
         friendRequests.addAll(friendRequestsList);
@@ -125,13 +128,15 @@ public class FriendController {
 
     public void onLogout(ActionEvent event) {
         try {
-            ILoadUsers loadUsers = LoadUsers.getInstance();
-            IAddUser user = new AddUser(loadUsers);
-            Validation valid = new UserValidator(loadUsers);
-            IUpdateUser updateUser = new UpdateUser();
-            IUserRepository userRepository = UserRepository.getInstance(loadUsers);
-            UserManager manager = new UserManager(user, loadUsers, valid, updateUser,userRepository);
-            manager.logout(userId);
+            UserManager manager = UserFactory.getInstance().createUserManager();
+//            ILoadUsers loadUsers = LoadUsers.getInstance();
+//            IAddUser user = new AddUser(loadUsers);
+//            IUpdateUser updateUser = new UpdateUser();
+//            IPasswordUtils passwordUtils = new PasswordUtils(loadUsers, updateUser);
+//            Validation valid = new UserValidator(loadUsers,passwordUtils);
+//            IUserRepository userRepository = UserRepository.getInstance(loadUsers);
+//            UserManager manager = new UserManager(user, loadUsers, valid, updateUser,userRepository);
+            manager.logout(currentUserId);
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/login.fxml"));
             Scene loginScene = new Scene(loginPage);
 
@@ -154,7 +159,7 @@ public class FriendController {
         if (selectedRequest != null) {
 
             String newFriendId = friendShip.getUserRepository().findUserIdByUsername(selectedRequest);
-            friendShip.acceptFriend(userId, selectedRequest);
+            friendShip.acceptFriend(currentUserId, selectedRequest);
             String status = friendShip.getUserRepository().getStatusByUserId(newFriendId);
             friends.add(selectedRequest + "(" + status + ")");
             // Remove from friend requests
@@ -170,7 +175,7 @@ public class FriendController {
         String selectedRequest = friendRequestListView.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
 
-            friendShip.removeFriend(userId, selectedRequest);
+            friendShip.removeFriend(currentUserId, selectedRequest);
             friendRequests.remove(selectedRequest);
         }
     }
@@ -180,8 +185,8 @@ public class FriendController {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
 
-            String selectedFriendUsername = friendShip.getManager().extractUsername(selectedFriend);
-            friendShip.BlockFriendship(userId, selectedFriendUsername);
+            String selectedFriendUsername = service.extractUsername(selectedFriend);
+            friendShip.BlockFriendship(currentUserId, selectedFriendUsername);
             // Remove from the friends list
             friends.remove(selectedFriend);
 
@@ -196,9 +201,9 @@ public class FriendController {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
 
-            String selectedFriendUsername = friendShip.getManager().extractUsername(selectedFriend);
+            String selectedFriendUsername = service.extractUsername(selectedFriend);
             System.out.println(selectedFriend);
-            friendShip.removeFriend(userId, selectedFriendUsername);
+            friendShip.removeFriend(currentUserId, selectedFriendUsername);
 
             // Remove from the local friends list
             friends.remove(selectedFriend);
@@ -210,8 +215,7 @@ public class FriendController {
     protected void onAddFriendFromSuggestions() {
         String selectedSuggestion = suggestionListView.getSelectionModel().getSelectedItem();
         if (selectedSuggestion != null) {
-             // Replace with the actual method to get the current user ID
-            friendShip.addFriend(userId, selectedSuggestion);
+            friendShip.addFriend(currentUserId, selectedSuggestion);
             // Update UI Lists
             pendingFriendRequests.add(selectedSuggestion + " (pending)"); // Add to pending
             friendSuggestions.remove(selectedSuggestion); // Remove from suggestions

@@ -2,7 +2,7 @@
     {
         "Bio": "Hey I am Omar",
         "userId": "U1",
-        "ProfilePicture": "images/I1.jpg",
+        "ProfilePicture": "images/defualtPp.jpg",
         "CoverPhoto": "images/I43.jpeg"
     },
     {
@@ -16,10 +16,25 @@
         "userId": "U4",
         "ProfilePicture": "images\\I3.jpg",
         "CoverPhoto": "images\\I14.jpg"
+    },
+    {
+        "Bio": "I am Amr",
+        "userId": "U3",
+        "ProfilePicture": "images\\I4.jpg",
+        "CoverPhoto": "images\\I14.jpg"
+    },
+    {
+        "Bio": "",
+        "userId": "U13",
+        "ProfilePicture": "images/defualtPp.jpg"
+    },
+    {
+        "Bio": "",
+        "userId": "U14",
+        "ProfilePicture": "images/defualtPp.jpg"
     },{
-    "Bio": "I am Amr",
-    "userId": "U3",
-    "ProfilePicture": "images\\I4.jpg",
-    "CoverPhoto": "images\\I14.jpg"
+    "Bio": "",
+    "userId": "U7",
+    "ProfilePicture": "images\\defualtPp.jpg"
 }
 ]

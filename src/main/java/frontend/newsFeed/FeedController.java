@@ -1,11 +1,7 @@
 package frontend.newsFeed;
 
-import backend.contentCreation.ContentFiles;
-import backend.contentCreation.IContent;
-import backend.contentCreation.Post;
-import backend.contentCreation.Story;
-import backend.friendship.FriendShip;
-import backend.friendship.FriendShipFactory;
+import backend.contentCreation.*;
+import backend.friendship.*;
 import backend.profile.*;
 import backend.user.*;
 import javafx.collections.FXCollections;
@@ -29,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -46,10 +43,14 @@ public class FeedController {
     private ScrollPane storiesScrollPane;
 
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    private  IFriendshipService friendShipService = friendShip.getFriendshipService();
 
+    public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+    public FriendRequestService service = factory.createFriendRequestService();
+    @FXML
+    private ScrollPane postsScrollPane;
     private final ObservableList<String> friends = FXCollections.observableArrayList();
     private final String userId = User.getUserId();
-
     @FXML
     public void initialize() {
         loadStories();
@@ -61,38 +62,39 @@ public class FeedController {
     private void loadFriendsList() {
         // Example friends array
 
-        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(userId);
+        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(userId);
         // Add friends to the ListView
         friendsListView.getItems().clear(); // Clear existing items (if any)
         friendsListView.getItems().addAll(friendsList); // Add all friends from the array
     }
     private void loadStories() {
 
-        IContent contentManager = new Story(new ContentFiles());
-        JSONArray stories = contentManager.getNewsFeedContent(userId);
-        System.out.println(stories);
+        StoryFactory storyFactory = StoryFactory.getInstance();
+        IContent contentManager = storyFactory.createStory();
+//        JSONArray stories = contentManager.getNewsFeedContent(userId);
 
-        int count = 0;
-        for (int i = 0; i < stories.length(); i++) {
-            JSONObject storyObject = stories.getJSONObject(i); // Get the JSON object at index i
+        List<String> friendsIDs = friendShipService.getFriends(userId);
+        for (String Id : friendsIDs){
+            JSONArray stories = contentManager.getNewsFeedContent(Id);
+            JSONObject storyObject = stories.getJSONObject(1); // Get the JSON object at index i
             String id = storyObject.getString("authorId");
 
             String userName = friendShip.getUserRepository().getUsernameByUserId(id);
-            ILoadProfiles loadProfiles = new LoadProfiles();
-            IUpdateProfile updateProfile = new UpdateProfile();
-            ProfileManager manager = new ProfileManager(loadProfiles, userId, updateProfile);
-            JSONObject profile = manager.findProfileByUserId(id);
-            String imagePath=null;
-            if(profile.get("ProfilePicture")!=null){
-                imagePath = profile.getString("ProfilePicture");
+            ProfileManager manager = ProfileManagerFactory.getInstance().createProfileManager(id);
+            JSONObject profile =manager.getRepo().findProfileByUserId(id);
+
+            String imagePath = null;
+            if(profile!=null && profile.get("ProfilePicture")!=null){
+                imagePath=  profile.getString("ProfilePicture");
             }
 
-            VBox storyItem = new VBox();
+
+                    VBox storyItem = new VBox();
             storyItem.setSpacing(5);
             storyItem.setStyle("-fx-alignment: center;");
 
             Circle storyCircle = new Circle(30);
-            int finalCount = count;
+
 
             if (imagePath != null && isFileValid(imagePath)) {
                 ImageView imageView = new ImageView(new Image("file:" + imagePath));
@@ -101,13 +103,13 @@ public class FeedController {
                 imageView.setPreserveRatio(false);
                 imageView.setClip(new Circle(30, 30, 30));
                 storyItem.getChildren().add(imageView);
-                imageView.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
+                imageView.setOnMouseClicked(event -> openStoryPage(stories));
             } else {
                 storyCircle.setFill(Color.LIGHTBLUE);
                 storyCircle.setStroke(Color.DARKBLUE);
                 storyCircle.setStrokeWidth(2);
                 storyItem.getChildren().add(storyCircle);
-                storyCircle.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
+                storyCircle.setOnMouseClicked(event -> openStoryPage(stories));
             }
 
             Text storyLabel = new Text(userName);
@@ -115,24 +117,23 @@ public class FeedController {
             storyItem.getChildren().add(storyLabel);
 
             storiesBox.getChildren().add(storyItem);
-            count++;
+
         }
+
 
     }
 
-
-    private void openStoryPage(JSONObject story) {
+    private void openStoryPage(JSONArray stories) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/StoryPage.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
 
             StoryPageController controller = loader.getController();
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             stage.setTitle("Story Page");
             stage.show();
-            controller.setStoryContent(story);
+            controller.setStoryContent(stories);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,9 +145,13 @@ public class FeedController {
     }
 
     private void loadPosts() {
+        // Creating a mock JSONArray
 
-        IContent contentManager = new Post(new ContentFiles());
-        JSONArray posts = contentManager.getNewsFeedContent(userId);
+
+
+        PostFactory postFactory = PostFactory.getInstance();
+        IContent contentCreation = postFactory.createPost();
+        JSONArray posts = contentCreation.getNewsFeedContent(userId);
 
         // Iterate over the posts JSONArray
         for (int i = 0; i < posts.length(); i++) {
@@ -277,11 +282,7 @@ public class FeedController {
     private void onRefreshNewsfeed() {
         System.out.println("Refresh Newsfeed button clicked");
         postsListView.getItems().clear();
-        storiesBox.getChildren().clear();
-        friendsListView.getItems().clear(); // Clear existing items (if any)
-        loadFriendsList();
         loadPosts();
-        loadStories();
     }
 
     public void onHome(ActionEvent event) {
@@ -341,12 +342,7 @@ public class FeedController {
 
     public void onLogout(ActionEvent event) {
         try {
-            ILoadUsers loadUsers = LoadUsers.getInstance();
-            IAddUser user = new AddUser(loadUsers);
-            Validation valid = new UserValidator(loadUsers);
-            IUpdateUser updateUser = new UpdateUser();
-            IUserRepository userRepository = UserRepository.getInstance(loadUsers);
-            UserManager manager = new UserManager(user, loadUsers, valid, updateUser,userRepository);
+            UserManager manager = UserFactory.getInstance().createUserManager();
             manager.logout(userId);
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/login.fxml"));
             Scene loginScene = new Scene(loginPage);

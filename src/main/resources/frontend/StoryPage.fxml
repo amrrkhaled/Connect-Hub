@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ScrollPane?>
 
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.newsFeed.StoryPageController">
     <!-- Top: User ID -->
@@ -14,8 +13,7 @@
 
     <!-- Center: Image List -->
     <center>
-        <VBox spacing="15.0" alignment="CENTER" style="-fx-padding: 20; -fx-background-color: #f0f2f5; -fx-background-radius: 10px;">
-            <Label fx:id="timeRemainingLabel" style="-fx-font-size: 14px; -fx-text-fill: #ff0000; -fx-font-weight: bold;" text="Time Remaining: " />
+        <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20; -fx-background-color: #f0f2f5; -fx-background-radius: 10px;">
             <ScrollPane fx:id="scrollPane" prefHeight="300.0" prefWidth="350.0" style="-fx-border-color: #ccc; -fx-background-color: transparent; -fx-background-radius: 10px; -fx-padding: 10px;">
                 <content>
                     <!-- Image Container: Dynamically filled with images -->
@@ -27,8 +25,6 @@
 
     <!-- Bottom: Caption -->
     <bottom>
-        <VBox spacing="15.0" style="-fx-padding: 20.0;">
-            <Label fx:id="captionLabel" style="-fx-font-size: 16px; -fx-text-fill: #333333; -fx-font-weight: bold;" text="Caption:" wrapText="true" />
-        </VBox>
+        <VBox spacing="15.0" style="-fx-padding: 20.0;" />
     </bottom>
 </BorderPane>

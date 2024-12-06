@@ -42,9 +42,7 @@ public class LoginController {
         if (usernameOrEmail.isEmpty() || password.isEmpty()) {
             showAlert("All fields are required!");
         } else {
-            ILoadUsers loadUser = LoadUsers.getInstance();
-            IUserRepository userRepository = UserRepository.getInstance(loadUser);
-            UserManager manager = new UserManager(new AddUser(loadUser),loadUser, new UserValidator(loadUser),new UpdateUser(), userRepository);
+            UserManager manager = UserFactory.getInstance().createUserManager();
             String msg = manager.login(usernameOrEmail, password);
             User.setUserId(msg);
             if (msg.matches("U\\d+")) {

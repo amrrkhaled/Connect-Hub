@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 public class storiesThread extends Thread {
     private final String FILEPATH = "data/stories.json";
-    private ContentFiles contentFiles = new ContentFiles();
+    private ContentFiles contentFiles = ContentFiles.getInstance();
 
     @Override
     public void run() {

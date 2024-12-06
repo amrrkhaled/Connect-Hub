@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 public class SaveImage {
     private static final String IMAGES_FOLDER = "images/";
     private static int imageCounter = 1;
-
     public static String saveImageToFolder(String absoluteFilePath) throws IOException {
         File sourceFile = new File(absoluteFilePath);
         if (!sourceFile.exists()) {
@@ -39,6 +38,5 @@ public class SaveImage {
         int lastDotIndex = fileName.lastIndexOf('.');
         return (lastDotIndex > 0) ? fileName.substring(lastDotIndex) : ""; // Return the extension, or empty if none
     }
-
 }
 

@@ -3,6 +3,9 @@ package frontend.profileManagement;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
+import backend.contentCreation.PostFactory;
+import backend.friendship.FriendRequestService;
+import backend.friendship.FriendRequestServiceFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.user.*;
@@ -31,6 +34,10 @@ import java.util.List;
 
 public class HomeController {
 
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+    public FriendRequestService service = factory.createFriendRequestService();
+
     @FXML
     private ScrollPane postsScrollPane;
 
@@ -41,7 +48,6 @@ public class HomeController {
     private ListView<String> friendsListView;
     @FXML
     private Button newsFeed;
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
 
 private final String userId = User.getUserId();
 
@@ -52,7 +58,8 @@ private final String userId = User.getUserId();
     public void initialize() {
         newsFeed.setOnAction(event -> navigateToNewsFeed());
 
-        IContent contentManager = new Post(new ContentFiles());
+        PostFactory postFactory = PostFactory.getInstance();
+        IContent contentManager = postFactory.createPost();
         JSONArray userPosts = contentManager.getUserContent(userId);
         System.out.println(userPosts);
         for (int i = 0; i < userPosts.length(); i++) {
@@ -68,7 +75,7 @@ private final String userId = User.getUserId();
            postsContainer.getChildren().add(post);
         }
 
-        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(userId);
+        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(userId);
         friends.addAll(friendsList);  // Add all elements to the ObservableList
 
         friendsListView.setItems(friends);

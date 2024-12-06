@@ -37,20 +37,30 @@ public class ProfileController {
 
     @FXML
     public void initialize(){
-        ILoadProfiles loadProfiles = new LoadProfiles();
-        IUpdateProfile updateProfile = new UpdateProfile();
-        ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
-        JSONObject profile =manager.findProfileByUserId(userId);
+        ProfileManagerFactory factory = ProfileManagerFactory.getInstance();
+        ProfileManager manager = factory.createProfileManager(userId);
+        JSONObject profile =manager.getRepo().findProfileByUserId(userId);
 
-        String pP = (profile.get("ProfilePicture").toString());
-        String cP = (profile.get("CoverPhoto").toString());
-        String bio = (profile.get("Bio").toString());
+if(profile!=null){
 
-        profilePhotoImageView.setImage(new Image(new File(pP).toURI().toString()));
-        coverPhotoImageView.setImage(new Image(new File(cP).toURI().toString()));
-        bioTextArea.clear();
-        bioTextArea.appendText(bio);
+    String pP = (profile.get("ProfilePicture").toString());
+   if(profile.has("CoverPhoto")) {
+       String cP = (profile.get("CoverPhoto").toString());
+       coverPhotoImageView.setImage(new Image(new File(cP).toURI().toString()));
+   }
+   else{
+       coverPhotoImageView.setImage(null);}
+    String bio = (profile.get("Bio").toString());
+    profilePhotoImageView.setImage(new Image(new File(pP).toURI().toString()));
+    bioTextArea.clear();
+    bioTextArea.appendText(bio);
 
+}else {
+    profilePhotoImageView.setImage(null);
+    coverPhotoImageView.setImage(null);
+    bioTextArea.clear();
+    bioTextArea.appendText("");
+}
     }
     @FXML
     public void changeProfilePhoto() throws IOException {
@@ -59,11 +69,10 @@ public class ProfileController {
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
             Image ProfileImage = new Image(selectedFile.toURI().toString());
-            ILoadProfiles loadProfiles = new LoadProfiles();
-            IUpdateProfile updateProfile = new UpdateProfile();
-            ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
-            manager.updateProfilePhoto(selectedFile.getAbsolutePath());
 
+            ProfileManagerFactory factory = ProfileManagerFactory.getInstance();
+            ProfileManager manager = factory.createProfileManager(userId);
+            manager.updateProfilePhoto(selectedFile.getAbsolutePath());
              profilePhotoImageView.setImage(ProfileImage);
 
         }
@@ -76,9 +85,8 @@ public class ProfileController {
         File selectedFile = fileChooser.showOpenDialog(new Stage());
         if (selectedFile != null) {
             Image coverImage = new Image(selectedFile.toURI().toString());
-            ILoadProfiles loadProfiles = new LoadProfiles();
-            IUpdateProfile updateProfile = new UpdateProfile();
-            ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
+            ProfileManagerFactory factory = ProfileManagerFactory.getInstance();
+            ProfileManager manager = factory.createProfileManager(userId);
             manager.updateCoverPhoto(selectedFile.getAbsolutePath());
             coverPhotoImageView.setImage(coverImage);
         }
@@ -87,9 +95,8 @@ public class ProfileController {
     @FXML
     public void editBio() {
         String newBio = bioTextArea.getText();
-        ILoadProfiles loadProfiles = new LoadProfiles();
-        IUpdateProfile updateProfile = new UpdateProfile();
-        ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
+        ProfileManagerFactory factory = ProfileManagerFactory.getInstance();
+        ProfileManager manager = factory.createProfileManager(userId);
         manager.updateBio(newBio);
         bioTextArea.clear();
         bioTextArea.appendText(newBio);
@@ -101,9 +108,8 @@ public class ProfileController {
         String newPassword = passwordField.getText();
         ILoadUsers loadUsers = LoadUsers.getInstance();
 
-        IUpdateUser updateUser = new UpdateUser();
-        PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
-
+        IUpdateUser updateUser = UpdateUser.getInstance();
+        PasswordUtils passwordUtils = PasswordUtils.getInstance(loadUsers,updateUser);
         passwordUtils.updatePasswordHashForUser(userId, newPassword);
     }
 

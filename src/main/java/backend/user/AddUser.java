@@ -1,5 +1,9 @@
 package backend.user;
 
+import backend.profile.LoadProfiles;
+import backend.profile.ProfileManager;
+import backend.profile.ProfileManagerFactory;
+import backend.profile.UpdateProfile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,12 +14,18 @@ public class AddUser implements IAddUser {
     private int usersNumber = 1;
     private final String filePath = "data/users.json";
     private final ILoadUsers userLoader;
-
-    public AddUser(ILoadUsers userLoader) {
+    private static AddUser instance;
+    private AddUser(ILoadUsers userLoader) {
 
         this.userLoader = userLoader;
         JSONArray usersArray = userLoader.loadUsers();
         this.usersNumber = usersArray.length() + 1;
+    }
+    public static synchronized AddUser getInstance(ILoadUsers userLoader) {
+        if (instance == null) {
+            instance = new AddUser(userLoader);
+        }
+        return instance;
     }
 
     public void addUser(String username, String password, String email, String dob) {
@@ -23,7 +33,7 @@ public class AddUser implements IAddUser {
         JSONObject newUser = new JSONObject();
         newUser.put("userId", "U" + usersNumber);
         newUser.put("username", username);
-        newUser.put("password", PasswordUtils.hashPassword(password));
+        newUser.put("password", IPasswordUtils.hashPassword(password));
         newUser.put("email", email);
         newUser.put("dateOfBirth", dob);
         newUser.put("status", "offline");
@@ -36,5 +46,9 @@ public class AddUser implements IAddUser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        ProfileManagerFactory factory = ProfileManagerFactory.getInstance();
+        ProfileManager manager = factory.createProfileManager("U" + usersNumber);
+        manager.intiallizeProfile();
+
     }
 }

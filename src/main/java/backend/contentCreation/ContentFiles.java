@@ -10,8 +10,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ContentFiles implements IContentFiles{
+     private static ContentFiles instance;
+     private ContentFiles() {
 
-
+     }
+     public static synchronized ContentFiles getInstance() {
+         if (instance == null) {
+             instance = new ContentFiles();
+         }
+         return instance;
+     }
     @Override
     public JSONArray loadContent(String filePath){
 

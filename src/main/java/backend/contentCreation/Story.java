@@ -1,8 +1,7 @@
 package backend.contentCreation;
 
 import backend.SaveImage;
-import backend.friendship.FriendShip;
-import backend.friendship.FriendShipFactory;
+import backend.friendship.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,15 +12,24 @@ import java.util.List;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class Story implements IContent {
+public class Story implements IContent , IContentRepository{
     private final IContentFiles contentFiles;
+    private final IFriendshipService friendShipService ;
+    private  final FriendRequestService friendRequestService;
     private final String FILEPATH = "data/stories.json";
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
-
-    public Story(IContentFiles contentFiles) {
+    private static Story instance;
+    private Story(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService)
+    {
         this.contentFiles = contentFiles;
+        this.friendShipService = friendShipService;
+        this.friendRequestService = friendRequestService;
     }
-
+    public static synchronized Story getInstance(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService) {
+        if (instance == null) {
+            instance = new Story(contentFiles, friendShipService , friendRequestService);
+        }
+        return instance;
+    }
     @Override
     public void createContent(String authorId,  String content, String timestamp, List<String> images) {
         JSONObject newStory = new JSONObject();
@@ -49,9 +57,6 @@ public class Story implements IContent {
 
     @Override
     public JSONArray getUserContent(String userId) {
-        System.err.println("Error fetching posts for friendId ");
-
-
         JSONArray stories = contentFiles.loadContent(FILEPATH); // Load stories
         JSONArray userStories = new JSONArray();
 
@@ -86,8 +91,7 @@ public class Story implements IContent {
 
     @Override
     public JSONArray getNewsFeedContent(String userId) {
-
-        List<String> friendsIDs = friendShip.getManager().getFriends(userId);  // Get the list of friend IDs
+        List<String> friendsIDs = friendShipService.getFriends(userId);  // Get the list of friend IDs
         JSONArray feedStories = new JSONArray();
 
         if (friendsIDs == null || friendsIDs.isEmpty()) {
