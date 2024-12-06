@@ -82,8 +82,11 @@ public class FeedController {
             IUpdateProfile updateProfile = new UpdateProfile();
             ProfileManager manager = new ProfileManager(loadProfiles, userId, updateProfile);
             JSONObject profile = manager.findProfileByUserId(id);
+            String imagePath=null;
+            if(profile.get("ProfilePicture")!=null){
+                imagePath = profile.getString("ProfilePicture");
+            }
 
-            String imagePath = profile.getString("ProfilePicture");
             VBox storyItem = new VBox();
             storyItem.setSpacing(5);
             storyItem.setStyle("-fx-alignment: center;");
