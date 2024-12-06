@@ -110,10 +110,8 @@ public class FeedController {
             String id = storyObject.getString("authorId");
 
             String userName = friendShip.getUserRepository().getUsernameByUserId(id);
-            ILoadProfiles loadProfiles = new LoadProfiles();
-            IUpdateProfile updateProfile = new UpdateProfile();
-            ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
-            JSONObject profile =manager.findProfileByUserId(id);
+            ProfileManager manager = ProfileManagerFactory.getInstance().createProfileManager(id);
+            JSONObject profile =manager.getRepo().findProfileByUserId(id);
 
             String imagePath = profile.getString("ProfilePicture");
             VBox storyItem = new VBox();
