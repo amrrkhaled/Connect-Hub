@@ -7,12 +7,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.profileManagement.HomeController">
+<BorderPane prefHeight="564.0" prefWidth="791.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.profileManagement.HomeController">
     <!-- Top Section: Header -->
     <top>
         <VBox alignment="CENTER" spacing="20" style="-fx-padding: 20;">
             <Text style="-fx-font-size: 30px; -fx-font-weight: bold; -fx-fill: #3f3f3f;" text="Home" />
-            <Button fx:id="newsFeed" mnemonicParsing="false" text="NewsFeed" style="-fx-font-size: 14px; -fx-padding: 10 20; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;" />
+            <Button fx:id="newsFeed" mnemonicParsing="false" style="-fx-font-size: 14px; -fx-padding: 10 20; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;" text="NewsFeed" />
         </VBox>
     </top>
 
