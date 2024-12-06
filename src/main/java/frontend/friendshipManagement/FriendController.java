@@ -1,5 +1,7 @@
 package frontend.friendshipManagement;
 
+import backend.friendship.FriendRequestService;
+import backend.friendship.FriendRequestServiceFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.user.*;
@@ -23,6 +25,8 @@ import java.util.List;
 
 public class FriendController {
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+    public FriendRequestService service = factory.createFriendRequestService();
     @FXML
     private ListView<String> friendListView;
     @FXML
@@ -47,10 +51,10 @@ public class FriendController {
         // Initialize dependencies
         // Populate lists from the backend
         String currentUserId = "U1";
-        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(currentUserId);
-        List<String> friendRequestsList = friendShip.getManager().getFriendRequests(currentUserId);
-        List<String> pendingFriendsList = friendShip.getManager().getPendingFriends(currentUserId);
-        List<String> suggestionsList = friendShip.getManager().getFriendSuggestions(currentUserId);
+        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(currentUserId);
+        List<String> friendRequestsList = service.getFriendRequests(currentUserId);
+        List<String> pendingFriendsList = service.getFriendshipService().getPendingFriends(currentUserId);
+        List<String> suggestionsList = service.getFriendSuggestions(currentUserId);
         // Set the ListView items with the populated ObservableLists
         friends.addAll(friendsList);  // Add all elements to the ObservableList
         friendRequests.addAll(friendRequestsList);
@@ -182,7 +186,7 @@ public class FriendController {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
             String currentUserId = "U1";
-            String selectedFriendUsername = friendShip.getManager().extractUsername(selectedFriend);
+            String selectedFriendUsername = service.extractUsername(selectedFriend);
             friendShip.BlockFriendship(currentUserId, selectedFriendUsername);
             // Remove from the friends list
             friends.remove(selectedFriend);
@@ -198,7 +202,7 @@ public class FriendController {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
             String currentUserId = "U1";
-            String selectedFriendUsername = friendShip.getManager().extractUsername(selectedFriend);
+            String selectedFriendUsername = service.extractUsername(selectedFriend);
             System.out.println(selectedFriend);
             friendShip.removeFriend(currentUserId, selectedFriendUsername);
 

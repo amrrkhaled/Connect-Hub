@@ -30,5 +30,13 @@
         "email": "amrss@gmail.com",
         "username": "ahmed",
         "status": "online"
+    },
+    {
+        "password": "FeKw08M4keuw8e9gnsQZQgwg4yDOlMZfvIwzEkSOsiU=",
+        "dateOfBirth": "2005-12-08",
+        "userId": "U5",
+        "email": "amaarss@gmail.com",
+        "username": "ali",
+        "status": "online"
     }
 ]

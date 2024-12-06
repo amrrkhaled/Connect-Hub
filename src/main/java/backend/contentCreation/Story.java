@@ -1,9 +1,7 @@
 package backend.contentCreation;
 
 import backend.SaveImage;
-import backend.friendship.FriendShip;
-import backend.friendship.FriendShipFactory;
-import backend.friendship.IFriendShipManager;
+import backend.friendship.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,17 +14,19 @@ import java.time.LocalDateTime;
 
 public class Story implements IContent , IContentRepository{
     private final IContentFiles contentFiles;
-    private final IFriendShipManager friendShipManager;
+    private final IFriendshipService friendShipService ;
+    private  final FriendRequestService friendRequestService;
     private final String FILEPATH = "data/stories.json";
     private static Story instance;
-    private Story(IContentFiles contentFiles, IFriendShipManager friendShipManager)
+    private Story(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService)
     {
         this.contentFiles = contentFiles;
-        this.friendShipManager = friendShipManager;
+        this.friendShipService = friendShipService;
+        this.friendRequestService = friendRequestService;
     }
-    public static synchronized Story getInstance(IContentFiles contentFiles, IFriendShipManager friendShipManager) {
+    public static synchronized Story getInstance(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService) {
         if (instance == null) {
-            instance = new Story(contentFiles, friendShipManager);
+            instance = new Story(contentFiles, friendShipService , friendRequestService);
         }
         return instance;
     }
@@ -91,7 +91,7 @@ public class Story implements IContent , IContentRepository{
 
     @Override
     public JSONArray getNewsFeedContent(String userId) {
-        List<String> friendsIDs = friendShipManager.getFriends(userId);  // Get the list of friend IDs
+        List<String> friendsIDs = friendShipService.getFriends(userId);  // Get the list of friend IDs
         JSONArray feedStories = new JSONArray();
 
         if (friendsIDs == null || friendsIDs.isEmpty()) {

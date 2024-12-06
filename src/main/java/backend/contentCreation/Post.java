@@ -1,9 +1,7 @@
 package backend.contentCreation;
 
 import backend.SaveImage;
-import backend.friendship.FriendShip;
-import backend.friendship.FriendShipFactory;
-import backend.friendship.IFriendShipManager;
+import backend.friendship.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,16 +12,19 @@ import java.util.List;
 public class Post implements IContent , IContentRepository{
 
     private final IContentFiles contentFiles;
-    private final IFriendShipManager friendShipManager;
+    private final  FriendRequestService friendRequestService ;
+    private final IFriendshipService friendShipService;
     private final String FILEPATH = "data/posts.json";
     private static Post instance;
-    private Post(IContentFiles contentFiles, IFriendShipManager friendShipManager) {
+
+    private Post(IContentFiles contentFiles,IFriendshipService friendShipService , FriendRequestService friendRequestService) {
         this.contentFiles = contentFiles;
-        this.friendShipManager = friendShipManager;
+       this.friendRequestService = friendRequestService;
+       this.friendShipService = friendShipService;
     }
-    public static synchronized Post getInstance(IContentFiles contentFiles, IFriendShipManager friendShipManager) {
+    public static synchronized Post getInstance(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService) {
         if (instance == null) {
-            instance = new Post(contentFiles, friendShipManager);
+            instance = new Post(contentFiles, friendShipService,friendRequestService);
         }
         return instance;
     }
@@ -78,7 +79,7 @@ public class Post implements IContent , IContentRepository{
 
     @Override
     public JSONArray getNewsFeedContent(String userId) {
-        List<String> friendsIDs = friendShipManager.getFriends(userId);
+        List<String> friendsIDs = friendRequestService.getFriendshipService().getFriends(userId);
         JSONArray feedPosts = new JSONArray();
 
         if (friendsIDs == null || friendsIDs.isEmpty()) {

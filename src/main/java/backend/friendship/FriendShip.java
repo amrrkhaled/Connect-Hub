@@ -11,22 +11,30 @@ public class FriendShip {
     Validation validation;
     ILoadFriendShips loadFriendShips;
     IFriendShipValidation friendShipValidation;
-    IFriendShipManager friendShipManager;
     IUserRepository userRepository;
+    IFriendshipService friendshipService;
+    IFriendRequestService friendRequestService;
     ILoadUsers loadUsers;
     private final String filePath = "data/friendships.json";
 
-    public FriendShip(IUserRepository userRepository, ILoadFriendShips loadFriendShips, IFriendShipValidation friendShipValidation, IFriendShipManager friendShipManager,ILoadUsers loadUsers) {
+    public FriendShip(IUserRepository userRepository, ILoadFriendShips loadFriendShips,IFriendShipValidation friendShipValidation,IFriendshipService friendshipService,IFriendRequestService friendRequestService,ILoadUsers loadUsers) {
         this.loadFriendShips = loadFriendShips;
         this.friendShipValidation = friendShipValidation;
-        this.friendShipManager = friendShipManager;
         this.userRepository = userRepository;
         this.loadUsers = loadUsers;
+        this.friendRequestService = friendRequestService;
+        this.friendshipService = friendshipService;
+
     }
-    public FriendShipManager getManager() {
-        // Use the Singleton instance of FriendShipManager
-        return FriendShipManager.getInstance(loadFriendShips, userRepository, loadUsers);
+
+
+    public IFriendshipService getFriendshipService() {
+        return friendshipService;
     }
+    public IFriendRequestService getFriendRequestService() {
+        return friendRequestService;
+    }
+
     public UserRepository getUserRepository() {
         return UserRepository.getInstance(loadUsers);
     }
@@ -70,7 +78,7 @@ public class FriendShip {
         FriendShip.put("status", "accepted");
         JSONArray friendships = loadFriendShips.loadFriendships();
         if (friendShipValidation.checkDuplicates(userId1, userId2, friendships)) {
-            friendshipFound = friendShipManager.RemoveFriendShip(userId1, userId2, friendships);
+            friendshipFound =friendshipService.RemoveFriendShip(userId1, userId2, friendships);
         }
         friendships.put(FriendShip);
         try (FileWriter file = new FileWriter(filePath)) {
@@ -86,7 +94,7 @@ public class FriendShip {
         System.out.println(username);
         String userId2 = user.getString("userId");
         JSONArray friendships = loadFriendShips.loadFriendships();
-        boolean friendshipFound = friendShipManager.RemoveFriendShip(userId1, userId2, friendships);
+        boolean friendshipFound = friendshipService.RemoveFriendShip(userId1, userId2, friendships);
         if (friendshipFound) {
             try (FileWriter file = new FileWriter(filePath)) {
                 file.write(friendships.toString(4));
@@ -112,9 +120,9 @@ public class FriendShip {
         JSONArray friendships = loadFriendShips.loadFriendships();
         boolean friendshipFound = friendShipValidation.checkDuplicates(userId1, userId2, friendships);
         if (friendshipFound) {
-            friendship = friendShipManager.FindFriendShip(userId1, userId2, friendships);
+            friendship = friendshipService.FindFriendShip(userId1, userId2, friendships);
             if(friendship != null) {
-                friendShipManager.RemoveFriendShip(userId1, userId2, friendships);
+                friendshipService.RemoveFriendShip(userId1, userId2, friendships);
                 friendship.put("userId1", userId1);
                 friendship.put("userId2", userId2);
                 friendship.put("status", "blocked");

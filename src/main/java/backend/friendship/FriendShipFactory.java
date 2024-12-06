@@ -10,8 +10,9 @@ public class FriendShipFactory {
         ILoadFriendShips loadFriendShips = LoadFriendShips.getInstance();
         ILoadUsers loadUsers = LoadUsers.getInstance();
         IUserRepository userRepository = UserRepository.getInstance(loadUsers);
-        IFriendShipManager manager = FriendShipManager.getInstance(loadFriendShips, userRepository, loadUsers); // Singleton instance
+        IFriendshipService friendshipService = FriendshipService.getInstance(userRepository,loadFriendShips);
+        IFriendRequestService friendRequestService = FriendRequestServiceFactory.getInstance().createFriendRequestService();
         IFriendShipValidation validation = FriendShipValidation.getInstance();
-        return new FriendShip(userRepository, loadFriendShips, validation, manager, loadUsers);
+        return new FriendShip(userRepository, loadFriendShips, validation, friendshipService,friendRequestService, loadUsers);
     }
 }

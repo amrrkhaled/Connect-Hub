@@ -4,6 +4,8 @@ import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
 import backend.contentCreation.PostFactory;
+import backend.friendship.FriendRequestService;
+import backend.friendship.FriendRequestServiceFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.user.*;
@@ -32,6 +34,10 @@ import java.util.List;
 
 public class HomeController {
 
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+    public FriendRequestService service = factory.createFriendRequestService();
+
     @FXML
     private ScrollPane postsScrollPane;
 
@@ -42,7 +48,6 @@ public class HomeController {
     private ListView<String> friendsListView;
     @FXML
     private Button newsFeed;
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
 
 private final String userId = User.getUserId();
 
@@ -70,7 +75,7 @@ private final String userId = User.getUserId();
            postsContainer.getChildren().add(post);
         }
         String currentUserId = "U1";
-        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(currentUserId);
+        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(currentUserId);
         friends.addAll(friendsList);  // Add all elements to the ObservableList
 
         friendsListView.setItems(friends);

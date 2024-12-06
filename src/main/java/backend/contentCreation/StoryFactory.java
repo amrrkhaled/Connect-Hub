@@ -1,8 +1,6 @@
 package backend.contentCreation;
 
-import backend.friendship.FriendShip;
-import backend.friendship.FriendShipFactory;
-import backend.friendship.IFriendShipManager;
+import backend.friendship.*;
 
 public class StoryFactory {
 
@@ -20,8 +18,8 @@ public class StoryFactory {
 
     public Story createStory() {
         IContentFiles contentFiles = ContentFiles.getInstance();  // Assuming ContentFiles is the correct class
-        FriendShip friendShip = FriendShipFactory.createFriendShip();  // Create the FriendShip instance
-        IFriendShipManager friendShipManager = friendShip.getManager();  // Get the FriendShipManager
-        return Story.getInstance(contentFiles, friendShipManager);  // Return the Story instance
+        FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+        FriendRequestService service = factory.createFriendRequestService();
+        return Story.getInstance(contentFiles,service.getFriendshipService(),service);  // Return the Story instance
     }
 }

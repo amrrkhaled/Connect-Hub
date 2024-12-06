@@ -4,6 +4,8 @@ import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
 import backend.contentCreation.PostFactory;
+import backend.friendship.FriendRequestService;
+import backend.friendship.FriendRequestServiceFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.profile.*;
@@ -46,9 +48,11 @@ public class FeedController {
     @FXML
     private ScrollPane storiesScrollPane;
 
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+    public FriendRequestService service = factory.createFriendRequestService();
     @FXML
     private ScrollPane postsScrollPane;
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
     private final ObservableList<String> friends = FXCollections.observableArrayList();
     private final String userId = User.getUserId();
     @FXML
@@ -62,7 +66,7 @@ public class FeedController {
     private void loadFriendsList() {
         // Example friends array
 
-        List<String> friendsList = friendShip.getManager().getFriendsWithStatus(userId);
+        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(userId);
         // Add friends to the ListView
         friendsListView.getItems().clear(); // Clear existing items (if any)
         friendsListView.getItems().addAll(friendsList); // Add all friends from the array

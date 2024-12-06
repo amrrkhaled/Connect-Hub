@@ -1,8 +1,27 @@
 [
-
     {
         "userId1": "U2",
-        "userId2":"U4",
+        "userId2": "U4",
         "status": "accepted"
+    },
+    {
+        "userId1": "U1",
+        "userId2": "U4",
+        "status": "pending"
+    },
+    {
+        "userId1": "U1",
+        "userId2": "U3",
+        "status": "blocked"
+    },
+    {
+        "userId1": "U1",
+        "userId2": "U2",
+        "status": "blocked"
+    },
+    {
+        "userId1": "U1",
+        "userId2": "U5",
+        "status": "pending"
     }
 ]

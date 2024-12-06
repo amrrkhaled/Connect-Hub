@@ -1,9 +1,8 @@
 package backend.contentCreation;
 
-import backend.friendship.FriendShip;
-import backend.friendship.FriendShipFactory;
-import backend.friendship.FriendShipManager;
-import backend.friendship.IFriendShipManager;
+import backend.friendship.*;
+// import backend.friendship.FriendShipManager;
+
 
 public class PostFactory {
 
@@ -21,8 +20,9 @@ public class PostFactory {
 
     public Post createPost() {
         IContentFiles contentFiles = ContentFiles.getInstance();
-        FriendShip friendShip= FriendShipFactory.createFriendShip();
-        IFriendShipManager friendShipManager =  friendShip.getManager();
-        return Post.getInstance(contentFiles, friendShipManager);
+        FriendShip friendShip = FriendShipFactory.createFriendShip();
+        FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
+        FriendRequestService service = factory.createFriendRequestService();
+        return Post.getInstance(contentFiles,service.getFriendshipService(),service);
     }
 }
