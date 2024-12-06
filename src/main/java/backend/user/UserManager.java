@@ -8,11 +8,13 @@ public class UserManager {
     private final ILoadUsers loadUsers;
     private final Validation validation;
     private final IUpdateUser updateUser;
-    public UserManager(IAddUser addUser, ILoadUsers loadUsers, Validation validation , IUpdateUser updateUser) {
+    private final IUserRepository userRepository;
+    public UserManager(IAddUser addUser, ILoadUsers loadUsers, Validation validation , IUpdateUser updateUser, IUserRepository userRepository) {
         this.addUser = addUser;
         this.loadUsers = loadUsers;
         this.validation = validation;
         this.updateUser = updateUser;
+        this.userRepository = userRepository;
     }
 
     public String signup(String username, String password, String email, String dob) {
@@ -46,8 +48,10 @@ public class UserManager {
 
 
 
-    public void logout(String username) {
-        JSONObject user = validation.findUserByUsername(username);
+    public void logout(String userId) {
+
+        String username = userRepository.getUsernameByUserId(userId);
+        JSONObject user = userRepository.findUserByUsername(username);
         JSONArray usersArray = loadUsers.loadUsers();
         user.put("status", "offline");
         updateUser.updateUser(username,usersArray,user);
