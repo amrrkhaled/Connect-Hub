@@ -10,9 +10,19 @@ import backend.user.*;
 
 public class UserValidator implements Validation {
     private final ILoadUsers loadUsers;
+    private final IPasswordUtils passwordUtils;
+    private static UserValidator instance;
+    private UserValidator(ILoadUsers loadUsers,IPasswordUtils passwordUtils) {
 
-    public UserValidator(ILoadUsers loadUsers) {
         this.loadUsers = loadUsers;
+        this.passwordUtils = passwordUtils;
+
+    }
+    public static UserValidator getInstance(ILoadUsers loadUsers,IPasswordUtils passwordUtils) {
+        if (instance == null) {
+            instance = new UserValidator(loadUsers,passwordUtils);
+        }
+        return instance;
     }
 
     public boolean doesUsernameExist(String username) {
@@ -49,7 +59,7 @@ public class UserValidator implements Validation {
     }
 
     public boolean isPasswordValid(String password, String storedPasswordHash) {
-        return PasswordUtils.hashPassword(password).equals(storedPasswordHash);
+        return IPasswordUtils.hashPassword(password).equals(storedPasswordHash);
     }
 
 

@@ -17,6 +17,22 @@ public class UserManager {
         this.userRepository = userRepository;
     }
 
+    public IAddUser getAddUser() {
+        return addUser;
+    }
+
+    public ILoadUsers getLoadUsers() {
+        return loadUsers;
+    }
+    public IUpdateUser getUpdateUser() {
+        return updateUser;
+    }
+    public IUserRepository getUserRepository() {
+        return userRepository;
+    }
+    public Validation getValidation() {
+        return validation;
+    }
     public String signup(String username, String password, String email, String dob) {
         if (validation.findUserByUsername(username) != null) {
             return "Username already exists";
@@ -31,7 +47,7 @@ public class UserManager {
     public String login(String username, String password) {
         if (validation.doesUsernameExist(username)) {
             JSONArray usersArray = loadUsers.loadUsers();
-            String storedPasswordHash = PasswordUtils.getStoredPasswordHashForUser(username, usersArray);
+            String storedPasswordHash = IPasswordUtils.getStoredPasswordHashForUser(username, usersArray);
             if (validation.isPasswordValid(password, storedPasswordHash)) {
                 JSONObject user = validation.findUserByUsername(username);
                 user.put("status", "online");

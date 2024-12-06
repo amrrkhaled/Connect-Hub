@@ -421,12 +421,7 @@ public class FeedController {
 
     public void onLogout(ActionEvent event) {
         try {
-            ILoadUsers loadUsers = LoadUsers.getInstance();
-            IAddUser user = new AddUser(loadUsers);
-            Validation valid = new UserValidator(loadUsers);
-            IUpdateUser updateUser = new UpdateUser();
-            IUserRepository userRepository = UserRepository.getInstance(loadUsers);
-            UserManager manager = new UserManager(user, loadUsers, valid, updateUser,userRepository);
+            UserManager manager = UserFactory.getInstance().createUserManager();
             manager.logout(userId);
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/login.fxml"));
             Scene loginScene = new Scene(loginPage);

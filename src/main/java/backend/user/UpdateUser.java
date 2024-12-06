@@ -7,6 +7,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class UpdateUser implements IUpdateUser{
+    private static UpdateUser instance;
+
+    private UpdateUser() {
+        // Private constructor to prevent instantiation
+    }
+
+    public static synchronized UpdateUser getInstance() {
+        if (instance == null) {
+            instance = new UpdateUser();
+        }
+        return instance;
+    }
+
     public void updateUser(String username , JSONArray usersArray ,JSONObject user) {
         for (int i = 0; i < usersArray.length(); i++) {
             JSONObject existingUser = usersArray.getJSONObject(i);

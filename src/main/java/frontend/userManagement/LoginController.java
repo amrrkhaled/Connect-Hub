@@ -42,9 +42,7 @@ public class LoginController {
         if (usernameOrEmail.isEmpty() || password.isEmpty()) {
             showAlert("All fields are required!");
         } else {
-            ILoadUsers loadUser = LoadUsers.getInstance();
-            IUserRepository userRepository = UserRepository.getInstance(loadUser);
-            UserManager manager = new UserManager(new AddUser(loadUser),loadUser, new UserValidator(loadUser),new UpdateUser(), userRepository);
+            UserManager manager = UserFactory.getInstance().createUserManager();
             String msg = manager.login(usernameOrEmail, password);
             User.setUserId(msg);
             if (msg.matches("U\\d+")) {
@@ -83,7 +81,7 @@ public class LoginController {
 
     private void navigateToSignup(javafx.event.ActionEvent event) {
         try {
-            Parent signupPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Signup.fxml")));
+            Parent signupPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/frontend/signup.fxml")));
             Scene signupScene = new Scene(signupPage);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(signupScene);

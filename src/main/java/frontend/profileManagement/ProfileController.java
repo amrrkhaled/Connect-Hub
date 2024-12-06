@@ -101,9 +101,8 @@ public class ProfileController {
         String newPassword = passwordField.getText();
         ILoadUsers loadUsers = LoadUsers.getInstance();
 
-        IUpdateUser updateUser = new UpdateUser();
-        PasswordUtils passwordUtils = new PasswordUtils(loadUsers,updateUser);
-
+        IUpdateUser updateUser = UpdateUser.getInstance();
+        PasswordUtils passwordUtils = PasswordUtils.getInstance(loadUsers,updateUser);
         passwordUtils.updatePasswordHashForUser(userId, newPassword);
     }
 
