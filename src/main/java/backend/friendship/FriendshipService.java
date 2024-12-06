@@ -48,52 +48,50 @@ public class FriendshipService implements IFriendshipService {
         IFriendRequestService friendRequestService = FriendRequestServiceFactory.getInstance().createFriendRequestService();
         List<String> friendRequests = friendRequestService.getFriendRequests(myId);
         List<String> BlockedFriends = getBlockedFriends(myId);
-        System.out.println("Pending friends: :");
-        for (int i = 0; i < myFriends.size(); i++) {
-            String friendId = FriendsOfmyFriend.get(i);
-            String username = userRepository.getUsernameByUserId(friendId);
-            System.out.println(username);
-            FriendsOfmyFriend.set(i, username);
-        }
-        for (String username : usernames) {
-            System.out.println(username);
-        }
-        System.out.println("FriendsUsernames :");
-        for (int i = 0; i < myFriends.size(); i++) {
-            String friendId = myFriends.get(i);
-            String username = userRepository.getUsernameByUserId(friendId);
-            System.out.println(username);
-            myFriends.set(i, username);
-        }
-        System.out.println("FriendRequests :");
-        for (int i = 0; i < friendRequests.size(); i++) {
-            String usernameFriendRequest = friendRequests.get(i);
-            System.out.println(usernameFriendRequest);
-        }
-        System.out.println("BlockedFriends :");
-        for (int i = 0; i < BlockedFriends.size(); i++) {
-            String friendId = BlockedFriends.get(i);
-            String username = userRepository.getUsernameByUserId(friendId);
-            System.out.println(username);
-            BlockedFriends.set(i, username);
-        }
+        System.out.println("Pending Friends:");
+        pendingFriends.forEach(System.out::println);
 
+        System.out.println("My Friends:");
+        myFriends.forEach(System.out::println);
+
+        System.out.println("Friend Requests:");
+        friendRequests.forEach(System.out::println);
+
+        System.out.println("Blocked Friends:");
+        BlockedFriends.forEach(System.out::println);
+
+        System.out.println("Friends of My Friend:");
+        friendsOfFriends.forEach(System.out::println);
 //        for (String username : usernames) {
 //            usernames.
 //        }
 
-        for (String friend : FriendsOfmyFriend) {
-            if (!myFriends.contains(friend) && !friend.equals(myId) &&!friend.equals(FriendId) && !usernames.contains(friend)&& !BlockedFriends.contains(friend) && !friendRequests.contains(friend)) {
-                System.out.println(friend);
+        // Filter friends of friends
+        for (String friend : friendsOfFriends) {
+            if (!myFriends.contains(friend) &&
+                    !friend.equals(myId) &&
+                    !friend.equals(FriendId) &&
+                    !pendingFriends.contains(friend) &&
+                    !BlockedFriends.contains(friend) &&
+                    !friendRequests.contains(friend)) {
                 friendsOfFriends.add(friend);
             }
         }
-        for (int i = 0; i < friendsOfFriends.size(); i++) {
-            String friendId = friendsOfFriends.get(i);
-            String username = userRepository.getUsernameByUserId(friendId);
-            friendsOfFriends.set(i, username);
-        }
+
+        System.out.println("Friends of Friends:");
+        friendsOfFriends.forEach(System.out::println);
+
         return friendsOfFriends;
+    }
+    private List<String> convertIdsToUsernames(List<String> userIds) {
+        List<String> usernames = new ArrayList<>();
+        for (String userId : userIds) {
+            String username = userRepository.getUsernameByUserId(userId);
+            if (username != null) {
+                usernames.add(username);
+            }
+        }
+        return usernames;
     }
     // return usenames of pendingFriends
     public List<String> extractUsernames(List<String> pendingFriends) {
