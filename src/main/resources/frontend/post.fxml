@@ -13,9 +13,10 @@
 
      <!-- Image Selection -->
      <Button fx:id="uploadImage" layoutX="43.0" layoutY="250.0" prefWidth="150.0" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Upload Image" />
+    <Button fx:id="back" layoutX="43.0" layoutY="404.0" prefWidth="150.0" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Back" />
 
      <!-- Submit Button -->
-     <Button fx:id="createPost" layoutX="43.0" layoutY="338.0" prefWidth="150.0" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Create Post" />
+     <Button fx:id="createPost" layoutX="43.0" layoutY="331.0" prefWidth="150.0" style="-fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Create Post" />
     <ScrollPane fx:id="scrollPane" layoutX="208.0" layoutY="188.0" prefHeight="300.0" prefWidth="350.0" style="-fx-border-color: #ccc;">
         <content>
             <VBox fx:id="imageContainer" alignment="TOP_LEFT" spacing="10.0" style="-fx-padding: 10;" />

@@ -24,6 +24,8 @@ module com.example.connecthub {
     opens frontend.userManagement to javafx.fxml;
     exports frontend.newsFeed;
     opens frontend.newsFeed to javafx.fxml;
+    exports frontend.controllersTest;
+    opens frontend.controllersTest to javafx.fxml;
 
 
 }

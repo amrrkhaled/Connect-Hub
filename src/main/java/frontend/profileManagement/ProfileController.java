@@ -127,8 +127,5 @@ public class ProfileController {
         }
     }
 
-    @FXML
-    public void loadFriendsList() {
-        friendsListView.getItems().addAll("Omar (Online)", "Amr (Offline)", "Sameh (Online)");
-    }
+
 }

@@ -1,11 +1,4 @@
-package backend;
-import org.json.JSONObject;
-import java.io.FileWriter;
-import java.io.IOException;
-import backend.user.*;
-import backend.profile.*;
-import backend.friendship.*;
-import java.util.List;
+package backend.backendTests;
 
 public class jsonExample {
     public static void main(String[] args) {

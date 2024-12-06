@@ -1,4 +1,4 @@
-package frontend;
+package frontend.controllersTest;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,12 +7,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Feed extends Application {
+
+public class Friend extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Feed.class.getResource("Newsfeed.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        FXMLLoader fxmlLoader = new FXMLLoader(Friend.class.getResource("friend.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 800, 700);
+        stage.setTitle("Friend");
+
         stage.setScene(scene);
         stage.show();
     }
@@ -21,3 +23,4 @@ public class Feed extends Application {
         launch();
     }
 }
+

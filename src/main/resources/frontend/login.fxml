@@ -5,15 +5,29 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-
-<AnchorPane prefHeight="401.0" prefWidth="432.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.userManagement.LoginController">
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="401.0" prefWidth="432.0" style="-fx-background-color: #f2f2f2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.userManagement.LoginController">
     <children>
-        <Label layoutX="176.0" layoutY="28.0" prefHeight="35.0" prefWidth="110.0" style="-fx-font-family: 'Times New Roman'; -fx-font-size: 28; -fx-text-fill: black; -fx-font-weight: bold;" text="Login" />
-        <Label layoutX="71.0" layoutY="112.0" style="-fx-text-fill: black;" text="Username:" />
-        <TextField fx:id="usernameField" layoutX="165.0" layoutY="107.0" prefWidth="200.0" style="-fx-border-color: black;" />
-        <Label layoutX="71.0" layoutY="162.0" style="-fx-text-fill: black;" text="Password:" />
-        <PasswordField fx:id="passwordField" layoutX="165.0" layoutY="157.0" prefWidth="200.0" style="-fx-border-color: black;" />
-        <Button fx:id="loginButton" layoutX="74.0" layoutY="207.0" prefHeight="26.0" prefWidth="296.0" style="-fx-background-color: #888; -fx-text-fill: white;" text="Login" />
-        <Button fx:id="signupPageButton" layoutX="77.0" layoutY="247.0" prefHeight="26.0" prefWidth="294.0" style="-fx-background-color: #888; -fx-text-fill: white;" text="Don't have an account?" />
+        <!-- Title Label -->
+        <Label layoutX="176.0" layoutY="28.0" prefHeight="35.0" prefWidth="110.0" style="-fx-font-family: 'Robot'; -fx-font-size: 28; -fx-text-fill: #1E1E1E; -fx-font-weight: bold;" text="Login" />
+
+        <!-- Username Label -->
+        <Label layoutX="71.0" layoutY="112.0" style="-fx-text-fill: #1E1E1E;" text="Username:" />
+
+        <!-- Username TextField -->
+        <TextField fx:id="usernameField" layoutX="165.0" layoutY="107.0" prefWidth="200.0" style="-fx-border-color: #1E1E1E; -fx-background-color: white; -fx-border-radius: 5px;" />
+
+        <!-- Password Label -->
+        <Label layoutX="71.0" layoutY="162.0" style="-fx-text-fill: #1E1E1E;" text="Password:" />
+
+        <!-- PasswordField -->
+        <PasswordField fx:id="passwordField" layoutX="165.0" layoutY="157.0" prefWidth="200.0" style="-fx-border-color: #1E1E1E; -fx-background-color: white; -fx-border-radius: 5px;" />
+
+        <!-- Login Button -->
+        <Button fx:id="loginButton" layoutX="74.0" layoutY="207.0" prefHeight="40.0" prefWidth="296.0" style="-fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 5px;" text="Login" />
+
+        <!-- Signup Button -->
+        <Button fx:id="signupPageButton" layoutX="75.0" layoutY="265.0" prefHeight="40.0" prefWidth="294.0" style="-fx-background-color: #C0C0C0; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 5px;" text="Don't have an account?" />
     </children>
 </AnchorPane>
+

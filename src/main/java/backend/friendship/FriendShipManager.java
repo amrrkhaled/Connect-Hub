@@ -87,7 +87,7 @@ public class FriendShipManager implements IFriendShipManager {
             if (friendship.getString("userId2").equals(userId) && friendship.getString("status").equals("accepted")) {
                 friendId = friendship.getString("userId1");
             }
-            if (friendId != null) {
+            if (friendId != null && !friendId.equals(userId)) {
                 String username = userRepository.getUsernameByUserId(friendId);
                 String status = userRepository.getStatusByUserId(friendId);
                 // Add friend in the format "ahmed(online)"

@@ -49,6 +49,9 @@ public class Story implements IContent {
 
     @Override
     public JSONArray getUserContent(String userId) {
+        System.err.println("Error fetching posts for friendId ");
+
+
         JSONArray stories = contentFiles.loadContent(FILEPATH); // Load stories
         JSONArray userStories = new JSONArray();
 
@@ -83,6 +86,7 @@ public class Story implements IContent {
 
     @Override
     public JSONArray getNewsFeedContent(String userId) {
+
         List<String> friendsIDs = friendShip.getManager().getFriends(userId);  // Get the list of friend IDs
         JSONArray feedStories = new JSONArray();
 

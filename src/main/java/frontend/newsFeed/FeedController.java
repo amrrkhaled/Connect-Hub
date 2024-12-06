@@ -3,6 +3,7 @@ package frontend.newsFeed;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
+import backend.contentCreation.Story;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.profile.*;
@@ -28,7 +29,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,11 +45,11 @@ public class FeedController {
     @FXML
     private ScrollPane storiesScrollPane;
 
-    @FXML
-    private ScrollPane postsScrollPane;
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
+
     private final ObservableList<String> friends = FXCollections.observableArrayList();
     private final String userId = User.getUserId();
+
     @FXML
     public void initialize() {
         loadStories();
@@ -67,53 +67,21 @@ public class FeedController {
         friendsListView.getItems().addAll(friendsList); // Add all friends from the array
     }
     private void loadStories() {
-//        String[][] storyTitles = {
-//                {"omar", "images/image1.png"},
-//                {"ahmed", "images/image2.png"},
-//                {"ana", "images/image3.png"},
-//
-//        };
-//        JSONArray stories = new JSONArray();
-//
-//        // Add mock posts
-//        JSONObject story1 = new JSONObject();
-//        story1.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
-//        story1.put("contentId", "P1");
-//        story1.put("authorId", "amr");
-//        story1.put("content", "s1 i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
-//        story1.put("timestamp", "2024-12-05 01:32:22");
-//
-//        JSONObject story2 = new JSONObject();
-//        story2.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
-//        story2.put("contentId", "P2");
-//        story2.put("authorId", "ahmed");
-//        story2.put("content", "s2,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
-//        story2.put("timestamp", "2024-12-04 01:32:22");
-//        JSONObject story3 = new JSONObject();
-//        story3.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
-//        story3.put("contentId", "P2");
-//        story3.put("authorId", "omar");
-//        story3.put("content", "s3 sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
-//        story3.put("timestamp", "2024-12-04 01:32:22");
-//
-//        // Add posts to the JSONArray
-//        stories.put(story1);
-//        stories.put(story2);
-//        stories.put(story3);
 
-        IContent contentManager = new Post(new ContentFiles());
+        IContent contentManager = new Story(new ContentFiles());
         JSONArray stories = contentManager.getNewsFeedContent(userId);
+        System.out.println(stories);
 
         int count = 0;
-        for (int i = 0; i < stories.length(); i++){
+        for (int i = 0; i < stories.length(); i++) {
             JSONObject storyObject = stories.getJSONObject(i); // Get the JSON object at index i
             String id = storyObject.getString("authorId");
 
             String userName = friendShip.getUserRepository().getUsernameByUserId(id);
             ILoadProfiles loadProfiles = new LoadProfiles();
             IUpdateProfile updateProfile = new UpdateProfile();
-            ProfileManager manager = new ProfileManager(loadProfiles,userId,updateProfile);
-            JSONObject profile =manager.findProfileByUserId(id);
+            ProfileManager manager = new ProfileManager(loadProfiles, userId, updateProfile);
+            JSONObject profile = manager.findProfileByUserId(id);
 
             String imagePath = profile.getString("ProfilePicture");
             VBox storyItem = new VBox();
@@ -144,50 +112,11 @@ public class FeedController {
             storyItem.getChildren().add(storyLabel);
 
             storiesBox.getChildren().add(storyItem);
-            count ++;
-       }
+            count++;
+        }
 
-
-
-
-
-
-
-
-//        for (String[] story : storyTitles) {
-//            String userName = story[0];
-//            String imagePath = story[1];
-//            VBox storyItem = new VBox();
-//            storyItem.setSpacing(5);
-//            storyItem.setStyle("-fx-alignment: center;");
-//
-//            Circle storyCircle = new Circle(30);
-//            int finalCount = count;
-//
-//            if (imagePath != null && isFileValid(imagePath)) {
-//                ImageView imageView = new ImageView(new Image("file:" + imagePath));
-//                imageView.setFitWidth(60);
-//                imageView.setFitHeight(60);
-//                imageView.setPreserveRatio(false);
-//                imageView.setClip(new Circle(30, 30, 30));
-//                storyItem.getChildren().add(imageView);
-//                imageView.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
-//            } else {
-//                storyCircle.setFill(Color.LIGHTBLUE);
-//                storyCircle.setStroke(Color.DARKBLUE);
-//                storyCircle.setStrokeWidth(2);
-//                storyItem.getChildren().add(storyCircle);
-//                storyCircle.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
-//            }
-//
-//            Text storyLabel = new Text(userName);
-//            storyLabel.setStyle("-fx-font-size: 12px; -fx-fill: #333333;");
-//            storyItem.getChildren().add(storyLabel);
-//
-//            storiesBox.getChildren().add(storyItem);
-//            count ++;
-//        }
     }
+
 
     private void openStoryPage(JSONObject story) {
         try {
@@ -196,23 +125,10 @@ public class FeedController {
             stage.setScene(new Scene(loader.load()));
 
             StoryPageController controller = loader.getController();
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             stage.setTitle("Story Page");
             stage.show();
-//            JSONObject story = new JSONObject();
-
-            // Add the images array
-//            JSONArray images = new JSONArray();
-//            images.put("images\\image4.png");
-//            images.put("images\\image5.png");
-//            images.put("images\\image4.png");
-//            images.put("images\\image5.png");
-//            images.put("images\\image3.png");
-//            story.put("images", images);
-//
-//            story.put("authorName", "authorId");
-//            story.put("content",caption);
-//            story.put("timestamp", "2024-12-05 01:32:22");
             controller.setStoryContent(story);
 
         } catch (IOException e) {
@@ -225,9 +141,6 @@ public class FeedController {
     }
 
     private void loadPosts() {
-        // Creating a mock JSONArray
-
-
 
         IContent contentManager = new Post(new ContentFiles());
         JSONArray posts = contentManager.getNewsFeedContent(userId);
@@ -361,7 +274,11 @@ public class FeedController {
     private void onRefreshNewsfeed() {
         System.out.println("Refresh Newsfeed button clicked");
         postsListView.getItems().clear();
+        storiesBox.getChildren().clear();
+        friendsListView.getItems().clear(); // Clear existing items (if any)
+        loadFriendsList();
         loadPosts();
+        loadStories();
     }
 
     public void onHome(ActionEvent event) {

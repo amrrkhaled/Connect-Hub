@@ -83,7 +83,7 @@ public class LoginController {
 
     private void navigateToSignup(javafx.event.ActionEvent event) {
         try {
-            Parent signupPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("Signup.fxml")));
+            Parent signupPage = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/frontend/signup.fxml")));
             Scene signupScene = new Scene(signupPage);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(signupScene);

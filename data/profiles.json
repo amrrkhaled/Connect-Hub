@@ -1,20 +1,25 @@
 [
     {
-        "Bio": "dsfdsf",
+        "Bio": "Hey I am Omar",
         "userId": "U1",
-        "ProfilePicture": "images/I41.jpg",
+        "ProfilePicture": "images/I1.jpg",
         "CoverPhoto": "images/I43.jpeg"
     },
     {
-        "Bio": "dsfdsf",
+        "Bio": "Hey I am Sameh",
         "userId": "U2",
-        "ProfilePicture": "images\\I13.jpg",
+        "ProfilePicture": "images\\I2.png",
         "CoverPhoto": "images\\I14.jpg"
     },
     {
-        "Bio": "dsfdsf",
-        "userId": "U3",
-        "ProfilePicture": "images\\I13.jpg",
+        "Bio": "I am Franco",
+        "userId": "U4",
+        "ProfilePicture": "images\\I3.jpg",
         "CoverPhoto": "images\\I14.jpg"
-    }
+    },{
+    "Bio": "I am Amr",
+    "userId": "U3",
+    "ProfilePicture": "images\\I4.jpg",
+    "CoverPhoto": "images\\I14.jpg"
+}
 ]
