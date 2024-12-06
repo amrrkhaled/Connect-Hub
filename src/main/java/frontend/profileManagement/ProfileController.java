@@ -40,15 +40,27 @@ public class ProfileController {
         ProfileManagerFactory factory = ProfileManagerFactory.getInstance();
         ProfileManager manager = factory.createProfileManager(userId);
         JSONObject profile =manager.getRepo().findProfileByUserId(userId);
-        String pP = (profile.get("ProfilePicture").toString());
-        String cP = (profile.get("CoverPhoto").toString());
-        String bio = (profile.get("Bio").toString());
 
-        profilePhotoImageView.setImage(new Image(new File(pP).toURI().toString()));
-        coverPhotoImageView.setImage(new Image(new File(cP).toURI().toString()));
-        bioTextArea.clear();
-        bioTextArea.appendText(bio);
+if(profile!=null){
 
+    String pP = (profile.get("ProfilePicture").toString());
+   if(profile.has("CoverPhoto")) {
+       String cP = (profile.get("CoverPhoto").toString());
+       coverPhotoImageView.setImage(new Image(new File(cP).toURI().toString()));
+   }
+   else{
+       coverPhotoImageView.setImage(null);}
+    String bio = (profile.get("Bio").toString());
+    profilePhotoImageView.setImage(new Image(new File(pP).toURI().toString()));
+    bioTextArea.clear();
+    bioTextArea.appendText(bio);
+
+}else {
+    profilePhotoImageView.setImage(null);
+    coverPhotoImageView.setImage(null);
+    bioTextArea.clear();
+    bioTextArea.appendText("");
+}
     }
     @FXML
     public void changeProfilePhoto() throws IOException {
@@ -121,8 +133,5 @@ public class ProfileController {
         }
     }
 
-    @FXML
-    public void loadFriendsList() {
-        friendsListView.getItems().addAll("Omar (Online)", "Amr (Offline)", "Sameh (Online)");
-    }
+
 }

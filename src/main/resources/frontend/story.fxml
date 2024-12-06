@@ -19,7 +19,8 @@
     <Button fx:id="uploadImage" layoutX="50.0" layoutY="200.0" prefWidth="180.0" style="-fx-background-color: #333; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Add Images" />
 
     <!-- Submit Button -->
-    <Button fx:id="createStory" layoutX="210.0" layoutY="529.0" prefWidth="180.0" style="-fx-background-color: #000; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Share Story" />
+    <Button fx:id="createStory" layoutX="370.0" layoutY="529.0" prefWidth="180.0" style="-fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="Share Story" />
+    <Button fx:id="back" layoutX="50.0" layoutY="529.0" prefWidth="180.0" style="-fx-background-color: black; -fx-text-fill: white; -fx-font-size: 14px; -fx-border-radius: 5;" text="back" />
 
     <!-- Scrollable Image Container -->
     <ScrollPane fx:id="scrollPane" layoutX="50.0" layoutY="250.0" prefHeight="260.0" prefWidth="500.0" style="-fx-border-color: #bbb; -fx-background-color: transparent;">

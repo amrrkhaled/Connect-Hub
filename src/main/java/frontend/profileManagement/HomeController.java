@@ -74,8 +74,8 @@ private final String userId = User.getUserId();
            VBox post = createPost(content, imagePaths);
            postsContainer.getChildren().add(post);
         }
-        String currentUserId = "U1";
-        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(currentUserId);
+
+        List<String> friendsList = service.getFriendshipService().getFriendsWithStatus(userId);
         friends.addAll(friendsList);  // Add all elements to the ObservableList
 
         friendsListView.setItems(friends);

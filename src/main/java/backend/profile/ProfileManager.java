@@ -42,6 +42,17 @@ public class ProfileManager {
         ProfileUpdater.updateProfile(userId, profiles, profile);
         ProfileUpdater.saveProfiles(profiles);
     }
+    public void intiallizeProfile(){
+
+        JSONArray profiles = ProfileLoader.loadProfiles();
+        JSONObject profileJson = new JSONObject();
+        profileJson.put("userId", userId);
+        profileJson.put("Bio", "");
+        profileJson.put("ProfilePicture","images/defualtPp.jpg");
+        profiles.put(profileJson);
+        ProfileUpdater.saveProfiles(profiles);
+
+    }
 
     public String getUserId() {
         return userId;

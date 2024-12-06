@@ -32,7 +32,8 @@ public class PostController {
     @FXML
     private Button createPost;
     @FXML
-    private ImageView imageView;
+    private Button back;
+
     @FXML
     private VBox imageContainer; // Container for displaying images
       private final String userId = User.getUserId();
@@ -43,6 +44,7 @@ public class PostController {
     public void initialize() {
         uploadImage.setOnAction(event -> handleUploadImages());
         createPost.setOnAction(event -> handleCreatePost());
+        back.setOnAction(event -> navigateToNewsFeed());
     }
     @FXML
     private void handleUploadImages() {

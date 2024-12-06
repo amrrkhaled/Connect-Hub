@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.ScrollPane?>
 
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.newsFeed.StoryPageController">
     <!-- Top: User ID -->
     <top>
-        <Label fx:id="userIdLabel" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: #3b5998;" text="User ID" BorderPane.alignment="CENTER" />
+        <Label fx:id="userIdLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10; -fx-text-fill: #3b5998; -fx-alignment: center;" text="User ID" BorderPane.alignment="CENTER" />
     </top>
 
     <!-- Center: Image List -->
     <center>
-        <VBox spacing="10.0" alignment="CENTER" style="-fx-padding: 20;">
-            <Label fx:id="timeRemainingLabel" style="-fx-font-size: 14px; -fx-text-fill: #ff0000;" text="Time Remaining: " />
-            <ScrollPane fx:id="scrollPane" prefHeight="300.0" prefWidth="350.0" style="-fx-border-color: #ccc;">
+        <VBox alignment="CENTER" spacing="15.0" style="-fx-padding: 20; -fx-background-color: #f0f2f5; -fx-background-radius: 10px;">
+            <ScrollPane fx:id="scrollPane" prefHeight="300.0" prefWidth="350.0" style="-fx-border-color: #ccc; -fx-background-color: transparent; -fx-background-radius: 10px; -fx-padding: 10px;">
                 <content>
                     <!-- Image Container: Dynamically filled with images -->
-                    <VBox fx:id="imageContainer" alignment="TOP_LEFT" spacing="10.0" style="-fx-padding: 10;" />
+                    <VBox fx:id="imageContainer" alignment="TOP_LEFT" spacing="15.0" style="-fx-padding: 10;" />
                 </content>
             </ScrollPane>
         </VBox>
@@ -27,8 +25,6 @@
 
     <!-- Bottom: Caption -->
     <bottom>
-        <VBox spacing="10.0" style="-fx-padding: 20.0;">
-            <Label fx:id="captionLabel" style="-fx-font-size: 16px; -fx-text-fill: #333333;" text="Caption:" wrapText="true" />
-        </VBox>
+        <VBox spacing="15.0" style="-fx-padding: 20.0;" />
     </bottom>
 </BorderPane>

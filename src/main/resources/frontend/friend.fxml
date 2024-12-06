@@ -8,48 +8,48 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.friendshipManagement.FriendController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="frontend.friendshipManagement.FriendController">
     <top>
-        <HBox spacing="20.0" style="-fx-background-color: #3b5998; -fx-padding: 10.0;">
-            <TextField fx:id="searchTextField" promptText="Search for friends..." style="-fx-pref-width: 300.0;"/>
-            <Button text="Home" onAction="#onHome" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"/>
-            <Button text="Profile" onAction="#onProfile" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"/>
-            <Button text="NewsFeed" onAction="#onNewsFeed" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"/>
-            <Button text="Logout" onAction="#onLogout" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"/>
+        <HBox spacing="20.0" style="-fx-background-color: #1877F2; -fx-padding: 10.0;">
+            <TextField fx:id="searchTextField" promptText="Search for friends..." style="-fx-pref-width: 300.0;" />
+            <Button onAction="#onHome" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Home" />
+            <Button onAction="#onProfile" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Profile" />
+            <Button onAction="#onNewsFeed" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="NewsFeed" />
+            <Button onAction="#onLogout" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Logout" />
         </HBox>
     </top>
 
     <left>
         <VBox spacing="20.0" style="-fx-background-color: #f0f2f5; -fx-padding: 10.0; -fx-pref-width: 200.0;">
-            <Label text="Friend Suggestions" style="-fx-font-weight: bold;"/>
+            <Label style="-fx-font-weight: bold;" text="Friend Suggestions" />
             <ListView fx:id="suggestionListView" />
-            <Button text="Add Friend" onAction="#onAddFriendFromSuggestions"/>
+            <Button onAction="#onAddFriendFromSuggestions" text="Add Friend" />
         </VBox>
     </left>
 
     <center>
         <VBox spacing="20.0" style="-fx-padding: 10.0;">
-            <Label text="Friend Requests" style="-fx-font-weight: bold;"/>
+            <Label style="-fx-font-weight: bold;" text="Friend Requests" />
             <HBox spacing="20.0">
                 <VBox>
-                    <Label text="Incoming Requests" style="-fx-font-weight: bold;"/>
-                    <ListView fx:id="friendRequestListView" style="-fx-pref-width: 200.0;"/>
+                    <Label style="-fx-font-weight: bold;" text="Incoming Requests" />
+                    <ListView fx:id="friendRequestListView" style="-fx-pref-width: 200.0;" />
                     <HBox spacing="10.0">
-                        <Button text="Accept" onAction="#onAcceptRequest"/>
-                        <Button text="Reject" onAction="#onRejectRequest"/>
+                        <Button onAction="#onAcceptRequest" text="Accept" />
+                        <Button onAction="#onRejectRequest" text="Reject" />
                     </HBox>
                 </VBox>
                 <VBox>
-                    <Label text="Pending Requests" style="-fx-font-weight: bold;"/>
-                    <ListView fx:id="pendingFriendRequestListView" style="-fx-pref-width: 200.0;"/>
+                    <Label style="-fx-font-weight: bold;" text="Pending Requests" />
+                    <ListView fx:id="pendingFriendRequestListView" style="-fx-pref-width: 200.0;" />
                 </VBox>
             </HBox>
 
-            <Label text="Friends" style="-fx-font-weight: bold;"/>
-            <ListView fx:id="friendListView"/>
+            <Label style="-fx-font-weight: bold;" text="Friends" />
+            <ListView fx:id="friendListView" />
             <HBox spacing="10.0">
-                <Button text="Block" onAction="#onBlockFriend" style="-fx-pref-width: 100.0;"/>
-                <Button text="Remove" onAction="#onRemoveFriend" style="-fx-pref-width: 100.0;"/>
+                <Button onAction="#onBlockFriend" style="-fx-pref-width: 100.0;" text="Block" />
+                <Button onAction="#onRemoveFriend" style="-fx-pref-width: 100.0;" text="Remove" />
             </HBox>
         </VBox>
     </center>

@@ -1,13 +1,7 @@
 package frontend.newsFeed;
 
-import backend.contentCreation.ContentFiles;
-import backend.contentCreation.IContent;
-import backend.contentCreation.Post;
-import backend.contentCreation.PostFactory;
-import backend.friendship.FriendRequestService;
-import backend.friendship.FriendRequestServiceFactory;
-import backend.friendship.FriendShip;
-import backend.friendship.FriendShipFactory;
+import backend.contentCreation.*;
+import backend.friendship.*;
 import backend.profile.*;
 import backend.user.*;
 import javafx.collections.FXCollections;
@@ -49,6 +43,8 @@ public class FeedController {
     private ScrollPane storiesScrollPane;
 
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    private  IFriendshipService friendShipService = friendShip.getFriendshipService();
+
     public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
     public FriendRequestService service = factory.createFriendRequestService();
     @FXML
@@ -72,60 +68,33 @@ public class FeedController {
         friendsListView.getItems().addAll(friendsList); // Add all friends from the array
     }
     private void loadStories() {
-//        String[][] storyTitles = {
-//                {"omar", "images/image1.png"},
-//                {"ahmed", "images/image2.png"},
-//                {"ana", "images/image3.png"},
-//
-//        };
-//        JSONArray stories = new JSONArray();
-//
-//        // Add mock posts
-//        JSONObject story1 = new JSONObject();
-//        story1.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
-//        story1.put("contentId", "P1");
-//        story1.put("authorId", "amr");
-//        story1.put("content", "s1 i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
-//        story1.put("timestamp", "2024-12-05 01:32:22");
-//
-//        JSONObject story2 = new JSONObject();
-//        story2.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
-//        story2.put("contentId", "P2");
-//        story2.put("authorId", "ahmed");
-//        story2.put("content", "s2,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
-//        story2.put("timestamp", "2024-12-04 01:32:22");
-//        JSONObject story3 = new JSONObject();
-//        story3.put("images", new JSONArray(Arrays.asList("images\\image4.png", "images\\image5.png")));
-//        story3.put("contentId", "P2");
-//        story3.put("authorId", "omar");
-//        story3.put("content", "s3 sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing,Hello i am sharing");
-//        story3.put("timestamp", "2024-12-04 01:32:22");
-//
-//        // Add posts to the JSONArray
-//        stories.put(story1);
-//        stories.put(story2);
-//        stories.put(story3);
 
-        PostFactory postFactory = PostFactory.getInstance();
-        IContent contentManager = postFactory.createPost();
-        JSONArray stories = contentManager.getNewsFeedContent(userId);
+        StoryFactory storyFactory = StoryFactory.getInstance();
+        IContent contentManager = storyFactory.createStory();
+//        JSONArray stories = contentManager.getNewsFeedContent(userId);
 
-        int count = 0;
-        for (int i = 0; i < stories.length(); i++){
-            JSONObject storyObject = stories.getJSONObject(i); // Get the JSON object at index i
+        List<String> friendsIDs = friendShipService.getFriends(userId);
+        for (String Id : friendsIDs){
+            JSONArray stories = contentManager.getNewsFeedContent(Id);
+            JSONObject storyObject = stories.getJSONObject(1); // Get the JSON object at index i
             String id = storyObject.getString("authorId");
 
             String userName = friendShip.getUserRepository().getUsernameByUserId(id);
             ProfileManager manager = ProfileManagerFactory.getInstance().createProfileManager(id);
             JSONObject profile =manager.getRepo().findProfileByUserId(id);
 
-            String imagePath = profile.getString("ProfilePicture");
-            VBox storyItem = new VBox();
+            String imagePath = null;
+            if(profile!=null && profile.get("ProfilePicture")!=null){
+                imagePath=  profile.getString("ProfilePicture");
+            }
+
+
+                    VBox storyItem = new VBox();
             storyItem.setSpacing(5);
             storyItem.setStyle("-fx-alignment: center;");
 
             Circle storyCircle = new Circle(30);
-            int finalCount = count;
+
 
             if (imagePath != null && isFileValid(imagePath)) {
                 ImageView imageView = new ImageView(new Image("file:" + imagePath));
@@ -134,13 +103,13 @@ public class FeedController {
                 imageView.setPreserveRatio(false);
                 imageView.setClip(new Circle(30, 30, 30));
                 storyItem.getChildren().add(imageView);
-                imageView.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
+                imageView.setOnMouseClicked(event -> openStoryPage(stories));
             } else {
                 storyCircle.setFill(Color.LIGHTBLUE);
                 storyCircle.setStroke(Color.DARKBLUE);
                 storyCircle.setStrokeWidth(2);
                 storyItem.getChildren().add(storyCircle);
-                storyCircle.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
+                storyCircle.setOnMouseClicked(event -> openStoryPage(stories));
             }
 
             Text storyLabel = new Text(userName);
@@ -148,52 +117,13 @@ public class FeedController {
             storyItem.getChildren().add(storyLabel);
 
             storiesBox.getChildren().add(storyItem);
-            count ++;
-       }
+
+        }
 
 
-
-
-
-
-
-
-//        for (String[] story : storyTitles) {
-//            String userName = story[0];
-//            String imagePath = story[1];
-//            VBox storyItem = new VBox();
-//            storyItem.setSpacing(5);
-//            storyItem.setStyle("-fx-alignment: center;");
-//
-//            Circle storyCircle = new Circle(30);
-//            int finalCount = count;
-//
-//            if (imagePath != null && isFileValid(imagePath)) {
-//                ImageView imageView = new ImageView(new Image("file:" + imagePath));
-//                imageView.setFitWidth(60);
-//                imageView.setFitHeight(60);
-//                imageView.setPreserveRatio(false);
-//                imageView.setClip(new Circle(30, 30, 30));
-//                storyItem.getChildren().add(imageView);
-//                imageView.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
-//            } else {
-//                storyCircle.setFill(Color.LIGHTBLUE);
-//                storyCircle.setStroke(Color.DARKBLUE);
-//                storyCircle.setStrokeWidth(2);
-//                storyItem.getChildren().add(storyCircle);
-//                storyCircle.setOnMouseClicked(event -> openStoryPage(stories.getJSONObject(finalCount)));
-//            }
-//
-//            Text storyLabel = new Text(userName);
-//            storyLabel.setStyle("-fx-font-size: 12px; -fx-fill: #333333;");
-//            storyItem.getChildren().add(storyLabel);
-//
-//            storiesBox.getChildren().add(storyItem);
-//            count ++;
-//        }
     }
 
-    private void openStoryPage(JSONObject story) {
+    private void openStoryPage(JSONArray stories) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/StoryPage.fxml"));
             Stage stage = new Stage();
@@ -203,21 +133,7 @@ public class FeedController {
 
             stage.setTitle("Story Page");
             stage.show();
-//            JSONObject story = new JSONObject();
-
-            // Add the images array
-//            JSONArray images = new JSONArray();
-//            images.put("images\\image4.png");
-//            images.put("images\\image5.png");
-//            images.put("images\\image4.png");
-//            images.put("images\\image5.png");
-//            images.put("images\\image3.png");
-//            story.put("images", images);
-//
-//            story.put("authorName", "authorId");
-//            story.put("content",caption);
-//            story.put("timestamp", "2024-12-05 01:32:22");
-            controller.setStoryContent(story);
+            controller.setStoryContent(stories);
 
         } catch (IOException e) {
             e.printStackTrace();

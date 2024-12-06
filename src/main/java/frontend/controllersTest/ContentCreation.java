@@ -1,4 +1,4 @@
-package frontend;
+package frontend.controllersTest;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

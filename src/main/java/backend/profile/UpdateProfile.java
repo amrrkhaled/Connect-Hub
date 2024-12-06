@@ -18,13 +18,19 @@ public class UpdateProfile implements IUpdateProfile {
         return instance;
     }
     public void updateProfile(String userId, JSONArray profilesArray, JSONObject profile) {
+       boolean found = false;
         for (int i = 0; i < profilesArray.length(); i++) {
             JSONObject existingUser = profilesArray.getJSONObject(i);
             if (existingUser.getString("userId").equals(userId)) {
                 profilesArray.put(i, profile);
+                found=true;
                 break;
             }
         }
+        if(!found){
+        profilesArray.put(profile);
+        }
+
     }
 
     public void saveProfiles(JSONArray profilesArray) {

@@ -33,6 +33,8 @@ public class StoryController {
     private Button uploadImage;
     @FXML
     private Button createStory;
+    @FXML
+    private Button back;
 
     @FXML
     private VBox imageContainer;
@@ -43,6 +45,8 @@ public class StoryController {
     public void initialize() {
         uploadImage.setOnAction(event -> handleUploadImages());
         createStory.setOnAction(event -> handleCreateStory());
+        back.setOnAction(event -> navigateToNewsFeed());
+
     }
     @FXML
     private void handleUploadImages() {

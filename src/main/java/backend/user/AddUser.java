@@ -1,5 +1,9 @@
 package backend.user;
 
+import backend.profile.LoadProfiles;
+import backend.profile.ProfileManager;
+import backend.profile.ProfileManagerFactory;
+import backend.profile.UpdateProfile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,5 +46,9 @@ public class AddUser implements IAddUser {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        ProfileManagerFactory factory = ProfileManagerFactory.getInstance();
+        ProfileManager manager = factory.createProfileManager("U" + usersNumber);
+        manager.intiallizeProfile();
+
     }
 }

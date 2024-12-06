@@ -1,4 +1,4 @@
-package backend;
+package backend.backendTests;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;

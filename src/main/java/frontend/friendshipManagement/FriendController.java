@@ -157,7 +157,7 @@ public class FriendController {
     protected void onAcceptRequest() {
         String selectedRequest = friendRequestListView.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
-            String currentUserId = "U1";
+
             String newFriendId = friendShip.getUserRepository().findUserIdByUsername(selectedRequest);
             friendShip.acceptFriend(currentUserId, selectedRequest);
             String status = friendShip.getUserRepository().getStatusByUserId(newFriendId);
@@ -174,7 +174,7 @@ public class FriendController {
     protected void onRejectRequest() {
         String selectedRequest = friendRequestListView.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
-            String currentUserId = "U1";
+
             friendShip.removeFriend(currentUserId, selectedRequest);
             friendRequests.remove(selectedRequest);
         }
@@ -184,7 +184,7 @@ public class FriendController {
     protected void onBlockFriend() {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
-            String currentUserId = "U1";
+
             String selectedFriendUsername = service.extractUsername(selectedFriend);
             friendShip.BlockFriendship(currentUserId, selectedFriendUsername);
             // Remove from the friends list
@@ -200,7 +200,7 @@ public class FriendController {
     protected void onRemoveFriend() {
         String selectedFriend = friendListView.getSelectionModel().getSelectedItem();
         if (selectedFriend != null) {
-            String currentUserId = "U1";
+
             String selectedFriendUsername = service.extractUsername(selectedFriend);
             System.out.println(selectedFriend);
             friendShip.removeFriend(currentUserId, selectedFriendUsername);
@@ -215,7 +215,6 @@ public class FriendController {
     protected void onAddFriendFromSuggestions() {
         String selectedSuggestion = suggestionListView.getSelectionModel().getSelectedItem();
         if (selectedSuggestion != null) {
-            String currentUserId = "U1"; // Replace with the actual method to get the current user ID
             friendShip.addFriend(currentUserId, selectedSuggestion);
             // Update UI Lists
             pendingFriendRequests.add(selectedSuggestion + " (pending)"); // Add to pending
