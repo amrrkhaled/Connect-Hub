@@ -17,7 +17,7 @@ public class UserFactory implements IUserFactory {
     public UserManager createUserManager() {
         // Create necessary singleton dependencies
         ILoadUsers loadUsers = LoadUsers.getInstance();
-        IAddUser addUser = AddUser.getInstance(loadUsers);
+        IAddUser addUser = new AddUser(loadUsers);
         IUpdateUser updateUser = UpdateUser.getInstance();
         IPasswordUtils passwordUtils = PasswordUtils.getInstance(loadUsers, updateUser);
         Validation validation = UserValidator.getInstance(loadUsers,passwordUtils);

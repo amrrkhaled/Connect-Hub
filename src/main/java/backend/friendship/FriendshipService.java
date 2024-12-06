@@ -160,7 +160,7 @@ public class FriendshipService implements IFriendshipService {
             if (friendship.getString("userId2").equals(userId) && friendship.getString("status").equals("accepted")) {
                 friendId = friendship.getString("userId1");
             }
-            if (friendId != null && !friendId.equals(userId)) {
+            if (friendId != null) {
                 String username = userRepository.getUsernameByUserId(friendId);
                 String status = userRepository.getStatusByUserId(friendId);
                 // Add friend in the format "ahmed(online)"
@@ -182,7 +182,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return false;
     }
-   // find friendShip
+    // find friendShip
     @Override
     public JSONObject FindFriendShip(String userId1, String userId2, JSONArray friendships) {
         for (int i = 0; i < friendships.length(); i++) {

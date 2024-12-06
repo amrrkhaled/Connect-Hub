@@ -1,11 +1,13 @@
 package frontend;
 
-import backend.threads.storiesThread;
+//import backend.threads.storiesThread;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
+
+
 
 public class Main extends Application {
 
@@ -26,8 +28,8 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        storiesThread storiesThread = new storiesThread();
-        storiesThread.start();  // This runs the thread in the background
+//        storiesThread storiesThread = new storiesThread();
+//        storiesThread.start();  // This runs the thread in the background
 
         // Main program continues executing concurrently
         System.out.println("Main program is running while the thread is also running.");

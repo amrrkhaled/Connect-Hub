@@ -65,6 +65,7 @@ public class FriendController {
         friendRequestListView.setItems(friendRequests);
         pendingFriendRequestListView.setItems(pendingFriendRequests);
         suggestionListView.setItems(friendSuggestions);
+
     }
 
 

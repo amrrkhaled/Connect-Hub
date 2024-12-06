@@ -74,52 +74,53 @@ public class FeedController {
 //        JSONArray stories = contentManager.getNewsFeedContent(userId);
 
         List<String> friendsIDs = friendShipService.getFriends(userId);
-        for (String Id : friendsIDs){
-            JSONArray stories = contentManager.getNewsFeedContent(Id);
-            JSONObject storyObject = stories.getJSONObject(1); // Get the JSON object at index i
-            String id = storyObject.getString("authorId");
+        for (String Id : friendsIDs) {
+            JSONArray stories = contentManager.getUserContent(Id);
+            if (!stories.isEmpty()) {
+                JSONObject storyObject = stories.getJSONObject(0); // Get the JSON object at index i
+                String id = storyObject.getString("authorId");
 
-            String userName = friendShip.getUserRepository().getUsernameByUserId(id);
-            ProfileManager manager = ProfileManagerFactory.getInstance().createProfileManager(id);
-            JSONObject profile =manager.getRepo().findProfileByUserId(id);
+                String userName = friendShip.getUserRepository().getUsernameByUserId(id);
+                ProfileManager manager = ProfileManagerFactory.getInstance().createProfileManager(id);
+                JSONObject profile = manager.getRepo().findProfileByUserId(id);
 
-            String imagePath = null;
-            if(profile!=null && profile.get("ProfilePicture")!=null){
-                imagePath=  profile.getString("ProfilePicture");
+                String imagePath = null;
+                if (profile != null && profile.get("ProfilePicture") != null) {
+                    imagePath = profile.getString("ProfilePicture");
+                }
+
+
+                VBox storyItem = new VBox();
+                storyItem.setSpacing(5);
+                storyItem.setStyle("-fx-alignment: center;");
+
+                Circle storyCircle = new Circle(30);
+
+
+                if (imagePath != null && isFileValid(imagePath)) {
+                    ImageView imageView = new ImageView(new Image("file:" + imagePath));
+                    imageView.setFitWidth(60);
+                    imageView.setFitHeight(60);
+                    imageView.setPreserveRatio(false);
+                    imageView.setClip(new Circle(30, 30, 30));
+                    storyItem.getChildren().add(imageView);
+                    imageView.setOnMouseClicked(event -> openStoryPage(stories));
+                } else {
+                    storyCircle.setFill(Color.LIGHTBLUE);
+                    storyCircle.setStroke(Color.DARKBLUE);
+                    storyCircle.setStrokeWidth(2);
+                    storyItem.getChildren().add(storyCircle);
+                    storyCircle.setOnMouseClicked(event -> openStoryPage(stories));
+                }
+
+                Text storyLabel = new Text(userName);
+                storyLabel.setStyle("-fx-font-size: 12px; -fx-fill: #333333;");
+                storyItem.getChildren().add(storyLabel);
+
+                storiesBox.getChildren().add(storyItem);
+
             }
-
-
-                    VBox storyItem = new VBox();
-            storyItem.setSpacing(5);
-            storyItem.setStyle("-fx-alignment: center;");
-
-            Circle storyCircle = new Circle(30);
-
-
-            if (imagePath != null && isFileValid(imagePath)) {
-                ImageView imageView = new ImageView(new Image("file:" + imagePath));
-                imageView.setFitWidth(60);
-                imageView.setFitHeight(60);
-                imageView.setPreserveRatio(false);
-                imageView.setClip(new Circle(30, 30, 30));
-                storyItem.getChildren().add(imageView);
-                imageView.setOnMouseClicked(event -> openStoryPage(stories));
-            } else {
-                storyCircle.setFill(Color.LIGHTBLUE);
-                storyCircle.setStroke(Color.DARKBLUE);
-                storyCircle.setStrokeWidth(2);
-                storyItem.getChildren().add(storyCircle);
-                storyCircle.setOnMouseClicked(event -> openStoryPage(stories));
-            }
-
-            Text storyLabel = new Text(userName);
-            storyLabel.setStyle("-fx-font-size: 12px; -fx-fill: #333333;");
-            storyItem.getChildren().add(storyLabel);
-
-            storiesBox.getChildren().add(storyItem);
-
         }
-
 
     }
 

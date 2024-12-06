@@ -83,7 +83,7 @@ public class FriendRequestService implements IFriendRequestService {
                 String usernameFriendRequest = friendRequests.get(i);
                 System.out.println(usernameFriendRequest);
             }
-           System.out.println("BlockedFriends :");
+            System.out.println("BlockedFriends :");
             for (int i = 0; i < BlockedFriends.size(); i++) {
                 String friendId = BlockedFriends.get(i);
                 String username = userRepository.getUsernameByUserId(friendId);
