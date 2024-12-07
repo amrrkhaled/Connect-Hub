@@ -1,10 +1,5 @@
 [
     {
-        "userId1": "U3",
-        "userId2": "U2",
-        "status": "pending"
-    },
-    {
         "userId1": "U2",
         "userId2": "U1",
         "status": "accepted"
@@ -13,5 +8,10 @@
         "userId1": "U1",
         "userId2": "U3",
         "status": "blocked"
+    },
+    {
+        "userId1": "U3",
+        "userId2": "U2",
+        "status": "accepted"
     }
 ]
