@@ -2,7 +2,8 @@
     {
         "Bio": "Hey, I am Software Engineer",
         "userId": "U1",
-        "ProfilePicture": "images\\I2.jpg"
+        "ProfilePicture": "images/I2.jpg",
+        "CoverPhoto": "images/I11.jpeg"
     },
     {
         "Bio": "",
@@ -27,11 +28,11 @@
     {
         "Bio": "",
         "userId": "U2",
-        "ProfilePicture": "images\\I5.png"
+        "ProfilePicture": "images//I5.png"
     },
     {
         "Bio": "",
         "userId": "U3",
-        "ProfilePicture": "images\\I7.jpg"
+        "ProfilePicture": "images//I7.jpg"
     }
 ]

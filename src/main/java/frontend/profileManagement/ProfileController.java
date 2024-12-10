@@ -107,10 +107,14 @@ if(profile!=null){
     public void updatePassword() {
         String newPassword = passwordField.getText();
         ILoadUsers loadUsers = LoadUsers.getInstance();
-
+        if(newPassword.length() < 8) {
+            showAlert("Password must be at least 8 characters.");
+        return;
+        }
         IUpdateUser updateUser = UpdateUser.getInstance();
         PasswordUtils passwordUtils = PasswordUtils.getInstance(loadUsers,updateUser);
         passwordUtils.updatePasswordHashForUser(userId, newPassword);
+        showSuccess("Password updated.");
     }
 
     @FXML
@@ -133,5 +137,19 @@ if(profile!=null){
         }
     }
 
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }
