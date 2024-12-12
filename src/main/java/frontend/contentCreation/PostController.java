@@ -36,7 +36,7 @@ public class PostController {
 
     @FXML
     private VBox imageContainer; // Container for displaying images
-      private final String userId = User.getUserId();
+    private final String userId = User.getUserId();
     private List<String> selectedImagePaths = new ArrayList<>(); // Holds paths of selected images
 
 

@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class FeedController {
     @FXML
@@ -43,7 +44,7 @@ public class FeedController {
     private ScrollPane storiesScrollPane;
 
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
-    private  IFriendshipService friendShipService = friendShip.getFriendshipService();
+    private final IFriendshipService friendShipService = friendShip.getFriendshipService();
 
     public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
     public FriendRequestService service = factory.createFriendRequestService();
@@ -360,4 +361,35 @@ public class FeedController {
             e.printStackTrace();
         }
     }
+    public void navigateToNotifications(ActionEvent event) {
+        try {
+            // Load FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/notifications.fxml"));
+            Parent notificationPage = loader.load();
+
+            // Create new scene
+            Scene notificationScene = new Scene(notificationPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set icon (check path)
+            try {
+                Image icon = new Image(getClass().getResourceAsStream("/frontend/icon.png"));
+                currentStage.getIcons().add(icon);
+            } catch (NullPointerException e) {
+                System.err.println("Icon file not found. Ensure the path is correct.");
+            }
+
+            // Set new scene and title
+            currentStage.setScene(notificationScene);
+            currentStage.setTitle("Notifications");
+            currentStage.show();
+
+        } catch (IOException e) {
+            System.err.println("Error loading notifications page: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 }

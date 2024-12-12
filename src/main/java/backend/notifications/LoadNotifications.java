@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class LoadNotifications implements ILoadNotifications{
     private static LoadNotifications instance;
-    private LoadNotifications() {
+    public LoadNotifications() {
     }
     public static synchronized LoadNotifications getInstance() {
         if (instance == null) {

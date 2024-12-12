@@ -1,19 +1,19 @@
 package frontend.notifications;
 
+import backend.notifications.FriendNotifications;
+import backend.notifications.PostNotification;
+import backend.notifications.ILoadNotifications;
+import backend.notifications.LoadNotifications;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-
-import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class NotificationController {
 
@@ -32,37 +32,64 @@ public class NotificationController {
     @FXML
     private Button rejectButton;
 
-    // Sample data for the lists
-    private ObservableList<String> postNotifications = FXCollections.observableArrayList(
-            "Post Notification 1", "Post Notification 2", "Post Notification 3"
-    );
-
-    private ObservableList<String> requestNotifications = FXCollections.observableArrayList(
-            "Request Notification 1", "Request Notification 2", "Request Notification 3"
-    );
-
-    private ObservableList<String> groupNotifications = FXCollections.observableArrayList(
-            "Group Notification 1", "Group Notification 2", "Group Notification 3"
-    );
+    private FriendNotifications friendNotifications;
+    private PostNotification postNotification;
+    private ObservableList<String> postNotifications = FXCollections.observableArrayList();
+    private ObservableList<String> friendNotificationsList = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
-        // Populate the list views with sample data
+        // Initialize the loaders and notification instances
+        ILoadNotifications loader = new LoadNotifications();
+        postNotification = new PostNotification(loader);
+        friendNotifications = new FriendNotifications(loader);
+
+        // Load and populate the notifications
+        loadPostNotifications();
+        loadFriendNotifications();
+
+        // Set list views
         postList.setItems(postNotifications);
-        requestList.setItems(requestNotifications);
-        groupList.setItems(groupNotifications);
+        requestList.setItems(friendNotificationsList);
 
-        // Handle accept button click
+        // Handle button actions
         acceptButton.setOnAction(event -> handleAccept());
-
-        // Handle reject button click
         rejectButton.setOnAction(event -> handleReject());
+    }
+
+    private void loadPostNotifications() {
+        JSONArray notifications = postNotification.getNotification();
+        postNotifications.clear();
+
+        for (int i = 0; i < notifications.length(); i++) {
+            JSONObject notification = notifications.getJSONObject(i);
+            String author = notification.optString("id1", "Unknown Author");
+            String timestamp = notification.optString("timestamp", "Unknown Time");
+
+            String displayText = "Author: " + author + " just posted @ " + timestamp;
+            postNotifications.add(displayText);
+        }
+    }
+
+    private void loadFriendNotifications() {
+        JSONArray notifications = friendNotifications.getNotification();
+        friendNotificationsList.clear();
+
+        for (int i = 0; i < notifications.length(); i++) {
+            JSONObject notification = notifications.getJSONObject(i);
+            String sender = notification.optString("sender", "Unknown Sender");
+            String receiver = notification.optString("receiver", "Unknown Receiver");
+
+            String displayText = "Friend Request from: " + sender + " to: " + receiver;
+            friendNotificationsList.add(displayText);
+        }
     }
 
     private void handleAccept() {
         String selectedRequest = requestList.getSelectionModel().getSelectedItem();
         if (selectedRequest != null) {
             showAlert("Accepted", "You have accepted: " + selectedRequest);
+
         } else {
             showAlert("Error", "No request selected to accept.");
         }
@@ -78,28 +105,11 @@ public class NotificationController {
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
-//    private void navigateToNotifications() {
-//        try {
-//            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/NewsFeed.fxml"));
-//            Scene loginScene = new Scene(loginPage);
-//
-//            // Get current stage
-//            Stage currentStage = (Stage) imageContainer.getScene().getWindow();
-//            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
-//
-//            // Set new scene and show the stage
-//            currentStage.setScene(loginScene);
-//            currentStage.setTitle("NewsFeed");
-//            currentStage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-}
 
+}
