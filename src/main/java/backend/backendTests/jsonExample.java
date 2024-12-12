@@ -1,5 +1,7 @@
 package backend.backendTests;
 
+import backend.Groups.*;
+
 public class jsonExample {
     public static void main(String[] args) {
 //      String username1 = "asser";
@@ -80,7 +82,7 @@ public class jsonExample {
 //            System.out.println("Friend request: " + friend);
 //        }
 //        friendShip.acceptFriend("U3","ahmed");
-////        friendShip.acceptFriend("U4","ahmed");
+//      friendShip.acceptFriend("U4","ahmed");
 //        List<String> friends6 =manager5.getFriendSuggestions("U2");
 //        for (String friend : friends6) {
 //            System.out.println (friend);
@@ -118,6 +120,23 @@ public class jsonExample {
 //       List<String> friendRequests = manager.getFriendRequests("U1");
 //       List<String> pendingFriendRequests = manager.getPendingFriends("U1");
 //       List<String> friendSuggestions = manager.getFriendSuggestions("U1");
+        ILoadGroups loadGroups = LoadGroups.getInstance();
+        GroupManager manager = new GroupManager(loadGroups);
+//        manager.createGroup("U1","elregala","i am good","/home/ahmed-sameh/Downloads/1722946632860.jpeg");
+//        manager.createGroup("U1","elregala","i am good","/home/ahmed-sameh/Downloads/1722946632860.jpeg");
+//        manager.createGroup("U1","elregala2","we are good","/home/ahmed-sameh/Downloads/1722946632860.jpeg");
+        IStorageHandler storageHandler = new StorageHandler();
+        NormalUserController normalUserController = new NormalUserController(loadGroups,storageHandler);
+//        normalUserController.sendJoinRequest("elregala","U2","3ayz ab2a ragl.");
+//        normalUserController.sendJoinRequest("elregala","U2","3ayz ab2a ragl.");
+        normalUserController.sendJoinRequest("elregala","U4","ana kman 3ayz ab2a ragl.");
+//        normalUserController.sendJoinRequest("elregala","U3","w ana kman 3ayz ab2a ragl.");
+        GeneralAdminController primaryAdminController = new GeneralAdminController(loadGroups,storageHandler);
+
+//
+//        primaryAdminController.acceptMember("G1","U2");
+//        primaryAdminController.rejectMember("G1","U4");
+        primaryAdminController.removeMember("G1","U2");
     }
 
 
