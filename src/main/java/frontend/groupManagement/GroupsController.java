@@ -240,6 +240,14 @@ public class GroupsController {
         loadMembersList(GROUPNAME);
     }
 
+    @FXML
+    public void onLeaveGroup(ActionEvent event) {
+
+        NormalUserController user = new NormalUserController(loadGroups,storageHandler);
+        user.leaveGroup(GROUPNAME,userId);
+        onNewsFeed(event);
+    }
+
     public void onHome(ActionEvent event) {
         try {
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/home.fxml"));

@@ -339,19 +339,20 @@ public class AdminController extends GroupsController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) postsListView.getScene().getWindow();
+            Stage currentStage =(Stage) requestsListView.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
-
+            editPostController.setPostId(postId);
             // Set new scene and show the stage
             currentStage.setScene(loginScene);
             currentStage.setTitle("Edit Post");
             currentStage.show();
 
-        
+
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

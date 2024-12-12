@@ -27,7 +27,7 @@ public class Request implements IRequest {
         this.requestsHandler = requestsHandler;
     }
 
-    public void sendJoinRequest(String groupName, String userId, String message) {
+    public void sendJoinRequest(String groupName, String userId) {
         String name;
         boolean requestExists = false;
         groups = loadGroups.loadGroups();
@@ -53,7 +53,7 @@ public class Request implements IRequest {
                 String groupId = group.getString("groupId");
                 request.put("userId", userId);
                 request.put("timestamp", Instant.now().toString());
-                request.put("message", message);
+
 
                 // Load the existing join requests (as a JSONArray) for all groups
                 JSONArray joinRequests = requestsHandler.loadDataAsArray(filePath);

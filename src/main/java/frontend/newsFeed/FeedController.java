@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
@@ -63,8 +64,10 @@ public class FeedController {
 
     IStorageHandler storageHandler = new StorageHandler();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
+    NormalUserController user = new NormalUserController(loadGroups,storageHandler);
     // Creating instances of controllers
     GroupManager groupManager = new GroupManager(loadGroups);
+    Request requestController = new Request(loadGroups, storageHandler);
 
     @FXML
     public void initialize() {
@@ -73,10 +76,46 @@ public class FeedController {
         loadPosts();
         loadFriendsList();
         loadMyGroupsList();
+        loadSuggestions();
         storiesScrollPane.setFitToWidth(true);
         myGroupsListView.setOnMouseClicked(event -> openGroup(event));
+        suggestedGroupsListView.setOnMouseClicked(this::handleSuggestionsClick);
 
+    }
 
+    public void handleSuggestionsClick(MouseEvent event) {
+        String groupName = suggestedGroupsListView.getSelectionModel().getSelectedItem();
+        if (groupName != null) {
+            showRequestDialog(groupName);
+        }
+    }
+    private void showRequestDialog(String groupName) {
+        // Create a dialog box or alert for admin to accept or reject
+        Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
+        dialog.setTitle("Request Action");
+        dialog.setHeaderText("Do you want to join" + groupName +" group?");
+//        dialog.setContentText("User: " + userId);
+
+        // Show accept and reject buttons
+        dialog.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.OK) {
+               requestController.sendJoinRequest(groupName,userId);
+                showInfoDialog("Request","Request to join to group will be reviewed by admins");
+            } else if (response == javafx.scene.control.ButtonType.CANCEL) {
+                return;
+
+            }
+        });
+      loadSuggestions();
+    }
+
+    protected void showInfoDialog(String title, String message) {
+        // Show an info dialog with the result of the action
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
     private void loadFriendsList() {
         // Example friends array
@@ -85,6 +124,14 @@ public class FeedController {
         // Add friends to the ListView
         friendsListView.getItems().clear(); // Clear existing items (if any)
         friendsListView.getItems().addAll(friendsList); // Add all friends from the array
+    }
+
+    private void loadSuggestions() {
+        // Example friends array
+       List<String> suggestions = loadGroups.loadGroupSuggestions(userId);
+        // Add friends to the ListView
+        suggestedGroupsListView.getItems().clear(); // Clear existing items (if any)
+        suggestedGroupsListView.getItems().addAll(suggestions); // Add all friends from the array
     }
     private void loadMyGroupsList() {
         // Example friends array
@@ -192,6 +239,8 @@ public class FeedController {
     private void openGroup(MouseEvent event) {
         // Get selected group name from the ListView
         String selectedGroup = myGroupsListView.getSelectionModel().getSelectedItem();
+        if(selectedGroup==null)
+            return;
         Group.setGroupName(selectedGroup);  // Set the group name for global access
 
         // Determine user role in the group
@@ -380,6 +429,26 @@ public class FeedController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void onCreateGroup() {
+        try {
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/createGroup.fxml"));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage =(Stage) postsListView.getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Create Group");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @FXML
     private void onRefreshNewsfeed() {

@@ -6,6 +6,7 @@ import backend.friendship.FriendShipFactory;
 import backend.user.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
@@ -80,5 +81,11 @@ public class PrimaryAdminController extends AdminController {
             // Reload the member list after the action
             super.onRefresh();
         }
+
+    @FXML
+    public void onDelete(ActionEvent event) {
+        pAdmin.deleteGroup(GROUPNAME);
+        super.onNewsFeed(event);
+    }
 
     }
