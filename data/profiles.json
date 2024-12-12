@@ -33,5 +33,10 @@
         "Bio": "",
         "userId": "U3",
         "ProfilePicture": "images\\I7.jpg"
+    },
+    {
+        "Bio": "",
+        "userId": "U4",
+        "ProfilePicture": "images/defualtPp.jpg"
     }
 ]

@@ -22,5 +22,13 @@
         "email": "f@gmail.com",
         "username": "franco",
         "status": "offline"
+    },
+    {
+        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+        "dateOfBirth": "2004-10-09",
+        "userId": "U4",
+        "email": "omar@gmail.com",
+        "username": "fran",
+        "status": "online"
     }
 ]

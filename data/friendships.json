@@ -13,5 +13,15 @@
         "userId1": "U1",
         "userId2": "U3",
         "status": "blocked"
+    },
+    {
+        "userId1": "U4",
+        "userId2": "U1",
+        "status": "pending"
+    },
+    {
+        "userId1": "U4",
+        "userId2": "U3",
+        "status": "pending"
     }
 ]

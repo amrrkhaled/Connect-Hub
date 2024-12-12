@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class LoadNotifications implements ILoadNotifications{
-    private final String filePath = "data/notifications.json";
     private static LoadNotifications instance;
     private LoadNotifications() {
     }
@@ -21,7 +20,7 @@ public class LoadNotifications implements ILoadNotifications{
         return instance;
     }
     @Override
-    public JSONArray LoadNotification() {
+    public JSONArray LoadNotification(String filePath) {
         File file = new File(filePath);
 
         // Initialize file with an empty array if it doesn't exist
@@ -43,7 +42,7 @@ public class LoadNotifications implements ILoadNotifications{
         }
     }
     @Override
-    public void saveContent(JSONArray content , String filePath){
+    public void saveNotification(JSONArray content , String filePath){
 
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(content.toString(4));

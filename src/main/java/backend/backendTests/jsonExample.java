@@ -1,5 +1,8 @@
 package backend.backendTests;
 
+import backend.notifications.IPostNotifications;
+import backend.notifications.PostNotification;
+
 public class jsonExample {
     public static void main(String[] args) {
 //      String username1 = "asser";
@@ -118,6 +121,7 @@ public class jsonExample {
 //       List<String> friendRequests = manager.getFriendRequests("U1");
 //       List<String> pendingFriendRequests = manager.getPendingFriends("U1");
 //       List<String> friendSuggestions = manager.getFriendSuggestions("U1");
+
     }
 
 
