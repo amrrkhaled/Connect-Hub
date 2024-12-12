@@ -15,7 +15,7 @@ public class FriendNotifications implements IFriendNotifications {
     }
 
     @Override
-    public JSONArray getNotification(){  /////wil return JSON array
+    public JSONArray getNotification() {  /////wil return JSON array
         JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
         JSONArray userNotifications = new JSONArray();
         if (notifications == null) {
@@ -33,13 +33,15 @@ public class FriendNotifications implements IFriendNotifications {
 
         return userNotifications;
     }
+
     @Override
-    public void createNotifications(String sender, String receiver){
+    public void createNotifications(String sender, String receiver , String timestamp) {
         JSONObject newNotification = new JSONObject();
         JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
-        newNotification.put("sender", sender);
-        newNotification.put("receiver", receiver);
+        newNotification.put("senderId", sender);
+        newNotification.put("receiverId", receiver);
+        newNotification.put("timestamp", timestamp);
         notifications.put(newNotification);
-        loadNotifications.saveNotification(notifications,FILEPATH);
+        loadNotifications.saveNotification(notifications, FILEPATH);
     }
 }

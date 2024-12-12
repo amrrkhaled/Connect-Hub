@@ -31,11 +31,11 @@ public class PostNotification implements IPostNotifications {
         return userNotifications;
     }
     @Override
-    public void createNotifications(String author, String receiver,String timestamp){
+    public void createNotifications(String authorId, String contentId,String timestamp){
         JSONObject newNotification = new JSONObject();
         JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
-        newNotification.put("id1", author);
-        newNotification.put("id2", receiver);
+        newNotification.put("authorId", authorId);
+        newNotification.put("contentId", contentId);
         newNotification.put("timestamp", timestamp);
         notifications.put(newNotification);
         loadNotifications.saveNotification(notifications,FILEPATH);

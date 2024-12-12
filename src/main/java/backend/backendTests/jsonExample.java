@@ -1,7 +1,16 @@
 package backend.backendTests;
 
-import backend.notifications.IPostNotifications;
-import backend.notifications.PostNotification;
+import backend.contentCreation.ContentFiles;
+import backend.contentCreation.IContentFiles;
+import backend.contentCreation.Post;
+import backend.contentCreation.PostFactory;
+import backend.friendship.*;
+import backend.notifications.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class jsonExample {
     public static void main(String[] args) {
@@ -121,6 +130,21 @@ public class jsonExample {
 //       List<String> friendRequests = manager.getFriendRequests("U1");
 //       List<String> pendingFriendRequests = manager.getPendingFriends("U1");
 //       List<String> friendSuggestions = manager.getFriendSuggestions("U1");
+        PostFactory postFactory = PostFactory.getInstance();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedTimestamp = now.format(formatter);
+        List<String> imagePaths = new ArrayList<>();
+        imagePaths.add("/home/ahmed-sameh/Pictures/Screenshots/client1.jpg");
+        postFactory.createPost().createContent("P1","i am a big man",formattedTimestamp,imagePaths);
+        ILoadNotifications loadNotifications = new LoadNotifications();
+        PostNotification postNotification = new PostNotification(loadNotifications);
+        postNotification.createNotifications("U1","P1",formattedTimestamp);
+        FriendShip friendShip = FriendShipFactory.createFriendShip();
+        friendShip.addFriend("U1","sameh");
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
+        friendNotifications.createNotifications("U1","U2" , formattedTimestamp);
+
 
     }
 

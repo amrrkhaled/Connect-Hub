@@ -363,33 +363,26 @@ public class FeedController {
     }
     public void navigateToNotifications(ActionEvent event) {
         try {
-            // Load FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/frontend/notifications.fxml"));
-            Parent notificationPage = loader.load();
-
-            // Create new scene
+            // Load the Notifications page
+            Parent notificationPage = FXMLLoader.load(getClass().getResource("/frontend/notifications.fxml"));
             Scene notificationScene = new Scene(notificationPage);
 
-            // Get current stage
+            // Get the current stage
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Set icon (check path)
-            try {
-                Image icon = new Image(getClass().getResourceAsStream("/frontend/icon.png"));
-                currentStage.getIcons().add(icon);
-            } catch (NullPointerException e) {
-                System.err.println("Icon file not found. Ensure the path is correct.");
+            // Set the icon (if not already added)
+            if (currentStage.getIcons().isEmpty()) {
+                currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
             }
 
-            // Set new scene and title
+            // Set the new scene and update the stage
             currentStage.setScene(notificationScene);
             currentStage.setTitle("Notifications");
             currentStage.show();
-
         } catch (IOException e) {
-            System.err.println("Error loading notifications page: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
 }
