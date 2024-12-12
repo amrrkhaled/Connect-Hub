@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class PrimaryAdminController extends GeneralAdminController {
+public class PrimaryAdmin extends GeneralAdminController {
 
     private final String groupsFilePath = "data/groups.json";
     private final String postsFilePath = "data/groupsPosts.json";
 
-    public PrimaryAdminController(ILoadGroups loadGroups, IStorageHandler storageHandler) {
+    public PrimaryAdmin(ILoadGroups loadGroups, IStorageHandler storageHandler) {
         super(loadGroups, storageHandler);
     }
 
@@ -80,29 +80,7 @@ public class PrimaryAdminController extends GeneralAdminController {
         }
     }
 
-    public void editPostImages(String postId, List<String> images) {
-        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
-        for (int i = 0; i < posts.length(); i++) {
-            JSONObject post = posts.getJSONObject(i);
-            if (post.getString("contentId").equals(postId)) {
-                post.put("images", images);
-                break;
-            }
-        }
-        storageHandler.saveDataAsArray(posts, postsFilePath);
-    }
 
-    public void editPostContent(String postId, String content) {
-        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
-        for (int i = 0; i < posts.length(); i++) {
-            JSONObject post = posts.getJSONObject(i);
-            if (post.getString("contentId").equals(postId)) {
-                post.put("content", content);
-                break;
-            }
-        }
-        storageHandler.saveDataAsArray(posts, postsFilePath);
-    }
 
     public void deleteGroup(String name) {
         JSONArray groups = loadGroups.loadGroups();

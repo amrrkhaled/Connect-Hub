@@ -1,9 +1,11 @@
 package frontend.newsFeed;
 
+import backend.Groups.*;
 import backend.contentCreation.*;
 import backend.friendship.*;
 import backend.profile.*;
 import backend.user.*;
+import frontend.groupManagement.GroupsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,10 +31,16 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FeedController {
+
+    @FXML
+    public ListView<String> suggestedGroupsListView;
+
+    @FXML
+    public ListView<String> myGroupsListView;
     @FXML
     private HBox storiesBox;
     @FXML
@@ -51,12 +60,22 @@ public class FeedController {
     private ScrollPane postsScrollPane;
     private final ObservableList<String> friends = FXCollections.observableArrayList();
     private final String userId = User.getUserId();
+
+    IStorageHandler storageHandler = new StorageHandler();
+    ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
+    // Creating instances of controllers
+    GroupManager groupManager = new GroupManager(loadGroups);
+
     @FXML
     public void initialize() {
+       // suggestedGroups.setItems(FXCollections.observableArrayList("Suggested Group 1", "Suggested Group 2"));
         loadStories();
         loadPosts();
         loadFriendsList();
+        loadMyGroupsList();
         storiesScrollPane.setFitToWidth(true);
+        myGroupsListView.setOnMouseClicked(event -> openGroup(event));
+
 
     }
     private void loadFriendsList() {
@@ -66,6 +85,23 @@ public class FeedController {
         // Add friends to the ListView
         friendsListView.getItems().clear(); // Clear existing items (if any)
         friendsListView.getItems().addAll(friendsList); // Add all friends from the array
+    }
+    private void loadMyGroupsList() {
+        // Example friends array
+
+        JSONArray myGroups = loadGroups.loadGroupsbyUserId(userId);
+        List<String> myGroupsNames = new ArrayList<>();  // Initialize the list
+
+        for (int i = 0; i < myGroups.length(); i++) {
+            JSONObject group = myGroups.getJSONObject(i);  // Get the JSONObject for the group
+            String groupName = group.optString("groupName");  // Use optString() to safely get the group name
+            if (groupName != null && !groupName.isEmpty()) {  // Ensure the group name is not null or empty
+                myGroupsNames.add(groupName);  // Add the group name to the list
+            }
+        }
+        // Add myGroups to the ListView
+        myGroupsListView.getItems().clear(); // Clear existing items (if any)
+        myGroupsListView.getItems().addAll(myGroupsNames); // Add all friends from the array
     }
     private void loadStories() {
 
@@ -122,6 +158,72 @@ public class FeedController {
             }
         }
 
+    }
+    boolean isUserPrimaryAdmin(String name) {
+        // Load the group details by name
+        JSONObject group = loadGroups.loadGroupByName(name);
+
+        // Check if the "primaryAdminId" exists and if it matches the current user's ID
+        if (group != null && group.has("primaryAdminId") && group.get("primaryAdminId").equals(userId)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    boolean isUserAdmin(String name) {
+        // Load the group details by name
+        JSONObject group = loadGroups.loadGroupByName(name);
+
+        // Check if the "admins" array exists
+        if (group != null && group.has("admins")) {
+            JSONArray admins = group.getJSONArray("admins");
+
+            // Loop through the admins array to check if the current user is an admin
+            for (int i = 0; i < admins.length(); i++) {
+                if (admins.optString(i).equals(userId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void openGroup(MouseEvent event) {
+        // Get selected group name from the ListView
+        String selectedGroup = myGroupsListView.getSelectionModel().getSelectedItem();
+        Group.setGroupName(selectedGroup);  // Set the group name for global access
+
+        // Determine user role in the group
+        boolean primaryAdmin = isUserPrimaryAdmin(selectedGroup);
+        boolean admin = isUserAdmin(selectedGroup);
+
+        // Determine the path to load based on admin status
+        String path;
+        if (primaryAdmin) {
+            path = "/frontend/groupPAdmin.fxml";  // User is the primary admin
+        } else if (admin) {
+            path = "/frontend/groupAdmin.fxml";  // User is a regular admin
+        } else {
+            path = "/frontend/groups.fxml";  // User is not an admin
+        }
+
+        // Load and switch to the corresponding scene
+        try {
+            Parent groupPage = FXMLLoader.load(getClass().getResource(path));
+            Scene groupScene = new Scene(groupPage);
+
+            // Get the current stage from the event source
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(groupScene);
+            currentStage.setTitle("Group Feed");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();  // Print the exception stack trace for debugging
+        }
     }
 
     private void openStoryPage(JSONArray stories) {

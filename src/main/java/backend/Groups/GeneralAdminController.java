@@ -3,9 +3,12 @@ package backend.Groups;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
+
 public class GeneralAdminController extends NormalUserController {
     private final String membersFilePath = "data/group_members.json";
     private final String joinRequestsFilePath = "data/groups_join_requests.json";
+    private final String postsFilePath = "data/groupsPosts.json";
 
     public GeneralAdminController(ILoadGroups loadGroups, IStorageHandler storageHandler) {
         super(loadGroups, storageHandler);
@@ -118,5 +121,46 @@ public class GeneralAdminController extends NormalUserController {
             }
         }
         System.out.println("User " + userId + " not found in group: " + groupName);
+    }
+
+    public void editPostImages(String postId, List<String> images) {
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+            if (post.getString("contentId").equals(postId)) {
+                post.put("images", images);
+                posts.put(i, post);
+                break;
+            }
+        }
+        storageHandler.saveDataAsArray(posts, postsFilePath);
+    }
+
+    public void editPostContent(String postId, String content) {
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+            if (post.getString("contentId").equals(postId)) {
+                post.put("content", content);
+                posts.put(i, post);
+                break;
+            }
+        }
+        storageHandler.saveDataAsArray(posts, postsFilePath);
+    }
+
+    public void deletePost(String postId) {
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+            if (post.getString("contentId").equals(postId)) {
+                System.out.println("Post " + postId + " deleted");
+
+                posts.remove(i);
+                break;
+            }
+        }
+        storageHandler.saveDataAsArray(posts, postsFilePath);
     }
 }

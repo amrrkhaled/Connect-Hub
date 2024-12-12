@@ -120,11 +120,11 @@ public class jsonExample {
 //       List<String> friendRequests = manager.getFriendRequests("U1");
 //       List<String> pendingFriendRequests = manager.getPendingFriends("U1");
 //       List<String> friendSuggestions = manager.getFriendSuggestions("U1");
-        ILoadGroups loadGroups = LoadGroups.getInstance();
-        GroupManager manager = new GroupManager(loadGroups);
+       // ILoadGroups loadGroups = LoadGroups.getInstance();
+      //  GroupManager manager = new GroupManager(loadGroups);
 //        manager.createGroup("U1","elregala","i am good","/home/ahmed-sameh/Downloads/1722946632860.jpeg");
 //        manager.createGroup("U1","elregala","i am good","/home/ahmed-sameh/Downloads/1722946632860.jpeg");
-      manager.createGroup("U1","elregala2","we are good","/home/ahmed-sameh/Downloads/1722946632860.jpeg");
+      //manager.createGroup("U1","elregala2","we are good","/home/ahmed-sameh/Downloads/1722946632860.jpeg");
 //        IStorageHandler storageHandler = new StorageHandler();
 //        NormalUserController normalUserController = new NormalUserController(loadGroups,storageHandler);
 //        normalUserController.sendJoinRequest("elregala","U2","3ayz ab2a ragl.");

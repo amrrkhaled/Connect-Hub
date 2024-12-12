@@ -23,14 +23,14 @@ public class Request implements IRequest {
     IStorageHandler  groupsHandler;
     public Request(ILoadGroups loadGroups, IStorageHandler requestsHandler) {
         this.loadGroups = loadGroups;
-        groups = loadGroups.loadGroups();
-        System.out.println(groups);
+
         this.requestsHandler = requestsHandler;
     }
 
     public void sendJoinRequest(String groupName, String userId, String message) {
         String name;
         boolean requestExists = false;
+        groups = loadGroups.loadGroups();
         JSONArray groupsMembers = requestsHandler.loadDataAsArray(membersFilePath);
         for (int i = 0; i < groupsMembers.length(); i++) {
             JSONObject groupMemberObject = groupsMembers.getJSONObject(i);

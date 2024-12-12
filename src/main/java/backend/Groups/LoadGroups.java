@@ -9,19 +9,22 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class LoadGroups implements ILoadGroups {
     private static final String GROUPS_FILE_PATH = "data/groups.json";
     private static final String POSTS_FILE_PATH = "data/groupsPosts.json";
+    private static final String MEMBERS_FILE_PATH = "data/group_members.json";
 
     private static volatile LoadGroups instance;
-
-    private LoadGroups() {
+    private IStorageHandler storageHandler;
+    private LoadGroups(IStorageHandler storageHandler) {
+        this.storageHandler = storageHandler;
     }
 
-    public static synchronized LoadGroups getInstance() {
+    public static synchronized LoadGroups getInstance(IStorageHandler storageHandler) {
         if (instance == null) {
-            instance = new LoadGroups();
+            instance = new LoadGroups(storageHandler);
         }
         return instance;
     }
@@ -90,5 +93,43 @@ public class LoadGroups implements ILoadGroups {
             e.printStackTrace();
         }
         return new JSONArray();
+    }
+
+    @Override
+    public JSONArray loadGroupsbyUserId(String userId) {
+        JSONArray groups = loadGroups();
+        JSONArray userGroups = new JSONArray();
+        JSONArray groupsMembers = storageHandler.loadDataAsArray(MEMBERS_FILE_PATH);
+        for (int i = 0; i < groups.length(); i++) {
+            JSONObject group = groups.getJSONObject(i);
+            JSONArray admins = group.optJSONArray("admins");
+            if (group.get("primaryAdminId").equals(userId)) {
+               userGroups.put(group);
+            }
+            else if (admins.length() > 0) {
+                for (int j = 0; j < admins.length(); j++) {
+                    String admin = admins.optString(j);
+                    if(admin.equals(userId)){
+                        userGroups.put(group);
+
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < groupsMembers.length(); i++) {
+            JSONObject group = groupsMembers.getJSONObject(i);
+            JSONArray memebrs = group.optJSONArray("members");
+            for (int j = 0; j < memebrs.length(); j++) {
+                String member = memebrs.optString(j);
+                if(member.equals(userId)){
+                    userGroups.put(group);
+                    break;
+                }
+            }
+        }
+
+
+    return userGroups;
+
     }
 }
