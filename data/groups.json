@@ -1,12 +1,20 @@
-[{
-    "groupName": "Group 1",
-    "groupId": "G1",
-    "description": "This is a test group",
-    "groupImage": "images\\I24.jpg",
-    "primaryAdminId": "U1",
-    "admins": [
-        "user2",
-        "user1",
-        "U2"
-    ]
-}]
+[
+    {
+        "groupName": "Group 1",
+        "groupId": "G1",
+        "description": "This is a test group",
+        "groupImage": "images\\I27.jpg",
+        "primaryAdminId": "admin1",
+        "admins": [
+            "user2",
+            "user1"
+        ]
+    },
+    {
+        "groupName": "hey",
+        "groupId": "G2",
+        "description": "Man",
+        "groupImage": "images\\I30.jpg",
+        "primaryAdminId": "U1"
+    }
+]

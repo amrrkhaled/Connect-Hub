@@ -44,6 +44,7 @@
          <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Post" />
          <Button onAction="#onRefreshNewsfeed" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Refresh" />
          <Button onAction="#onCreateStory" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Story" />
+         <Button onAction="#onCreateGroup" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Group" />
       </HBox>
    </bottom>
 

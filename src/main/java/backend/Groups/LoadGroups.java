@@ -10,12 +10,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoadGroups implements ILoadGroups {
     private static final String GROUPS_FILE_PATH = "data/groups.json";
     private static final String POSTS_FILE_PATH = "data/groupsPosts.json";
     private static final String MEMBERS_FILE_PATH = "data/group_members.json";
-
+    private static final String REQUESTS_FILE_PATH = "data/groups_join_requests.json";
     private static volatile LoadGroups instance;
     private IStorageHandler storageHandler;
     private LoadGroups(IStorageHandler storageHandler) {
@@ -132,4 +133,81 @@ public class LoadGroups implements ILoadGroups {
     return userGroups;
 
     }
+
+
+    @Override
+    public List<String> loadGroupSuggestions(String userId) {
+        List<String> suggestions = new ArrayList<>();
+        JSONArray groupsMembers = storageHandler.loadDataAsArray(MEMBERS_FILE_PATH);
+        JSONArray requests = storageHandler.loadDataAsArray(REQUESTS_FILE_PATH);
+
+        // Iterate through all the groups in the groupsMembers array
+        for (int i = 0; i < groupsMembers.length(); i++) {
+            JSONObject group = groupsMembers.getJSONObject(i);
+            JSONArray members = group.optJSONArray("members");
+
+            boolean isUserMember = false;
+
+            // Check if the current user is already a member of the group
+            for (int j = 0; j < members.length(); j++) {
+                String member = members.optString(j);
+                if (member.equals(userId)) {
+                    isUserMember = true;
+                    break; // User is already a member, no need to add this group to suggestions
+                }
+            }
+
+            // If the user is not a member, we proceed to check if the user has already sent a request
+            if (!isUserMember) {
+
+                // Check if the user has already sent a request for this group
+                boolean hasUserSentRequest = false;
+                for (int j = 0; j < requests.length(); j++) {
+                    JSONObject requestGroup = requests.getJSONObject(j);
+
+                    // Check if this group has requests and if the groupName matches
+                    if (requestGroup.getString("groupName").equals(group.getString("groupName"))) {
+                        JSONArray groupRequests = requestGroup.getJSONArray("requests");
+
+                        // Loop through the requests for this group to check if the current user has already requested to join
+                        for (int k = 0; k < groupRequests.length(); k++) {
+                            JSONObject request = groupRequests.getJSONObject(k);
+                            String requestUserId = request.getString("userId");
+
+                            // If the user has already sent a request, we mark it as true
+                            if (requestUserId.equals(userId)) {
+                                hasUserSentRequest = true;
+                                break; // No need to continue looping through requests for this group
+                            }
+                        }
+                    }
+
+                    if (hasUserSentRequest) {
+                        break; // No need to continue looping through requests, as we found the user's request
+                    }
+                }
+
+                // If the user hasn't sent a request, we add the group to suggestions
+                if (!hasUserSentRequest) {
+                    suggestions.add(group.optString("groupName", "Unknown Group"));
+                }
+            }
+        }
+
+        return suggestions;
+    }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+

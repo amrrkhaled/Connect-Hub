@@ -38,6 +38,7 @@
         <HBox prefHeight="67.0" prefWidth="456.0" spacing="10.0" style="-fx-padding: 10.0; -fx-background-color: #ffffff;">
             <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Post" />
             <Button onAction="#onRefresh" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Refresh" />
+         <Button onAction="#onDelete" style="-fx-pref-width: 100.0; -fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold;" text="Delete Group" />
         </HBox>
     </bottom>
 
