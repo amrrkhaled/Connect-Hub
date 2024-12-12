@@ -1,8 +1,10 @@
-package frontend.contentCreation;
+package frontend.groupManagement;
 
+import backend.Groups.*;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.PostFactory;
 import backend.user.User;
+import frontend.newsFeed.FeedController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,15 +17,18 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import backend.contentCreation.IContent;
 import backend.contentCreation.Post;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostController {
+public class GroupPostController {
     private Stage previousStage; // A reference to the previous stage
 
     @FXML
@@ -39,28 +44,25 @@ public class PostController {
     private VBox imageContainer; // Container for displaying images
     private final String userId = User.getUserId();
     private List<String> selectedImagePaths = new ArrayList<>(); // Holds paths of selected images
+    IStorageHandler storageHandler = new StorageHandler();
+    public String GROUPNAME = Group.getGroupName();
+    ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
+
 
 
     @FXML
     public void initialize() {
         uploadImage.setOnAction(event -> handleUploadImages());
         createPost.setOnAction(event -> handleCreatePost());
-        back.setOnAction(event -> navigateToPreviousStage());
+        back.setOnAction(event -> returnBack());
     }
+
     public void setPreviousStage(Stage stage) {
         this.previousStage = stage;
     }
 
-        private void navigateToPreviousStage() {
-            if (previousStage != null) {
-                // Close the current stage and show the previous stage
-                Stage currentStage = (Stage) back.getScene().getWindow();
-                currentStage.close();
-                previousStage.show();
-            }
-            else navigateToNewsFeed();
 
-    }
+
     @FXML
     private void handleUploadImages() {
         FileChooser fileChooser = new FileChooser();
@@ -82,6 +84,71 @@ public class PostController {
             }
         }
     }
+    boolean isUserPrimaryAdmin(String name) {
+        // Load the group details by name
+        JSONObject group = loadGroups.loadGroupByName(name);
+
+        // Check if the "primaryAdminId" exists and if it matches the current user's ID
+        if (group != null && group.has("primaryAdminId") && group.get("primaryAdminId").equals(userId)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    boolean isUserAdmin(String name) {
+        // Load the group details by name
+        JSONObject group = loadGroups.loadGroupByName(name);
+
+        // Check if the "admins" array exists
+        if (group != null && group.has("admins")) {
+            JSONArray admins = group.getJSONArray("admins");
+
+            // Loop through the admins array to check if the current user is an admin
+            for (int i = 0; i < admins.length(); i++) {
+                if (admins.optString(i).equals(userId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void returnBack() {
+        boolean primaryAdmin = isUserPrimaryAdmin(GROUPNAME);
+        boolean admin = isUserAdmin(GROUPNAME);
+
+        // Determine the path to load based on admin status
+        String path;
+        if (primaryAdmin) {
+            path = "/frontend/groupPAdmin.fxml";  // User is the primary admin
+        } else if (admin) {
+            path = "/frontend/groupAdmin.fxml";  // User is a regular admin
+        } else {
+            path = "/frontend/groups.fxml";  // User is not an admin
+        }
+
+
+        try {
+            Parent loginPage = FXMLLoader.load(getClass().getResource(path));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage =(Stage) imageContainer.getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Group Feed");
+            currentStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @FXML
     private void handleCreatePost() {
@@ -92,34 +159,21 @@ public class PostController {
             return;
         }
 
-
         showSuccess("Post created successfully!");
-        PostFactory postFactory = PostFactory.getInstance();
-        IContent contentCreation = postFactory.createPost();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        contentCreation.createContent(userId,content, now.format(formatter), selectedImagePaths);
-        navigateToNewsFeed();
+        // Assuming normalUserController.addPost does the actual saving of the post
+        NormalUserController normalUserController = new NormalUserController(loadGroups, storageHandler);
+        normalUserController.addPost(GROUPNAME, userId, content, now.format(formatter), selectedImagePaths);
+
+        // Navigate back after creating the post
+        returnBack();
     }
 
-    private void navigateToNewsFeed() {
-        try {
-            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/NewsFeed.fxml"));
-            Scene loginScene = new Scene(loginPage);
 
-            // Get current stage
-            Stage currentStage = (Stage) imageContainer.getScene().getWindow();
-            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
-            // Set new scene and show the stage
-            currentStage.setScene(loginScene);
-            currentStage.setTitle("NewsFeed");
-            currentStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -136,4 +190,6 @@ public class PostController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
 }
