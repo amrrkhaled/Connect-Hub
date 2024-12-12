@@ -1,29 +1,118 @@
 package backend.Groups;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+
 public class PrimaryAdminController extends GeneralAdminController {
+
+    private final String groupsFilePath = "data/groups.json";
+    private final String postsFilePath = "data/groupsPosts.json";
+
     public PrimaryAdminController(ILoadGroups loadGroups, IStorageHandler storageHandler) {
         super(loadGroups, storageHandler);
     }
 
-    public void promoteToAdmin(String userId, String groupId) {
-        // promote the user to be an admin
-        // save it in the a database called data/admins.json
-        // in this form
-        // "groupId": "G1",
-        //    "admins": ["U4","U3"]
-        //check my code for members it will help
+    public void addAdminToGroup(String name, String userId) {
+        JSONObject group = loadGroups.loadGroupByName(name);
+        if (group != null) {
+            // Initialize "admins" if not already present
+            if (!group.has("admins")) {
+                group.put("admins", new JSONArray());
+            }
+
+            JSONArray admins = group.getJSONArray("admins");
+            admins.put(userId); // Add user as an admin
+
+            // Update the group in the groups array
+            JSONArray groups = loadGroups.loadGroups();
+            for (int i = 0; i < groups.length(); i++) {
+                if (groups.getJSONObject(i).getString("groupName").equals(name)) {
+                    groups.put(i, group);
+                    break;
+                }
+            }
+
+            storageHandler.saveDataAsArray(groups, groupsFilePath);
+            System.out.println("Admin added successfully.");
+        } else {
+            System.out.println("Group not found.");
+        }
     }
 
-    public void removeAdmin(String userId, String groupId) {
+    public void removeAdmin(String name, String userId) {
+        JSONObject group = loadGroups.loadGroupByName(name);
+        if (group != null) {
+            if (!group.has("admins")) {
+                group.put("admins", new JSONArray());
+            }
 
+            JSONArray admins = group.getJSONArray("admins");
+            boolean adminFound = false;
+
+            for (int i = 0; i < admins.length(); i++) {
+                if (admins.getString(i).equals(userId)) {
+                    admins.remove(i);
+                    adminFound = true;
+                    break;
+                }
+            }
+
+            if (adminFound) {
+                // Update group with modified admins list
+                group.put("admins", admins);
+                JSONArray groups = loadGroups.loadGroups();
+                for (int i = 0; i < groups.length(); i++) {
+                    if (groups.getJSONObject(i).getString("groupName").equals(name)) {
+                        groups.put(i, group);
+                        break;
+                    }
+                }
+
+                storageHandler.saveDataAsArray(groups, groupsFilePath);
+                System.out.println("Admin removed successfully.");
+            } else {
+                System.out.println("Admin not found in the group.");
+            }
+        } else {
+            System.out.println("Group not found.");
+        }
     }
 
-    //make the parameters in AddPost according to your imagination
-    public void AddPost() {
+    public void editPostImages(String postId, List<String> images) {
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+            if (post.getString("contentId").equals(postId)) {
+                post.put("images", images);
+                break;
+            }
+        }
+        storageHandler.saveDataAsArray(posts, postsFilePath);
     }
-    public void RemovePost() {
 
+    public void editPostContent(String postId, String content) {
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+            if (post.getString("contentId").equals(postId)) {
+                post.put("content", content);
+                break;
+            }
+        }
+        storageHandler.saveDataAsArray(posts, postsFilePath);
     }
-    public void editPost() {}
-    public void deleteGroup(String groupId) {}
+
+    public void deleteGroup(String name) {
+        JSONArray groups = loadGroups.loadGroups();
+        for (int i = 0; i < groups.length(); i++) {
+            if (groups.getJSONObject(i).getString("groupName").equals(name)) {
+                groups.remove(i);
+                storageHandler.saveDataAsArray(groups, groupsFilePath);
+                System.out.println("Group deleted successfully.");
+                break;
+            }
+        }
+    }
 }

@@ -1,109 +1,84 @@
 package backend.Groups;
 
+import backend.SaveImage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.Instant;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NormalUserController {
     ILoadGroups loadGroups;
     JSONArray groups;
-    private final String filePath = "data/groups_join_requests.json";
+    private final String postsFilePath = "data/groupsPosts.json";
     private final String membersFilePath = "data/group_members.json";
-    IStorageHandler requestsHandler;
+    IStorageHandler storageHandler;
 
-    public NormalUserController(ILoadGroups loadGroups, IStorageHandler requestsHandler) {
+    public NormalUserController(ILoadGroups loadGroups, IStorageHandler storageHandler) {
         this.loadGroups = loadGroups;
         groups = loadGroups.loadGroups();
-        this.requestsHandler = requestsHandler;
+        this.storageHandler = storageHandler;
     }
 
-    public void sendJoinRequest(String groupName, String userId, String message) {
-        String name;
-        boolean requestExists = false;
-        JSONArray groupsMembers = requestsHandler.loadDataAsArray(membersFilePath);
+    // Add a post to a group
+    public void addPost(String groupName, String authorId, String content, String timestamp, List<String> images) {
+        JSONObject newPost = new JSONObject();
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+        newPost.put("authorId", authorId);
+        newPost.put("contentId", "P" + (posts.length() + 1));  // Generate a unique post ID
+        newPost.put("content", content);
+        newPost.put("timestamp", timestamp);
+        newPost.put("groupName", groupName);
+
+        List<String> newImages = new ArrayList<>();
+        if (images != null) {
+            for (String imagePath : images) {
+                String newPath = null;
+                try {
+                    newPath = SaveImage.saveImageToFolder(imagePath);  // Save the image and get the new path
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                newImages.add(newPath);  // Add the image path to the list
+            }
+            newPost.put("images", newImages);  // Add images to the post
+        }
+
+        posts.put(posts.length(), newPost);  // Add the new post to the posts array
+        storageHandler.saveDataAsArray(posts, postsFilePath);  // Save the updated posts
+    }
+
+    // Allow a user to leave a group
+    public void leaveGroup(String name, String userId) {
+        JSONArray groupsMembers = storageHandler.loadDataAsArray(membersFilePath);
+        JSONArray members = null;
+        int groupIndex = -1;
+
+        // Find the group by name
         for (int i = 0; i < groupsMembers.length(); i++) {
             JSONObject groupMemberObject = groupsMembers.getJSONObject(i);
-            JSONArray members = groupMemberObject.getJSONArray("members");
-            for (int j = 0; j < members.length(); j++) {
-                String memberObject = members.optString(j);
-                System.out.println("Member " + memberObject.toString());
-                if (memberObject.equals(userId)) {
-                    System.out.println("Member " + memberObject.toString() + " already exists");
-                    return;
-                }
+            if (groupMemberObject.getString("groupName").equals(name)) {
+                members = groupMemberObject.getJSONArray("members");
+                groupIndex = i;
+                break;  // Exit loop once the group is found
             }
         }
-        for (int i = 0; i < groups.length(); i++) {
-            JSONObject group = groups.getJSONObject(i);
-            name = group.getString("name");
-            if (name.equals(groupName)) {
-                JSONObject request = new JSONObject();
-                String groupId = group.getString("groupId");
-                request.put("userId", userId);
-                request.put("timestamp", Instant.now().toString());
-                request.put("message", message);
 
-                // Load the existing join requests (as a JSONArray) for all groups
-                JSONArray joinRequests = requestsHandler.loadDataAsArray(filePath);
-                // Look for the group in the joinRequests array
-                boolean groupFound = false;
-                for (int j = 0; j < joinRequests.length(); j++) {
-                    JSONObject groupRequestObject = joinRequests.getJSONObject(j);
-
-                    if (groupRequestObject.getString("groupId").equals(groupId)) {
-                        // If the group exists, look for an existing request from the same user
-                        JSONArray groupRequests = groupRequestObject.optJSONArray("requests");
-                        if (groupRequests == null) {
-                            groupRequests = new JSONArray();  // Create a new requests array if not present
-                        }
-
-                        // Check if the user has already sent a request for this group
-
-                        for (int k = 0; k < groupRequests.length(); k++) {
-                            JSONObject existingRequest = groupRequests.getJSONObject(k);
-                            if (existingRequest.getString("userId").equals(userId)) {
-                                requestExists = true;  // Request from the same user already exists
-                                break;
-                            }
-                        }
-
-                        // If the request doesn't already exist, add it
-                        if (!requestExists) {
-                            groupRequests.put(request);
-                            groupRequestObject.put("requests", groupRequests);
-                            groupFound = true;
-                        } else {
-                            System.out.println("You have already sent a request to join this group.");
-                        }
-                        break;
-                    }
+        // If the group is found, remove the user from the members list
+        if (members != null && groupIndex != -1) {
+            for (int i = 0; i < members.length(); i++) {
+                if (members.getString(i).equals(userId)) {
+                    groupsMembers.getJSONObject(groupIndex).getJSONArray("members").remove(i);  // Remove user
+                    break;
                 }
-
-                // If the group doesn't exist in the join requests, create a new entry for it
-                if (!groupFound && !requestExists) {
-                    JSONObject newGroupRequest = new JSONObject();
-                    newGroupRequest.put("groupId", groupId);
-                    JSONArray groupRequests = new JSONArray();
-                    groupRequests.put(request);
-                    newGroupRequest.put("requests", groupRequests);
-                    joinRequests.put(newGroupRequest);
-                }
-
-                // Save the updated join requests data back to the file
-                requestsHandler.saveDataAsArray(joinRequests, filePath);
-
-                if (groupFound) {
-                    System.out.println("Join request sent successfully.");
-                }
-
-                return;
             }
+
+            // Save the updated members list
+            storageHandler.saveDataAsArray(groupsMembers, membersFilePath);
+            System.out.println("User has left the group and the group has been updated successfully.");
+        } else {
+            System.out.println("Group or user not found.");
         }
-        System.out.println("Group not found: " + groupName);
     }
-    //according to your imagination.
-    //check if this user is a member or not before doing this methods.
-    public void addPost(){};
-    public void leaveGroup(String groupName, String userId) {};
 }

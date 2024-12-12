@@ -21,14 +21,14 @@ public class GroupManager {
         // Check if the groupId already exists
         for (int i = 0; i < groups.length(); i++) {
             JSONObject group = groups.getJSONObject(i);
-            if (group.getString("name").equals(groupName)) {
+            if (group.getString("groupName").equals(groupName)) {
                 System.out.println("Group with Name " + groupName + " already exists.");
                 return; // Do not create the group, as it already exists
             }
         }
         // If groupId doesn't exist, create the new group
         JSONObject group = new JSONObject();
-        group.put("name", groupName);
+        group.put("groupName", groupName);
         group.put("description", groupDescription);
         group.put("primaryAdminId", userId);
         group.put("groupId","G" +numberOfGroups);
@@ -51,7 +51,7 @@ public class GroupManager {
     public void deleteGroup(String groupId , String userId) {
         for (int i = 0; i < groups.length(); i++) {
             JSONObject group = groups.getJSONObject(i);
-            if (group.getString("GroupId").equals(groupId) && group.getString("PrimaryAdminId").equals(userId)) {
+            if (group.getString("groupId").equals(groupId) && group.getString("PrimaryAdminId").equals(userId)) {
                 groups.remove(i);
             }
         }
