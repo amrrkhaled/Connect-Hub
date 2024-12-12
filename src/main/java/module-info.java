@@ -4,6 +4,7 @@ module com.example.connecthub {
     requires net.synedra.validatorfx;
     requires org.kordamp.bootstrapfx.core;
     requires org.json;
+    requires java.desktop;
     opens frontend to javafx.fxml;
     exports frontend;
 
