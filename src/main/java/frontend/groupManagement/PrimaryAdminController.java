@@ -9,10 +9,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 
 public class PrimaryAdminController extends AdminController {
 
+    @FXML
+    public Button updateDescription;
     @FXML
     private ListView<String> requestsListView;
     private final ObservableList<String> friends = FXCollections.observableArrayList();
@@ -30,10 +33,27 @@ public class PrimaryAdminController extends AdminController {
     @FXML
     public void initialize() {
         super.initialize();
-        groupDescription.textProperty().addListener((observable, oldText, newText) -> {
-            pAdmin.updateDescription(GROUPNAME, newText);
-// You can perform other actions based on the text change
-        });
+
+        // Set up the event handler for the button
+        updateDescription.setOnAction(event -> handleUpdateDescription());
+    }
+
+    // Event handler for the button
+    private void handleUpdateDescription() {
+        String newDescription = groupDescription.getText(); // Assume groupDescription is a TextField or TextArea
+        if (newDescription != null && !newDescription.trim().isEmpty()) {
+            pAdmin.updateDescription(GROUPNAME, newDescription);
+            showAlert("Success", "Group description updated successfully!");
+        } else {
+            showAlert("Error", "Description cannot be empty.");
+        }
+    }
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 

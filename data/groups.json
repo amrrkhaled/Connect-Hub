@@ -1,1 +1,6 @@
-[]
+[{
+    "groupName": "Hello",
+    "groupId": "G1",
+    "description": "Math",
+    "primaryAdminId": "U1"
+}]
