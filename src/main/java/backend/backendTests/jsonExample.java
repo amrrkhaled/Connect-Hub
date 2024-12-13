@@ -145,7 +145,6 @@ public class jsonExample {
         FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         friendNotifications.createNotifications("U1","U2" , formattedTimestamp);
         GroupNotifications groupNotifications = new GroupNotifications(loadNotifications);
-        Group
         groupNotifications.createNotifications("G1","P3" , formattedTimestamp);
     }
 
