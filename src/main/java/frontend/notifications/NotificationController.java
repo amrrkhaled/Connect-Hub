@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -47,6 +48,9 @@ public class NotificationController {
     @FXML
     private Button rejectButton;
 
+    @FXML
+    private Button viewbutton;
+
     private FriendNotifications friendNotifications;
     private PostNotification postNotification;
     private final String currentUserId = User.getUserId();
@@ -59,8 +63,6 @@ public class NotificationController {
         ILoadNotifications loader = LoadNotifications.getInstance();
         postNotification = new PostNotification(loader);
         friendNotifications = new FriendNotifications(loader);
-
-        // Populate the JSONArray for friend requests
 
         // Load and populate the notifications
         loadPostNotifications();
@@ -81,10 +83,12 @@ public class NotificationController {
 
         for (int i = 0; i < notifications.length(); i++) {
             JSONObject notification = notifications.getJSONObject(i);
-            String author = notification.optString("id1");
+            String author = notification.optString("authorId");
+            String content = notification.optString("contentId");
             String timestamp = notification.optString("timestamp");
+            String authorName=friendShip.getUserRepository().getUsernameByUserId(author);
 
-            String displayText = author + "posted @: " + timestamp;
+            String displayText = authorName + " posted "+ content+ " @: "+ timestamp;
             JSONObject postNotificationJson = new JSONObject();
             postNotificationJson.put("notification", displayText);
             postNotificationList.put(postNotificationJson);
@@ -314,6 +318,39 @@ public class NotificationController {
             // Set new scene and show the stage
             currentStage.setScene(loginScene);
             currentStage.setTitle("Login");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void navigateToPost(ActionEvent event) {
+        String selectedPost = postList.getSelectionModel().getSelectedItem();
+        String[] post=selectedPost.split(" ");
+        JSONObject postDetails = new JSONObject();
+        postDetails.put("authorName", post[0]);
+        postDetails.put("contentId", post[2]);
+        postDetails.put("timestamp", post[4]);
+
+        try {
+            //call function to set post details
+            PostViewController.setPostDetails(postDetails);
+
+            // Load the Notifications page
+            Parent notificationPage = FXMLLoader.load(getClass().getResource("/frontend/postView.fxml"));
+            Scene notificationScene = new Scene(notificationPage);
+            // Get the current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+
+
+            // Set the icon (if not already added
+            if (currentStage.getIcons().isEmpty()) {
+                currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+            }
+
+            // Set the new scene and update the stage
+            currentStage.setScene(notificationScene);
+            currentStage.setTitle("Notifications");
             currentStage.show();
         } catch (IOException e) {
             e.printStackTrace();

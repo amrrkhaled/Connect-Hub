@@ -101,4 +101,16 @@ public class Post implements IContent , IContentRepository{
         return feedPosts;
     }
 
+     public JSONObject getContentById(String id) {
+         JSONArray posts = contentFiles.loadContent(FILEPATH);
+        for(int i = 0; i < posts.length(); i++) {
+            System.out.println(posts.getJSONObject(i));
+            if(posts.getJSONObject(i).getString("contentId").equals(id)) {
+
+                return posts.getJSONObject(i);
+            }
+        }
+         return null;
+     }
+
 }

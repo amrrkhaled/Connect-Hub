@@ -117,6 +117,14 @@ public class Story implements IContent , IContentRepository{
         return feedStories;
     }
 
-
+    public JSONObject getContentById(String id) {
+        JSONArray posts = contentFiles.loadContent(FILEPATH);
+        for(int i = 0; i < posts.length(); i++) {
+            if(posts.getJSONObject(i).getString("id").equals(id)) {
+                return posts.getJSONObject(i);
+            }
+        }
+        return null;
+    }
 
 }

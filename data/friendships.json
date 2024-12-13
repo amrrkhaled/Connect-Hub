@@ -5,8 +5,13 @@
         "status": "pending"
     },
     {
+        "userId1": "U1",
+        "userId2": "U4",
+        "status": "pending"
+    },
+    {
         "userId1": "U3",
         "userId2": "U1",
-        "status": "pending"
+        "status": "accepted"
     }
 ]
