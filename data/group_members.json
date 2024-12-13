@@ -2,15 +2,12 @@
     {
         "groupName": "Group 1",
         "members": [
-            "user3",
-            "user4"
+            "U1",
+            "U2"
         ]
     },
     {
-        "groupName": "amm",
-        "members": [
-            "user3",
-            "user4"
-        ]
+        "groupName": "swimming",
+        "members": ["U5"]
     }
 ]

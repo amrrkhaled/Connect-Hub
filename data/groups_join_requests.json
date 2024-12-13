@@ -1,8 +1,5 @@
 [{
-    "groupName": "amm",
-    "groupId": "G2",
-    "requests": [{
-        "userId": "U1",
-        "timestamp": "2024-12-13T18:47:08.459276700Z"
-    }]
+    "groupName": "swimming",
+    "groupId": "G1",
+    "requests": []
 }]

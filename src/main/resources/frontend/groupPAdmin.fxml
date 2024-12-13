@@ -11,6 +11,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane prefHeight="762.0" prefWidth="916.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.groupManagement.PrimaryAdminController">
     <top>
         <HBox prefHeight="24.0" prefWidth="456.0" spacing="20.0" style="-fx-background-color: #1877F2; -fx-padding: 10.0;">
@@ -32,7 +34,9 @@
                     <TextArea fx:id="groupDescription" prefHeight="150.0" prefWidth="471.0" />
                 </children>
             </HBox>
+
          <Button fx:id="updateDescription" mnemonicParsing="false" text="Update Description" />
+
 
             <!-- Posts Section -->
             <Label style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Posts" />

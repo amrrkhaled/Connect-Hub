@@ -22,10 +22,8 @@ public class StoryPageController {
 
     @FXML
     private VBox imageContainer; // For holding all stories
-
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private FriendShip friendShip = FriendShipFactory.createFriendShip();
-
     public void setStoryContent(JSONArray stories) {
         // Clear the container to avoid duplicating images
         imageContainer.getChildren().clear();

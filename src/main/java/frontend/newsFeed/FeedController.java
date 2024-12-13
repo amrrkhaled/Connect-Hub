@@ -15,7 +15,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+
 import javafx.scene.control.*;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -32,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FeedController {
 
@@ -53,7 +61,7 @@ public class FeedController {
     private ScrollPane storiesScrollPane;
 
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
-    private  IFriendshipService friendShipService = friendShip.getFriendshipService();
+    private final IFriendshipService friendShipService = friendShip.getFriendshipService();
 
     public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
     public FriendRequestService service = factory.createFriendRequestService();
@@ -82,6 +90,7 @@ public class FeedController {
         suggestedGroupsListView.setOnMouseClicked(this::handleSuggestionsClick);
 
     }
+
     public void handleSearch(){
         String searchText = searchBar.getText().toLowerCase();
         if (!searchText.isEmpty()){
@@ -107,6 +116,7 @@ public class FeedController {
             e.printStackTrace();
         }
     }
+
 
     public void handleSuggestionsClick(MouseEvent event) {
         String groupName = suggestedGroupsListView.getSelectionModel().getSelectedItem();
@@ -558,4 +568,28 @@ public class FeedController {
             e.printStackTrace();
         }
     }
+    public void navigateToNotifications(ActionEvent event) {
+        try {
+            // Load the Notifications page
+            Parent notificationPage = FXMLLoader.load(getClass().getResource("/frontend/notifications.fxml"));
+            Scene notificationScene = new Scene(notificationPage);
+
+            // Get the current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set the icon (if not already added)
+            if (currentStage.getIcons().isEmpty()) {
+                currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+            }
+
+            // Set the new scene and update the stage
+            currentStage.setScene(notificationScene);
+            currentStage.setTitle("Notifications");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
