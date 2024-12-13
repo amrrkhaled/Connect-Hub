@@ -4,11 +4,9 @@ import backend.friendship.FriendRequestService;
 import backend.friendship.FriendRequestServiceFactory;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
-import backend.notifications.FriendNotifications;
-import backend.notifications.PostNotification;
-import backend.notifications.ILoadNotifications;
-import backend.notifications.LoadNotifications;
+import backend.notifications.*;
 import backend.user.*;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +33,8 @@ public class NotificationController {
     public FriendShip friendShip = FriendShipFactory.createFriendShip();
     public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
     public FriendRequestService service = factory.createFriendRequestService();
+   @FXML
+    public ListView groupList;
 
     @FXML
     private ListView<String> postList;
@@ -49,6 +50,7 @@ public class NotificationController {
 
     private FriendNotifications friendNotifications;
     private PostNotification postNotification;
+    private GroupNotifications groupNotifications;
     private final String currentUserId = User.getUserId();
     private JSONArray postNotificationList = new JSONArray();  // Changed to JSONArray
     private JSONArray friendNotificationsList = new JSONArray();  // Changed to JSONArray
@@ -59,12 +61,14 @@ public class NotificationController {
         ILoadNotifications loader = LoadNotifications.getInstance();
         postNotification = new PostNotification(loader);
         friendNotifications = new FriendNotifications(loader);
+        groupNotifications = new GroupNotifications(loader);
 
         // Populate the JSONArray for friend requests
 
         // Load and populate the notifications
         loadPostNotifications();
         loadFriendNotifications();
+        loadGroupNotifications();
 
         // Set list views
         updatePostListView();
@@ -74,9 +78,10 @@ public class NotificationController {
         acceptButton.setOnAction(event -> handleAccept());
         rejectButton.setOnAction(event -> handleReject());
     }
-
     private void loadPostNotifications() {
+
         JSONArray notifications = postNotification.getNotification();
+        System.out.println("Notifications: " + notifications);
         postNotificationList = new JSONArray();
 
         for (int i = 0; i < notifications.length(); i++) {
@@ -91,6 +96,20 @@ public class NotificationController {
             postNotificationJson.put("notification", displayText);
             postNotificationList.put(postNotificationJson);
         }
+   updatePostListView();
+    }
+    private void loadGroupNotifications() {
+        JSONArray notifications = groupNotifications.getNotification();
+        List<String> groupNot = new ArrayList<>();
+
+        for (int i = 0; i < notifications.length(); i++) {
+            String notification = notifications.getJSONObject(i).optString("notificationName", "");
+            String name = notifications.getJSONObject(i).optString("groupName");
+            groupNot.add(name + " " + notification);
+
+
+        }
+        groupList.setItems(FXCollections.observableArrayList(groupNot));
     }
 
 

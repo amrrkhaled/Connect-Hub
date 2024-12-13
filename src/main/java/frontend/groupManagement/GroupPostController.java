@@ -51,6 +51,7 @@ public class GroupPostController {
     public String GROUPNAME = Group.getGroupName();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
 
+    GroupManagementFacade facade = new GroupManagementFacade(loadGroups, storageHandler);
 
     @FXML
     public void initialize() {
@@ -165,8 +166,7 @@ public class GroupPostController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         // Assuming normalUserController.addPost does the actual saving of the post
-        NormalUserController normalUserController = new NormalUserController(loadGroups, storageHandler);
-        normalUserController.addPost(GROUPNAME, userId, content, now.format(formatter), selectedImagePaths);
+        facade.addPost(GROUPNAME, userId, content, now.format(formatter), selectedImagePaths);
         IContentFiles postContent=ContentFiles.getInstance();
         ILoadFriendShips loadFriendShips = LoadFriendShips.getInstance();
         ILoadUsers loadUsers = LoadUsers.getInstance();

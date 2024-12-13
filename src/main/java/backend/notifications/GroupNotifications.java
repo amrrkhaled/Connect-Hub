@@ -10,12 +10,12 @@ public class GroupNotifications implements IGroupNotifications{
     public GroupNotifications(ILoadNotifications loadNotifications) {
         this.loadNotifications = loadNotifications;
     }
-    public void createNotifications(String groupId, String postId, String timestamp){
+    public void createNotifications(String groupName, String notificationName){
         JSONObject newNotification = new JSONObject();
         JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
-        newNotification.put("groupId", groupId);
-        newNotification.put("postId", postId);
-        newNotification.put("timestamp", timestamp);
+        newNotification.put("groupName", groupName);
+        newNotification.put("notificationName", notificationName);
+
         notifications.put(newNotification);
         loadNotifications.saveNotification(notifications,FILEPATH);
     }

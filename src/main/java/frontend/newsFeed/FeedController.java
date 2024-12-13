@@ -1,11 +1,12 @@
 package frontend.newsFeed;
 
+import frontend.*;
 import backend.Groups.*;
 import backend.contentCreation.*;
 import backend.friendship.*;
 import backend.profile.*;
 import backend.user.*;
-import frontend.groupManagement.GroupsController;
+import frontend.groupManagement.NormalUserController;
 import frontend.searchManagement.SearchController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class FeedController {
 
@@ -72,7 +72,7 @@ public class FeedController {
 
     IStorageHandler storageHandler = new StorageHandler();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
-    NormalUserController user = new NormalUserController(loadGroups,storageHandler);
+    NormalUser user = new NormalUser(loadGroups,storageHandler);
     // Creating instances of controllers
     GroupManager groupManager = new GroupManager(loadGroups);
     Request requestController = new Request(loadGroups, storageHandler);
@@ -531,6 +531,7 @@ public class FeedController {
     }
 
     public void onFriends(ActionEvent event) {
+
         try {
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/friend.fxml"));
             Scene loginScene = new Scene(loginPage);

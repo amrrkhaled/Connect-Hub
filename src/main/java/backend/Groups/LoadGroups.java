@@ -271,7 +271,7 @@ public class LoadGroups implements ILoadGroups {
     }
 
 
-public JSONObject getPostById(String postId) {
+     public JSONObject getPostById(String postId) {
         JSONArray posts = storageHandler.loadDataAsArray(POSTS_FILE_PATH);
         for (int i = 0; i < posts.length(); i++) {
             JSONObject post = posts.optJSONObject(i);

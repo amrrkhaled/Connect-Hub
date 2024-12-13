@@ -4,7 +4,6 @@ import backend.Groups.*;
 import backend.user.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -164,7 +163,7 @@ public  class editPostController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         // Assuming normalUserController.addPost does the actual saving of the post
-        GeneralAdminController generalAdminController = new GeneralAdminController(loadGroups, storageHandler);
+        GeneralAdmin generalAdminController = new GeneralAdmin(loadGroups, storageHandler);
         generalAdminController.editPostContent(postId,content);
         generalAdminController.editPostImages(postId,selectedImagePaths);
         // Navigate back after creating the post

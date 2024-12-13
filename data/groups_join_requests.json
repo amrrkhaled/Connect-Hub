@@ -1,5 +1,12 @@
-[{
-    "groupName": "swimming",
-    "groupId": "G1",
-    "requests": []
-}]
+[
+    {
+        "groupName": "Programming",
+        "groupId": "G1",
+        "requests": []
+    },
+    {
+        "groupName": "Math",
+        "groupId": "G2",
+        "requests": []
+    }
+]

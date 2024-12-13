@@ -51,12 +51,5 @@ public class GroupManager {
             e.printStackTrace();
         }
     }
-    public void deleteGroup(String groupId , String userId) {
-        for (int i = 0; i < groups.length(); i++) {
-            JSONObject group = groups.getJSONObject(i);
-            if (group.getString("groupId").equals(groupId) && group.getString("PrimaryAdminId").equals(userId)) {
-                groups.remove(i);
-            }
-        }
-    }
+
 }

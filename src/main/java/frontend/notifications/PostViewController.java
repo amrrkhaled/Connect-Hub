@@ -79,6 +79,7 @@ public class PostViewController {
             String timestamp = post.optString("timestamp", "");
             JSONArray images = post.optJSONArray("images");
             contentLabel.setText(caption);
+            System.out.println(post);
             // Set the user ID label
             String userName = friendShip.getUserRepository().getUsernameByUserId(userId);  // Assuming you have a method to get the username by userId
             userIdLabel.setText("User: " + userName);

@@ -14,7 +14,7 @@ public class GroupManagementTest {
 
                 // Creating instances of controllers
                 GroupManager groupManager = new GroupManager(loadGroups);
-                NormalUserController normalUserController = new NormalUserController(loadGroups, storageHandler);
+                NormalUser normalUser = new NormalUser(loadGroups, storageHandler);
                 PrimaryAdmin primaryAdminController = new PrimaryAdmin(loadGroups, storageHandler);
                 Request requestController = new Request(loadGroups, storageHandler);
 
@@ -33,8 +33,8 @@ public class GroupManagementTest {
                 System.out.println("Adding posts...");
                 List<String> postImages = new ArrayList<>();
                 postImages.add("C:\\Users\\amrkh\\Downloads\\WhatsApp Image 2024-06-06 at 21.59.04_ed24978c.jpg");
-                normalUserController.addPost("Group 1", "user1", "This is a test post from user1", Instant.now().toString(), postImages);
-                normalUserController.addPost("Group 1", "user2", "This is another post from user2", Instant.now().toString(), postImages);
+                normalUser.addPost("Group 1", "user1", "This is a test post from user1", Instant.now().toString(), postImages);
+                normalUser.addPost("Group 1", "user2", "This is another post from user2", Instant.now().toString(), postImages);
 
                 // Simulating adding admins
                 System.out.println("Adding admins...");
@@ -68,7 +68,7 @@ public class GroupManagementTest {
 
                 // Simulating leaving a group (user2)
                 System.out.println("User leaving group (user2)...");
-                normalUserController.leaveGroup("Group 1", "user2");
+                normalUser.leaveGroup("Group 1", "user2");
 
                 // Simulating re-adding admin (user1)
                 System.out.println("Re-adding admin (user1)...");

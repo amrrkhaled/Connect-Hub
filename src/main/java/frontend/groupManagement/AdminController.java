@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminController extends GroupsController {
+public class AdminController extends NormalUserController {
 
     @FXML
     private ListView<String> requestsListView;
@@ -46,7 +46,7 @@ public class AdminController extends GroupsController {
 
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
     GroupManager groupManager = new GroupManager(loadGroups);
-    GeneralAdminController admin = new GeneralAdminController(loadGroups,storageHandler); // Make sure this class is properly imported and exists
+    GeneralAdmin admin = new GeneralAdmin(loadGroups,storageHandler); // Make sure this class is properly imported and exists
 
     @FXML
     public void initialize() {
@@ -125,7 +125,7 @@ public class AdminController extends GroupsController {
         // Show confirmation dialog
         dialog.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                admin.removeMember(GROUPNAME, userId); // Remove the user from the group
+                facade.removeGroupMember(GROUPNAME, userId); // Remove the user from the group
                 showInfoDialog("Member Removed", "User " + userId + " has been successfully removed from the group.");
             }
         });
@@ -157,10 +157,10 @@ public class AdminController extends GroupsController {
         // Show accept and reject buttons
         dialog.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                admin.acceptMember(GROUPNAME, userId); // Accept request
+                facade.handleMemberJoinRequest(GROUPNAME, userId,true); // Accept request
                 showInfoDialog("Request Accepted", "User " + userId + " has been added to the group.");
             } else if (response == javafx.scene.control.ButtonType.CANCEL) {
-                admin.rejectMember(GROUPNAME, userId); // Reject request
+                facade.handleMemberJoinRequest(GROUPNAME, userId,false);
                 showInfoDialog("Request Rejected", "User " + userId + "'s request has been rejected.");
             }
         });
@@ -334,7 +334,7 @@ public class AdminController extends GroupsController {
                 // Handle Delete action
                 System.out.println("Deleting post: " + postId);
                 // Call a method to delete the post
-                admin.deletePost(postId);
+                facade.deletePost(postId);
                 super.onRefresh();
             }
         });

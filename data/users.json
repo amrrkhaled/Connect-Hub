@@ -5,7 +5,7 @@
         "userId": "U1",
         "email": "amr@gmail.com",
         "username": "amr",
-        "status": "online"
+        "status": "offline"
     },
     {
         "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
@@ -13,7 +13,7 @@
         "userId": "U2",
         "email": "sameh@gmail.com",
         "username": "sameh",
-        "status": "offline"
+        "status": "online"
     },
     {
         "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
@@ -29,14 +29,14 @@
         "userId": "U4",
         "email": "omar@gmail.com",
         "username": "fran",
-        "status": "online"
+        "status": "offline"
     },
     {
         "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
-        "dateOfBirth": "2004-10-09",
+        "dateOfBirth": "2005-12-22",
         "userId": "U5",
-        "email": "omar1@gmail.com",
-        "username": "omar1",
-        "status": "offline"
+        "email": "seif@gmail.com",
+        "username": "seif",
+        "status": "online"
     }
 ]

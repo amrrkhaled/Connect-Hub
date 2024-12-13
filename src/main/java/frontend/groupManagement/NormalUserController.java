@@ -1,16 +1,10 @@
 package frontend.groupManagement;
 
 import backend.Groups.*;
-import backend.contentCreation.IContent;
-import backend.contentCreation.PostFactory;
-import backend.contentCreation.StoryFactory;
 import backend.friendship.*;
-import backend.profile.ProfileManager;
-import backend.profile.ProfileManagerFactory;
 import backend.user.User;
 import backend.user.UserFactory;
 import backend.user.UserManager;
-import frontend.newsFeed.StoryPageController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,7 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.json.JSONArray;
@@ -39,7 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupsController {
+public class NormalUserController {
 
     @FXML
     public ImageView groupPhoto;
@@ -68,6 +61,9 @@ public class GroupsController {
     // Creating instances of controllers
     GroupManager groupManager = new GroupManager(loadGroups);
 
+
+    // Create facade instance
+    GroupManagementFacade facade = new GroupManagementFacade(loadGroups, storageHandler);
     @FXML
     public void initialize() {
         loadPosts(GROUPNAME);
@@ -274,8 +270,8 @@ public class GroupsController {
     @FXML
     public void onLeaveGroup(ActionEvent event) {
 
-        NormalUserController user = new NormalUserController(loadGroups,storageHandler);
-        user.leaveGroup(GROUPNAME,userId);
+        NormalUser user = new NormalUser(loadGroups,storageHandler);
+        facade.userLeaveGroup(GROUPNAME,userId);
         onNewsFeed(event);
     }
 

@@ -1,13 +1,10 @@
 [
     {
-        "groupName": "Group 1",
-        "members": [
-            "U1",
-            "U2"
-        ]
+        "groupName": "Programming",
+        "members": ["U2"]
     },
     {
-        "groupName": "swimming",
+        "groupName": "Math",
         "members": ["U5"]
     }
 ]

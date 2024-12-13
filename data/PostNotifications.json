@@ -1,12 +1,5 @@
-[
-    {
-        "contentId": "P13",
-        "authorId": "U5",
-        "timestamp": "2024-12-13 20:38:04"
-    },
-    {
-        "contentId": "P14",
-        "authorId": "U5",
-        "timestamp": "2024-12-13 20:50:49"
-    }
-]
+[{
+    "contentId": "P1",
+    "authorId": "U2",
+    "timestamp": "2024-12-13 23:18:20"
+}]

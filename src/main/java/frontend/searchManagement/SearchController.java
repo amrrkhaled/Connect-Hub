@@ -5,16 +5,19 @@ import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.search.IGroupSearch;
 import backend.search.SearchManager;
-import backend.user.IUserRepository;
 import backend.user.User;
-import backend.user.UserRepository;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 public class SearchController {
@@ -31,7 +34,7 @@ public class SearchController {
     GroupManager groupManager = new GroupManager(loadGroups);
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
     private final String userId = User.getUserId();
-    NormalUserController normalUserController = new NormalUserController(loadGroups, storageHandler);
+    NormalUser normalUser = new NormalUser(loadGroups, storageHandler);
     PrimaryAdmin primaryAdminController = new PrimaryAdmin(loadGroups, storageHandler);
     Request requestController = new Request(loadGroups, storageHandler);
     IGroupSearch search = new SearchManager(groupManager);
@@ -99,7 +102,30 @@ public class SearchController {
     private void handleLeaveGroup(String group) {
         if (group != null) {
             System.out.println("Leaving group: " + group);
-             normalUserController.leaveGroup(group,userId);
+             normalUser.leaveGroup(group,userId);
+        }
+    }
+
+    public void onNewsFeed(ActionEvent actionEvent) {
+        try {
+            // Load the FXML file for the NewsFeed page
+            Parent newsFeedParent = FXMLLoader.load(getClass().getResource("/frontend/NewsFeed.fxml"));
+
+            // Create a new Scene with the loaded Parent (FXML)
+            Scene newsFeedScene = new Scene(newsFeedParent);
+
+            // Get the current Stage (window)
+            Stage currentStage = (Stage) groupsListView.getScene().getWindow();
+
+            // Set the new Scene and update the Stage's title
+            currentStage.setScene(newsFeedScene);
+            currentStage.setTitle("NewsFeed");
+
+            // Show the updated Stage
+            currentStage.show();
+        } catch (IOException e) {
+            // Handle exceptions in case the FXML file cannot be loaded
+            e.printStackTrace();
         }
     }
 }

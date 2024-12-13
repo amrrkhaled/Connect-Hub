@@ -5,12 +5,12 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class GeneralAdminController extends NormalUserController {
+public class GeneralAdmin extends NormalUser {
     private final String membersFilePath = "data/group_members.json";
     private final String joinRequestsFilePath = "data/groups_join_requests.json";
     private final String postsFilePath = "data/groupsPosts.json";
 
-    public GeneralAdminController(ILoadGroups loadGroups, IStorageHandler storageHandler) {
+    public GeneralAdmin(ILoadGroups loadGroups, IStorageHandler storageHandler) {
         super(loadGroups, storageHandler);
     }
 

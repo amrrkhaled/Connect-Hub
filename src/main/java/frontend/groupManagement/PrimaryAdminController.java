@@ -42,7 +42,7 @@ public class PrimaryAdminController extends AdminController {
     private void handleUpdateDescription() {
         String newDescription = groupDescription.getText(); // Assume groupDescription is a TextField or TextArea
         if (newDescription != null && !newDescription.trim().isEmpty()) {
-            pAdmin.updateDescription(GROUPNAME, newDescription);
+            facade.updateGroupDescription(GROUPNAME, newDescription);
             showAlert("Success", "Group description updated successfully!");
         } else {
             showAlert("Error", "Description cannot be empty.");
@@ -83,11 +83,11 @@ public class PrimaryAdminController extends AdminController {
                     super.showErrorDialog("User is Already an Admin", "The user " + userId + " is already an admin.");
                     return;  // Don't proceed if the user is an admin or primary member
                 }
-                pAdmin.addAdminToGroup(GROUPNAME, userId);  // Promote the user
+                facade.addAdminToGroup(GROUPNAME, userId);  // Promote the user
                 super.showInfoDialog("Promoted", "User " + userId + " has been promoted to admin.");
             } else if ("Demote".equals(responseText)) {
                 // Call your back-end method for demotion
-                pAdmin.removeAdmin(GROUPNAME, userId);   // Demote the user
+                facade.removeAdminFromGroup(GROUPNAME, userId);   // Demote the user
                 super.showInfoDialog("Demoted", "User " + userId + " has been demoted to a regular member.");
             } else if ("Remove".equals(responseText)) {
                 // Call your back-end method for removal
@@ -95,7 +95,7 @@ public class PrimaryAdminController extends AdminController {
                     super.showErrorDialog("Cannot Remove Member", "The user " + userId + " is an admin or primary member and cannot be removed.");
                     return;  // Don't proceed if the user is an admin or primary member
                 }
-                pAdmin.removeMember(GROUPNAME, userId);   // Remove the user from the group
+                facade.removeGroupMember(GROUPNAME, userId);   // Remove the user from the group
                 super.showInfoDialog("Removed", "User " + userId + " has been removed from the group.");
             }
         });
@@ -107,7 +107,7 @@ public class PrimaryAdminController extends AdminController {
 
     @FXML
     public void onDelete(ActionEvent event) {
-        pAdmin.deleteGroup(GROUPNAME);
+        facade.deleteGroup(GROUPNAME);
         super.onNewsFeed(event);
     }
 

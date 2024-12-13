@@ -1,10 +1,7 @@
 package backend.notifications;
 
 import backend.Groups.*;
-import backend.user.ILoadUsers;
-import backend.user.IUserRepository;
-import backend.user.LoadUsers;
-import backend.user.UserRepository;
+import backend.user.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,10 +13,11 @@ import java.util.Set;
 public class PostNotification implements IPostNotifications {
     private final ILoadNotifications loadNotifications;
     private final String FILEPATH = "data/PostNotifications.json";
+    private final String userId = User.getUserId();
 
     public PostNotification(ILoadNotifications loadNotifications) {
         this.loadNotifications = loadNotifications;
-        ;
+
     }
 
     @Override
@@ -33,6 +31,9 @@ public class PostNotification implements IPostNotifications {
         for (int i = 0; i < notifications.length(); i++) {
             try {
                 JSONObject notification = notifications.getJSONObject(i);
+                if(notification.getString("authorId").equals(userId)) {
+                    continue;
+                }
                 userNotifications.put(notification);
             } catch (Exception e) {
                 System.err.println("Error processing Notification at index " + i + ": " + e.getMessage());

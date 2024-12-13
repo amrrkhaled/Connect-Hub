@@ -4,7 +4,6 @@ import backend.Groups.*;
 import backend.friendship.FriendShipFactory;
 import backend.user.ILoadUsers;
 import backend.user.LoadUsers;
-import backend.user.UserRepository;
 import backend.friendship.FriendShip;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,7 +19,7 @@ public class SearchManager implements IUserSearch, IGroupSearch {
 
     // Creating instances of controllers
     GroupManager groupManager = new GroupManager(loadGroups);
-    NormalUserController normalUserController = new NormalUserController(loadGroups, storageHandler);
+    NormalUser normalUser = new NormalUser(loadGroups, storageHandler);
     PrimaryAdmin primaryAdminController = new PrimaryAdmin(loadGroups, storageHandler);
     Request requestController = new Request(loadGroups, storageHandler);
 
@@ -88,6 +87,6 @@ public class SearchManager implements IUserSearch, IGroupSearch {
 
     @Override
     public void leaveGroup(String groupName, String userId) {
-        normalUserController.leaveGroup(groupName, userId);
+        normalUser.leaveGroup(groupName, userId);
     }
 }

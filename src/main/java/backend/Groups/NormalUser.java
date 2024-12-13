@@ -8,14 +8,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NormalUserController {
+public class NormalUser {
     ILoadGroups loadGroups;
     JSONArray groups;
     private final String postsFilePath = "data/groupsPosts.json";
     private final String membersFilePath = "data/group_members.json";
     IStorageHandler storageHandler;
 
-    public NormalUserController(ILoadGroups loadGroups, IStorageHandler storageHandler) {
+    public NormalUser(ILoadGroups loadGroups, IStorageHandler storageHandler) {
         this.loadGroups = loadGroups;
         groups = loadGroups.loadGroups();
         this.storageHandler = storageHandler;

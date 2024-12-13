@@ -1,12 +1,10 @@
 package backend.Groups;
 
-import javafx.scene.image.Image;
+import backend.notifications.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.List;
-
-public class PrimaryAdmin extends GeneralAdminController {
+public class PrimaryAdmin extends GeneralAdmin {
 
     private final String groupsFilePath = "data/groups.json";
     private final String requestsFilePath = "data/groups_join_requests.json";
@@ -51,11 +49,14 @@ public class PrimaryAdmin extends GeneralAdminController {
             // Check if the group name matches the one passed as a parameter
             if (group.getString("groupName").equals(groupName)) {
                 group.put("description",description);
-               Groups.put(i, group);
+                Groups.put(i, group);
                 break;
             }
         }
         storageHandler.saveDataAsArray(Groups, groupsFilePath);
+        ILoadNotifications loadNotification = new LoadNotifications();
+        IGroupNotifications groupNotification = new GroupNotifications(loadNotification);
+        groupNotification.createNotifications(groupName,"Updated description");
     }
 
     public void removeAdmin(String name, String userId) {
