@@ -1,41 +1,50 @@
 package backend.search;
 
-import backend.user.UserRepository;
-import backend.user.IUserRepository;
 import backend.user.User;
-import org.json.JSONObject;
+import backend.Groups.Group;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class SearchManager {
-
-    private final IUserRepository userRepository;
-
-    public SearchManager(IUserRepository userRepository) {
-        this.userRepository = userRepository;
+public class SearchManager implements IUserSearch, IGroupSearch {
+    Object Database = null;
+    @Override
+    public List<User> searchUsers(String keyword) {
+        return Database.getUsers().stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
-    public List<User> performUserSearch(String query) {
-        List<User> matchedUsers = new ArrayList<>();
-
-        for (int i = 0; i < userRepository.getUsersArray().length(); i++) {
-            JSONObject userJson = userRepository.getUsersArray().getJSONObject(i);
-            String username = userJson.getString("username");
-
-            if (username.toLowerCase().contains(query.toLowerCase())) {
-                User user = new User(username, userJson.getString("userId"));
-                matchedUsers.add(user);
-            }
-        }
-        return matchedUsers;
+    @Override
+    public List<Group> searchGroups(String keyword) {
+        return Database.getGroups().stream()
+                .filter(group -> group.getName().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
-    public IUserRepository getUserRepository() {
-        return userRepository;
+    @Override
+    public String addFriend(String userId, String friendId) {
+        return Database.addFriend(userId, friendId);
     }
 
-    public void setUserRepository(IUserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Override
+    public String removeFriend(String userId, String friendId) {
+        return Database.removeFriend(userId, friendId);
+    }
+
+    @Override
+    public String blockUser(String userId, String targetId) {
+        return Database.blockUser(userId, targetId);
+    }
+
+    @Override
+    public String joinGroup(String userId, String groupId) {
+        return Database.joinGroup(userId, groupId);
+    }
+
+    @Override
+    public String leaveGroup(String userId, String groupId) {
+        return Database.leaveGroup(userId, groupId);
     }
 }

@@ -1,9 +1,11 @@
 package backend.search;
 
-import backend.user.User;
+import backend.Groups.Group;
 
 import java.util.List;
 
-public interface ISearchRepository {
-    List<User> findUsersByQuery(String query);
+public interface IGroupSearch {
+    List<Group> searchGroups(String keyword);
+    String joinGroup(String userId, String groupId);
+    String leaveGroup(String userId, String groupId);
 }
