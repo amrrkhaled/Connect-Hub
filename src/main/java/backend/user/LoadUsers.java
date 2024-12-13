@@ -14,7 +14,7 @@ public class LoadUsers implements ILoadUsers {
 
     private static LoadUsers instance;
 
-    private LoadUsers() {
+    public LoadUsers() {
 
     }
 
@@ -30,8 +30,6 @@ public class LoadUsers implements ILoadUsers {
         File file = new File(filePath);
 
         // Initialize file with an empty array if it doesn't exist
-
-
 
             if (file.length() == 0 || !file.exists()) {
 

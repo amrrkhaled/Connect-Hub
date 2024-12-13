@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.searchManagement.SearchController">
+    <top>
+        <HBox spacing="10" alignment="CENTER" padding="10">
+            <Label text="Search:"/>
+            <TextField fx:id="queryField" promptText="Enter search query"/>
+            <Button text="Search" onAction="#onSearch"/>
+        </HBox>
+    </top>
+    <center>
+        <SplitPane orientation="VERTICAL">
+            <VBox spacing="10" fx:id="userResults" padding="10" style="-fx-background-color: #f4f4f4;">
+                <Label text="User Results:"/>
+            </VBox>
+            <VBox spacing="10" fx:id="groupResults" padding="10" style="-fx-background-color: #e8e8e8;">
+                <Label text="Group Results:"/>
+            </VBox>
+        </SplitPane>
+    </center>
+</BorderPane>
