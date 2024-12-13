@@ -47,7 +47,7 @@ public class storiesThread extends Thread {
                     }
                 }
 
-                // Save filtered active stories back to the file
+                // Save  active stories back to the file
                 contentFiles.saveContent(activeStories, FILEPATH);
                 LocalDateTime noww = LocalDateTime.now();
                 DateTimeFormatter formatterr = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

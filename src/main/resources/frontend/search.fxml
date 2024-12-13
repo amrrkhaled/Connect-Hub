@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="frontend.searchManagement.SearchController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <!-- Title Label -->
+    <Label text="Search Results" layoutX="20.0" layoutY="20.0"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+    <!-- Users ListView -->
+    <VBox layoutX="20.0" layoutY="60.0" spacing="10">
+        <Label text="Users" />
+        <ListView fx:id="usersListView" prefHeight="150.0" prefWidth="260.0" />
+    </VBox>
+
+    <!-- Groups ListView -->
+    <VBox layoutX="300.0" layoutY="60.0" spacing="10">
+        <Label text="Groups" />
+        <ListView fx:id="groupsListView" prefHeight="150.0" prefWidth="260.0" />
+    </VBox>
+
+</AnchorPane>

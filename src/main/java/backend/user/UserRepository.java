@@ -18,7 +18,7 @@ public class UserRepository implements IUserRepository {
         }
         return instance;
     }
-    private JSONArray getUsersArray() {
+    public JSONArray getUsersArray() {
         return loadUsers.loadUsers();
     }
 
