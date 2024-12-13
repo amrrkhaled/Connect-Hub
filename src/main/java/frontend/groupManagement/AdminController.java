@@ -104,7 +104,11 @@ public class AdminController extends GroupsController {
         }
         return false;
     }
-
+    @FXML
+    public void onRefresh() {
+       super.onRefresh();
+       loadRequests();
+    }
     protected void showMemberDialog(String userId) {
         // Check if the user is an admin or primary member
         if ((isUserAdmin(userId) || isUserPrimaryAdmin(userId))) {
