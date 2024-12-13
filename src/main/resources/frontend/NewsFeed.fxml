@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="762.0" prefWidth="752.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.newsFeed.FeedController">
+<BorderPane prefHeight="762.0" prefWidth="916.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.newsFeed.FeedController">
    <top>
       <HBox prefHeight="24.0" prefWidth="456.0" spacing="20.0" style="-fx-background-color: #1877F2; -fx-padding: 10.0;">
          <Button onAction="#onHome" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Home" />
@@ -32,7 +32,7 @@
 
          <!-- Posts Section -->
          <Label style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Posts" />
-         <AnchorPane>
+         <AnchorPane prefWidth="618.0">
             <ListView fx:id="postsListView" layoutY="14.0" prefHeight="314.0" prefWidth="508.0" style="-fx-background-color: #ffffff; -fx-padding: 10.0; -fx-border-color: #d3d3d3; -fx-border-width: 1.0;" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0" />
          </AnchorPane>
 
@@ -50,10 +50,22 @@
    <left>
       <AnchorPane prefHeight="645.0" prefWidth="223.0" BorderPane.alignment="CENTER">
          <children>
-            <ScrollPane layoutX="12.0" layoutY="57.0" prefHeight="578.0" prefWidth="200.0">
-               <ListView fx:id="friendsListView" prefHeight="595.0" prefWidth="200.0" />
+            <ScrollPane layoutX="12.0" layoutY="57.0" prefHeight="147.0" prefWidth="200.0">
+               <ListView fx:id="friendsListView" prefHeight="187.0" prefWidth="200.0" />
             </ScrollPane>
-            <Label layoutX="14.0" layoutY="14.0" style="-fx-font-weight: bold; -fx-font-size: 16.0; -fx-font-family: Roboto;" text="Friends" />
+            <Label layoutX="14.0" layoutY="14.0" style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Friends" />
+            <Label layoutX="12.0" layoutY="215.0" style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Your Groups" />
+            <ScrollPane layoutX="12.0" layoutY="259.0" prefHeight="172.0" prefWidth="200.0">
+               <content>
+                  <ListView fx:id="myGroupsListView" prefHeight="187.0" prefWidth="200.0" />
+               </content>
+            </ScrollPane>
+            <ScrollPane layoutX="12.0" layoutY="477.0" prefHeight="148.0" prefWidth="200.0">
+               <content>
+                  <ListView fx:id="suggestedGroupsListView" prefHeight="187.0" prefWidth="200.0" />
+               </content>
+            </ScrollPane>
+            <Label layoutX="12.0" layoutY="451.0" style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Suggested Groups" />
          </children>
       </AnchorPane>
    </left>
