@@ -52,23 +52,15 @@ public class NotificationController {
     private final String currentUserId = User.getUserId();
     private JSONArray postNotificationList = new JSONArray();  // Changed to JSONArray
     private JSONArray friendNotificationsList = new JSONArray();  // Changed to JSONArray
-    private ILoadNotifications loadNotifications;
 
     @FXML
     private void initialize() {
         // Initialize the loaders and notification instances
-        ILoadNotifications loader = new LoadNotifications();
+        ILoadNotifications loader = LoadNotifications.getInstance();
         postNotification = new PostNotification(loader);
         friendNotifications = new FriendNotifications(loader);
 
         // Populate the JSONArray for friend requests
-        List<String> friendRequestsList = service.getFriendRequests(currentUserId);
-        JSONArray friendRequestsJSONArray = new JSONArray();
-        for (String request : friendRequestsList) {
-            JSONObject requestObject = new JSONObject();
-            requestObject.put("request", request);
-            friendRequestsJSONArray.put(requestObject);  // Storing as JSON objects inside the array
-        }
 
         // Load and populate the notifications
         loadPostNotifications();
@@ -85,81 +77,105 @@ public class NotificationController {
 
     private void loadPostNotifications() {
         JSONArray notifications = postNotification.getNotification();
-        postNotificationList = new JSONArray();  // Clear existing notifications
+        postNotificationList = new JSONArray();
 
         for (int i = 0; i < notifications.length(); i++) {
             JSONObject notification = notifications.getJSONObject(i);
-            String authorId = notification.optString("authorId", "Unknown Author");
+            String author = notification.optString("id1");
+            String timestamp = notification.optString("timestamp");
 
-            String timestamp = notification.optString("timestamp", "Unknown Time");
-            String author= friendShip.getUserRepository().getUsernameByUserId(authorId);
-            String displayText =  author + " posted @: " + timestamp;
+            String displayText = author + "posted @: " + timestamp;
             JSONObject postNotificationJson = new JSONObject();
             postNotificationJson.put("notification", displayText);
-            postNotificationList.put(postNotificationJson);  // Store as JSON object
+            postNotificationList.put(postNotificationJson);
         }
     }
 
     private void loadFriendNotifications() {
-        JSONArray notifications = friendNotifications.getNotification();
-        friendNotificationsList = new JSONArray();  // Clear existing friend notifications
+        ILoadNotifications loadNotifications = LoadNotifications.getInstance();
+        // Load the existing notifications from the database
+        JSONArray notifications = loadNotifications.LoadNotification("data/FriendNotifications.json");
+        // Initialize friendNotificationsList with existing notifications
+        friendNotificationsList = new JSONArray(notifications.toString());
+        // Load new friend requests (usernames)
+        List<String> friendRequestsList = service.getFriendRequests(currentUserId);
+        System.out.println("Friend Requests: " + friendRequestsList);
+        // Remove outdated notifications
+        for (int i = 0; i < friendNotificationsList.length(); i++) {
+            JSONObject existingNotification = friendNotificationsList.getJSONObject(i);
+            String existingNotificationText = existingNotification.optString("notification", "");
 
-        for (int i = 0; i < notifications.length(); i++) {
-            JSONObject notification = notifications.getJSONObject(i);
-            String senderId= notification.optString("senderId", "Unknown Sender");
-            String sender= friendShip.getUserRepository().getUsernameByUserId(senderId);
-            String receiver = notification.optString("receiver", "Unknown Receiver");
+            // Extract username from notification text (e.g., "Request from: username")
+            String usernameInNotification = existingNotificationText.replace("Request from: ", "").trim();
 
-            String displayText = " Request from:-" + sender;
-            JSONObject friendNotificationJson = new JSONObject();
-            friendNotificationJson.put("notification", displayText);
-            friendNotificationsList.put(friendNotificationJson);  // Store as JSON object
+            // If the username is not in the friend request list, remove the notification
+            if (!friendRequestsList.contains(usernameInNotification)) {
+                friendNotificationsList.remove(i);
+                i--; // Adjust index after removal
+            }
         }
+        // Add any new friend requests to the notification list if not already present
+        for (String username : friendRequestsList) {
+            boolean isAlreadyNotified = false;
+            // Check if the request (username) is already present in the notification list
+            for (int i = 0; i < friendNotificationsList.length(); i++) {
+                JSONObject existingNotification = friendNotificationsList.getJSONObject(i);
+                String existingNotificationText = existingNotification.optString("notification", "");
+
+                // Check if the notification already contains this username
+                if (existingNotificationText.contains(username)) {
+                    isAlreadyNotified = true;
+                    break;
+                }
+            }
+            // If the request is not in the notification list, add it
+            if (!isAlreadyNotified) {
+                String displayText = "Request from: " + username;
+                JSONObject newFriendNotification = new JSONObject();
+                newFriendNotification.put("notification", displayText);
+                friendNotificationsList.put(newFriendNotification);
+            }
+        }
+        // Save the updated notification list to the database
+        loadNotifications.saveNotification(friendNotificationsList, "data/FriendNotifications.json");
+        // Log the updated list
+        System.out.println("Updated Notifications: " + friendNotificationsList);
+        // Update the ListView
+        updateFriendRequestListView();
     }
+
 
     private void handleAccept() {
         String selectedRequest = requestList.getSelectionModel().getSelectedItem();
-
+        ILoadNotifications loadNotifications = LoadNotifications.getInstance();
         if (selectedRequest != null) {
             try {
                 // Split the string to extract the sender username
                 String[] parts = selectedRequest.split("-");
-                String sender = parts[1].trim();  // Extract the token after "Request from:- "
-                System.out.println("Extracted sender: " + sender);  // Debugging line
-
-                // Check if the sender is actually found
-                JSONObject user = friendShip.getUserRepository().findUserByUsername(sender);
-
-                if (user != null) {
-                    String newFriendId = user.getString("userId");
-                    System.out.println("User found, User ID: " + newFriendId);  // Debugging line
-
+                String sender = parts[1].trim();
+                // Find user ID by username
+                String newFriendId = friendShip.getUserRepository().findUserIdByUsername(sender);
+                System.out.println(sender);
+                if (newFriendId != null) {
                     // Accept the friend request
-                    friendShip.acceptFriend(currentUserId, newFriendId);
-
+                    friendShip.acceptFriend(currentUserId, sender);
                     // Remove the request from the JSONArray (assuming we use the request object)
                     removeRequestFromJSONArray(sender);
-
-                    // Save the updated list to file
+                    // Save the updated list
                     loadNotifications.saveNotification(friendNotificationsList, "data/FriendNotifications.json");
-
-                    // Refresh the ListView with the updated list
+                    // Refresh the ListView
                     updateFriendRequestListView();
                 } else {
-                    showAlert("Error", "User not found: " + sender);
-                    System.out.println("Error: User not found");
+                    showAlert("Error", "Sender not found: " + sender);
                 }
             } catch (Exception e) {
-                showAlert("Error", "An error occurred while accepting the request. Please try again.");
-                System.out.println("Exception during accept request: " + e.getMessage());
-                e.printStackTrace();
+                showAlert("Error", "Invalid request format: ");
+                System.out.println(e);
             }
         } else {
             showAlert("Error", "No request selected to accept.");
         }
     }
-
-
 
     private void handleReject() {
         String selectedRequest = requestList.getSelectionModel().getSelectedItem();
@@ -228,6 +244,7 @@ public class NotificationController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     public void onHome(ActionEvent event) {
         try {
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/home.fxml"));

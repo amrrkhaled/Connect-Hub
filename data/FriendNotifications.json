@@ -1,5 +1,4 @@
-[{
-    "senderId": "U1",
-    "receiverId": "U2",
-    "timestamp": "2024-12-13 00:18:48"
-}]
+[
+    {"notification": "Request from: sameh"},
+    {"notification": "Request from: franco"}
+]
