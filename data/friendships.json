@@ -1,5 +1,12 @@
-[{
-    "userId1": "U1",
-    "userId2": "U2",
-    "status": "pending"
-}]
+[
+    {
+        "userId1": "U1",
+        "userId2": "U2",
+        "status": "pending"
+    },
+    {
+        "userId1": "U1",
+        "userId2": "U4",
+        "status": "accepted"
+    }
+]

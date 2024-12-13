@@ -28,9 +28,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class FeedController {
     @FXML
@@ -362,27 +360,25 @@ public class FeedController {
         }
     }
     public void navigateToNotifications(ActionEvent event) {
+        System.out.println("Attempting to navigate to notifications...");
         try {
-            // Load the Notifications page
-            Parent notificationPage = FXMLLoader.load(getClass().getResource("/frontend/notifications.fxml"));
-            Scene notificationScene = new Scene(notificationPage);
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/notifications.fxml"));
+            Scene loginScene = new Scene(loginPage);
 
-            // Get the current stage
+            // Get current stage
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
-            // Set the icon (if not already added)
-            if (currentStage.getIcons().isEmpty()) {
-                currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
-            }
-
-            // Set the new scene and update the stage
-            currentStage.setScene(notificationScene);
-            currentStage.setTitle("Notifications");
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Profile");
             currentStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
 
 }
