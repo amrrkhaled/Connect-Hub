@@ -1,14 +1,6 @@
-[
-    {
-        "notification": "Request from: sameh",
-        "senderId": "U2",
-        "receiverId": "U1",
-        "timestamp": "2024-12-13 06:23:02"
-    },
-    {
-        "notification": "Request from: franco",
-        "senderId": "U3",
-        "receiverId": "U1",
-        "timestamp": "2024-12-13 06:23:02"
-    }
-]
+[{
+    "notification": "Request from: franco",
+    "senderId": "U3",
+    "receiverId": "U1",
+    "timestamp": "2024-12-13 06:23:02"
+}]
