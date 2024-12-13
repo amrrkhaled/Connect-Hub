@@ -4,4 +4,10 @@
         "user3",
         "user4"
     ]
+},{
+    "groupName": "amm",
+    "members": [
+        "user3",
+        "user4"
+    ]
 }]

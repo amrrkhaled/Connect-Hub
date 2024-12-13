@@ -1,6 +1,7 @@
 package backend.search;
 
 import backend.Groups.*;
+import backend.friendship.FriendShipFactory;
 import backend.user.ILoadUsers;
 import backend.user.LoadUsers;
 import backend.user.UserRepository;
@@ -23,17 +24,13 @@ public class SearchManager implements IUserSearch, IGroupSearch {
     PrimaryAdmin primaryAdminController = new PrimaryAdmin(loadGroups, storageHandler);
     Request requestController = new Request(loadGroups, storageHandler);
 
-    private final UserRepository userRepository;
-    private final FriendShip friendShip;
 
-    public JSONObject findUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
-    }
+    public FriendShip friendShip= FriendShipFactory.createFriendShip();
 
-    public SearchManager(GroupManager groupManager, UserRepository userRepository, FriendShip friendShip) {
+
+    public SearchManager(GroupManager groupManager) {
         this.groupManager = groupManager;
-        this.userRepository = userRepository;
-        this.friendShip = friendShip;
+
     }
 
     @Override
@@ -55,9 +52,11 @@ public class SearchManager implements IUserSearch, IGroupSearch {
         List<String> matchingGroups = new ArrayList<>();
 
         for (int i = 0; i < groups.length(); i++) {
+
             JSONObject group = groups.getJSONObject(i);
-            if (group.getString("name").contains(keyword)) {
-                matchingGroups.add(group.getString("name"));
+            System.out.println(group);
+            if (group.getString("groupName").toLowerCase().contains(keyword.toLowerCase())) {
+                matchingGroups.add(group.getString("groupName"));
             }
         }
         return matchingGroups;

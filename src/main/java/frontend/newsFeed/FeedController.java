@@ -6,6 +6,7 @@ import backend.friendship.*;
 import backend.profile.*;
 import backend.user.*;
 import frontend.groupManagement.GroupsController;
+import frontend.searchManagement.SearchController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,10 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -42,6 +40,8 @@ public class FeedController {
 
     @FXML
     public ListView<String> myGroupsListView;
+    @FXML
+    public TextField searchBar;
     @FXML
     private HBox storiesBox;
     @FXML
@@ -81,6 +81,31 @@ public class FeedController {
         myGroupsListView.setOnMouseClicked(event -> openGroup(event));
         suggestedGroupsListView.setOnMouseClicked(this::handleSuggestionsClick);
 
+    }
+    public void handleSearch(){
+        String searchText = searchBar.getText().toLowerCase();
+        if (!searchText.isEmpty()){
+        SearchController.setKeyword(searchText);
+        navigateSearchPage();
+        }
+    }
+    public void navigateSearchPage() {
+        try {
+            Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/search.fxml"));
+            Scene loginScene = new Scene(loginPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) searchBar.getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Search Results");
+            currentStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void handleSuggestionsClick(MouseEvent event) {
