@@ -9,7 +9,7 @@ import java.util.List;
 public class PrimaryAdmin extends GeneralAdminController {
 
     private final String groupsFilePath = "data/groups.json";
-    private final String postsFilePath = "data/groupsPosts.json";
+    private final String requestsFilePath = "data/groups_join_requests.json";
     private final String membersFile = "data/group_members.json";
 
     public PrimaryAdmin(ILoadGroups loadGroups, IStorageHandler storageHandler) {
@@ -100,23 +100,45 @@ public class PrimaryAdmin extends GeneralAdminController {
 
 
     public void deleteGroup(String name) {
+        // Load the groups data
         JSONArray groups = loadGroups.loadGroups();
+        // Loop through the groups to find the one to delete
         for (int i = 0; i < groups.length(); i++) {
             if (groups.getJSONObject(i).getString("groupName").equals(name)) {
+                // Remove the group from the array
                 groups.remove(i);
+                // Save the updated groups array to the correct file
                 storageHandler.saveDataAsArray(groups, groupsFilePath);
-                System.out.println("Group deleted successfully.");
+                System.out.println("Group deleted successfully from groups.");
                 break;
             }
         }
-        JSONArray groupMembers = storageHandler.loadDataAsArray(membersFile);  // Load the JSON array
-for(int i = 0; i < groupMembers.length(); i++) {
-    if (groupMembers.getJSONObject(i).getString("groupName").equals(name)) {
-        groupMembers.remove(i);
-        storageHandler.saveDataAsArray(groupMembers, groupsFilePath);
-        System.out.println("Group deleted successfully.");
-        break;
+
+        // Load the group members data
+        JSONArray groupMembers = storageHandler.loadDataAsArray(membersFile);
+        // Loop through the group members to find and delete the corresponding members array
+        for (int i = 0; i < groupMembers.length(); i++) {
+            if (groupMembers.getJSONObject(i).getString("groupName").equals(name)) {
+                // Remove the group members from the array
+                groupMembers.remove(i);
+                // Save the updated group members array to the correct file
+                storageHandler.saveDataAsArray(groupMembers, membersFile);
+                System.out.println("Group deleted successfully from members.");
+                break;
+            }
+        }
+        JSONArray groupRequests = storageHandler.loadDataAsArray(requestsFilePath);
+        // Loop through the group members to find and delete the corresponding members array
+        for (int i = 0; i < groupRequests.length(); i++) {
+            if (groupRequests.getJSONObject(i).getString("groupName").equals(name)) {
+                // Remove the group members from the array
+                groupRequests.remove(i);
+                // Save the updated group members array to the correct file
+                storageHandler.saveDataAsArray(groupRequests, requestsFilePath);
+                System.out.println("Group deleted successfully from members.");
+                break;
+            }
+        }
     }
-}
-    }
+
 }
