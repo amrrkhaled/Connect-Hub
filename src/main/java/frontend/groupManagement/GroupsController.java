@@ -107,7 +107,7 @@ public class GroupsController {
         return new File(path).exists();
     }
 
-    protected void loadPosts(String name) {
+    protected void  loadPosts(String name) {
         // Creating a mock JSONArray
         JSONArray allPosts = storageHandler.loadDataAsArray(postsFilePath);  // Load the JSON array
         JSONArray posts = new JSONArray();

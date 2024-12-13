@@ -1,8 +1,22 @@
-[{
+[
+  {
     "groupName": "Group 1",
-    "images": ["images\\I26.jpg"],
+    "images": [
+      "images\\I26.jpg"
+    ],
     "contentId": "P2",
     "authorId": "U2",
     "content": "This is another post from user2",
     "timestamp": "2024-12-12T20:16:37.503639700Z"
-}]
+  },
+  {
+    "groupName": "Group 1",
+    "images": [
+      "images\\I26.jpg"
+    ],
+    "contentId": "P3",
+    "authorId": "U3",
+    "content": "This is post from user2",
+    "timestamp": "2024-12-12T20:16:37.503639700Z"
+  }
+]

@@ -81,4 +81,26 @@ public class NormalUserController {
             System.out.println("Group or user not found.");
         }
     }
+    // Get the list of group names a user is a member of
+    public List<String> getGroupsForUser(String userId) {
+        JSONArray groupsMembers = storageHandler.loadDataAsArray(membersFilePath);
+        List<String> userGroups = new ArrayList<>();
+
+        // Iterate through all groups to find the groups the user is a member of
+        for (int i = 0; i < groupsMembers.length(); i++) {
+            JSONObject groupMemberObject = groupsMembers.getJSONObject(i);
+            String groupName = groupMemberObject.getString("groupName");
+            JSONArray members = groupMemberObject.getJSONArray("members");
+
+            // Check if the userId exists in the members list
+            for (int j = 0; j < members.length(); j++) {
+                if (members.getString(j).equals(userId)) {
+                    userGroups.add(groupName);  // Add the group name to the list
+                    break;  // Exit the inner loop once the user is found
+                }
+            }
+        }
+
+        return userGroups;  // Return the list of group names
+    }
 }

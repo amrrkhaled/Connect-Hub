@@ -34,6 +34,7 @@ public class PostNotification implements IPostNotifications {
     public void createNotifications(String authorId, String contentId,String timestamp){
         JSONObject newNotification = new JSONObject();
         JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
+//        newNotification.put("notification", notification);
         newNotification.put("authorId", authorId);
         newNotification.put("contentId", contentId);
         newNotification.put("timestamp", timestamp);

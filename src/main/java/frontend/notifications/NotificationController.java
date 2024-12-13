@@ -1,5 +1,6 @@
 package frontend.notifications;
 
+import backend.Groups.*;
 import backend.friendship.FriendRequestService;
 import backend.friendship.FriendRequestServiceFactory;
 import backend.friendship.FriendShip;
@@ -24,8 +25,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import frontend.groupManagement.GroupsController;
+import backend.user.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static backend.user.User.userId;
@@ -46,7 +50,7 @@ public class NotificationController {
 
     @FXML
     private Button rejectButton;
-
+    private final String postsFilePath = "data/groupsPosts.json";
     private FriendNotifications friendNotifications;
     private PostNotification postNotification;
     private final String currentUserId = User.getUserId();
@@ -75,21 +79,86 @@ public class NotificationController {
         rejectButton.setOnAction(event -> handleReject());
     }
 
-    private void loadPostNotifications() {
-        JSONArray notifications = postNotification.getNotification();
-        postNotificationList = new JSONArray();
+    private JSONArray getPostsOfGroups(String groupName) {
+        IStorageHandler storageHandler = new StorageHandler();
+        JSONArray allPosts = storageHandler.loadDataAsArray(postsFilePath);  // Load the JSON array
+        JSONArray posts = new JSONArray();
+        for (int i = 0; i < allPosts.length(); i++) {
+            JSONObject post = allPosts.getJSONObject(i);  // Get each post
 
-        for (int i = 0; i < notifications.length(); i++) {
-            JSONObject notification = notifications.getJSONObject(i);
-            String author = notification.optString("id1");
-            String timestamp = notification.optString("timestamp");
-
-            String displayText = author + "posted @: " + timestamp;
-            JSONObject postNotificationJson = new JSONObject();
-            postNotificationJson.put("notification", displayText);
-            postNotificationList.put(postNotificationJson);
+            // Check if the post's "groupName" matches the given name
+            if (post.getString("groupName").equals(groupName)) {
+                posts.put(post);  // Add the post to the filteredPosts JSONArray
+            }
+        }
+        return posts;
+    }
+    private void displayPostList(JSONArray postNotifications) {
+        System.out.println("Updated Post Notifications:");
+        for (int i = 0; i < postNotifications.length(); i++) {
+            JSONObject notification = postNotifications.getJSONObject(i);
+            // Display the notification message
+            System.out.println(notification.getString("notification"));
         }
     }
+
+    // Helper method to display posts in the UI or console
+    private void loadPostNotifications() {
+        // Initialize the storage handler and group loader
+        IStorageHandler storageHandler = new StorageHandler();
+        ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
+        NormalUserController userController = new NormalUserController(loadGroups, storageHandler);
+
+        // Get the list of groups the user is a member of
+        List<String> userGroups = userController.getGroupsForUser(currentUserId);
+
+        // Load previously saved notifications
+        postNotificationList = storageHandler.loadDataAsArray("data/PostNotifications.json");
+
+        // Track content IDs already in the notification list to avoid duplicates
+        List<String> existingContentIds = new ArrayList<>();
+        for (int i = 0; i < postNotificationList.length(); i++) {
+            existingContentIds.add(postNotificationList.getJSONObject(i).getString("contentId"));
+        }
+
+        // Fetch new posts for the groups the user is part of
+        for (String groupName : userGroups) {
+            // Get all posts for the group
+            JSONArray groupPosts = getPostsOfGroups(groupName);
+
+            // Iterate through the posts to add new notifications
+            for (int i = 0; i < groupPosts.length(); i++) {
+                JSONObject post = groupPosts.getJSONObject(i);
+                String contentId = post.getString("contentId");
+
+                // If the contentId is not already in the notifications list, add it
+                if (!existingContentIds.contains(contentId)) {
+                    String authorId = post.optString("authorId");
+                    ILoadUsers loadUsers = LoadUsers.getInstance();
+                    IUserRepository userRepository = UserRepository.getInstance(loadUsers);
+                    String username = userRepository.getUsernameByUserId(authorId);
+                    String timestamp = post.optString("timestamp");
+                    String displayText = username + " posted @: " + timestamp;
+
+                    // Create a new notification JSON object
+                    JSONObject newNotification = new JSONObject();
+                    newNotification.put("notification", displayText);
+                    newNotification.put("contentId", contentId);  // Track content ID to avoid duplicates
+                    newNotification.put("authorId", authorId);
+                    newNotification.put("timestamp", timestamp);
+                    // Add the new notification to the list
+                    postNotificationList.put(newNotification);
+                }
+            }
+        }
+
+        // Save the updated post notifications to the JSON file
+        storageHandler.saveDataAsArray(postNotificationList, "data/PostNotifications.json");
+
+        // Display the updated notifications in the UI
+        displayPostList(postNotificationList);
+    }
+
 
     private void loadFriendNotifications() {
         ILoadNotifications loadNotifications = LoadNotifications.getInstance();
