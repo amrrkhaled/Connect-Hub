@@ -1,15 +1,5 @@
 [{
-    "groupName": "Group 1",
+    "groupName": "Programming",
     "groupId": "G1",
-    "requests": [
-        {
-            "message": "Can I join again?",
-            "userId": "user5",
-            "timestamp": "2024-12-12T22:54:41.391252900Z"
-        },
-        {
-            "userId": "U1",
-            "timestamp": "2024-12-12T23:26:02.423528900Z"
-        }
-    ]
+    "requests": []
 }]

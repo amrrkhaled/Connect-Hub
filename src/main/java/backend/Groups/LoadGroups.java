@@ -98,103 +98,164 @@ public class LoadGroups implements ILoadGroups {
 
     @Override
     public JSONArray loadGroupsbyUserId(String userId) {
-        JSONArray groups = loadGroups();
-        JSONArray userGroups = new JSONArray();
-        JSONArray groupsMembers = storageHandler.loadDataAsArray(MEMBERS_FILE_PATH);
+        JSONArray groups = loadGroups();  // Load all groups
+        JSONArray userGroups = new JSONArray();  // This will store the groups that the user is associated with
+        JSONArray groupsMembers = storageHandler.loadDataAsArray(MEMBERS_FILE_PATH);  // Load group members
+
+        // First loop to check for primary admin and admins
         for (int i = 0; i < groups.length(); i++) {
             JSONObject group = groups.getJSONObject(i);
             JSONArray admins = group.optJSONArray("admins");
+
+            // Check if user is the primary admin of the group
             if (group.get("primaryAdminId").equals(userId)) {
-               userGroups.put(group);
+                userGroups.put(group);
             }
-            else if (admins.length() > 0) {
+            // Check if user is in the list of admins
+            else if (admins != null && admins.length() > 0) {
                 for (int j = 0; j < admins.length(); j++) {
                     String admin = admins.optString(j);
-                    if(admin.equals(userId)){
+                    if (admin.equals(userId)) {
                         userGroups.put(group);
-
+                        break;  // Exit once we find the user as an admin
                     }
                 }
             }
         }
-        for (int i = 0; i < groupsMembers.length(); i++) {
-            JSONObject group = groupsMembers.getJSONObject(i);
-            JSONArray memebrs = group.optJSONArray("members");
-            for (int j = 0; j < memebrs.length(); j++) {
-                String member = memebrs.optString(j);
-                if(member.equals(userId)){
-                    userGroups.put(group);
-                    break;
-                }
-            }
-        }
 
-
-    return userGroups;
-
-    }
-
-
-    @Override
-    public List<String> loadGroupSuggestions(String userId) {
-        List<String> suggestions = new ArrayList<>();
-        JSONArray groupsMembers = storageHandler.loadDataAsArray(MEMBERS_FILE_PATH);
-        JSONArray requests = storageHandler.loadDataAsArray(REQUESTS_FILE_PATH);
-
-        // Iterate through all the groups in the groupsMembers array
+        // Second loop to check for regular group membership
         for (int i = 0; i < groupsMembers.length(); i++) {
             JSONObject group = groupsMembers.getJSONObject(i);
             JSONArray members = group.optJSONArray("members");
 
-            boolean isUserMember = false;
-
-            // Check if the current user is already a member of the group
-            for (int j = 0; j < members.length(); j++) {
-                String member = members.optString(j);
-                if (member.equals(userId)) {
-                    isUserMember = true;
-                    break; // User is already a member, no need to add this group to suggestions
-                }
-            }
-
-            // If the user is not a member, we proceed to check if the user has already sent a request
-            if (!isUserMember) {
-
-                // Check if the user has already sent a request for this group
-                boolean hasUserSentRequest = false;
-                for (int j = 0; j < requests.length(); j++) {
-                    JSONObject requestGroup = requests.getJSONObject(j);
-
-                    // Check if this group has requests and if the groupName matches
-                    if (requestGroup.getString("groupName").equals(group.getString("groupName"))) {
-                        JSONArray groupRequests = requestGroup.getJSONArray("requests");
-
-                        // Loop through the requests for this group to check if the current user has already requested to join
-                        for (int k = 0; k < groupRequests.length(); k++) {
-                            JSONObject request = groupRequests.getJSONObject(k);
-                            String requestUserId = request.getString("userId");
-
-                            // If the user has already sent a request, we mark it as true
-                            if (requestUserId.equals(userId)) {
-                                hasUserSentRequest = true;
-                                break; // No need to continue looping through requests for this group
-                            }
-                        }
+            // Check if user is a member of the group and not already in userGroups
+            if (members != null) {
+                for (int j = 0; j < members.length(); j++) {
+                    String member = members.optString(j);
+                    if (member.equals(userId) && !containsGroup(userGroups, group)) {
+                        userGroups.put(group);
+                        break;  // Exit once we find the user as a member
                     }
-
-                    if (hasUserSentRequest) {
-                        break; // No need to continue looping through requests, as we found the user's request
-                    }
-                }
-
-                // If the user hasn't sent a request, we add the group to suggestions
-                if (!hasUserSentRequest) {
-                    suggestions.add(group.optString("groupName", "Unknown Group"));
                 }
             }
         }
 
+        return userGroups;  // Return the list of groups the user is associated with
+    }
+
+    // Helper method to check if a group is already in the userGroups array
+    private boolean containsGroup(JSONArray userGroups, JSONObject group) {
+        for (int i = 0; i < userGroups.length(); i++) {
+            if (userGroups.getJSONObject(i).getString("groupName").equals(group.getString("groupName"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<String> loadGroupSuggestions(String userId) {
+        List<String> suggestions = new ArrayList<>();
+        // Load necessary data arrays
+
+        JSONArray groupsMembers = storageHandler.loadDataAsArray(MEMBERS_FILE_PATH);
+        JSONArray requests = storageHandler.loadDataAsArray(REQUESTS_FILE_PATH);
+        JSONArray groups = storageHandler.loadDataAsArray(GROUPS_FILE_PATH);
+
+        // Check if arrays are empty or null
+        if (groupsMembers == null || requests == null || groups == null) {
+            System.err.println("Error: One or more JSON arrays failed to load.");
+            return suggestions; // Return empty suggestions if data couldn't be loaded
+        }
+
+        // Iterate through all the groups to check if the user is a member or has requested to join
+        for (int i = 0; i < groups.length(); i++) {
+            JSONObject group = groups.optJSONObject(i);
+
+            if (group == null) {
+                continue; // Skip null or invalid group data
+            }
+            String groupName = group.optString("groupName", "Unknown Group");
+
+            // Check if the user is already a member or primary admin
+            if (isUserMemberOrAdmin(userId, groupName, group, groupsMembers)) {
+                continue;  // Skip if user is already a member or primary admin
+            }
+
+            // Check if the user has already sent a request to join the group
+            if (hasUserSentRequest(userId, groupName, requests)) {
+                continue;  // Skip if user has already sent a request
+            }
+
+            // If neither, add the group to the suggestions
+            suggestions.add(groupName);
+        }
+
         return suggestions;
+    }
+
+    private boolean isUserMemberOrAdmin(String userId, String groupName, JSONObject group, JSONArray groupsMembers) {
+        // Check if user is a primary admin of the group
+
+
+            if (group.optString("groupName").equals(groupName)) {
+                String primaryAdminId = group.optString("primaryAdminId", "");
+                if (primaryAdminId.equals(userId)) {
+                    return true;  // User is the primary admin
+                }
+            }
+
+
+        // Check if user is a member of the group by passing groupsMembers
+        JSONArray members = getGroupMembers(groupName, groupsMembers);
+        for (int j = 0; j < members.length(); j++) {
+            if (members.optString(j).equals(userId)) {
+                return true;  // User is a member of the group
+            }
+        }
+
+        return false;  // User is neither a member nor a primary admin
+    }
+
+    private boolean hasUserSentRequest(String userId, String groupName, JSONArray requests) {
+        // Check if user has already sent a request to join the group
+        for (int i = 0; i < requests.length(); i++) {
+            JSONObject requestGroup = requests.optJSONObject(i);
+            if (requestGroup == null) {
+                continue; // Skip invalid or null request group data
+            }
+            if (requestGroup.optString("groupName").equals(groupName)) {
+                JSONArray groupRequests = requestGroup.optJSONArray("requests");
+                if (groupRequests != null) {
+                    for (int j = 0; j < groupRequests.length(); j++) {
+                        JSONObject request = groupRequests.optJSONObject(j);
+                        if (request == null) {
+                            continue; // Skip invalid or null request data
+                        }
+                        String requestUserId = request.optString("userId", "");
+                        if (requestUserId.equals(userId)) {
+                            return true;  // User has already sent a request
+                        }
+                    }
+                }
+            }
+        }
+        return false;  // User hasn't sent a request to join this group
+    }
+
+    private JSONArray getGroupMembers(String groupName, JSONArray groupsMembers) {
+        // This method will fetch and return the members of a given group
+        // Iterate through the groupsMembers to find the group by name
+        for (int i = 0; i < groupsMembers.length(); i++) {
+            JSONObject group = groupsMembers.optJSONObject(i);
+            if (group == null) {
+                continue; // Skip invalid or null group data
+            }
+            if (group.optString("groupName").equals(groupName)) {
+                return group.optJSONArray("members");
+            }
+        }
+        return new JSONArray();  // Return an empty array if no members are found
     }
 
 
