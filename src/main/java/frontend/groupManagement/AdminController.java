@@ -56,6 +56,8 @@ public class AdminController extends GroupsController {
         // Initialize mouse click listener for requestsListView
         requestsListView.setOnMouseClicked(this::handleRequestClick);
         membersListView.setOnMouseClicked(this::handleMemberClick);
+
+
     }
 
     private void handleRequestClick(MouseEvent event) {

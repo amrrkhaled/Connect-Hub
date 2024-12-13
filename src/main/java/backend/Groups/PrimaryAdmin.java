@@ -1,5 +1,6 @@
 package backend.Groups;
 
+import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,6 +10,7 @@ public class PrimaryAdmin extends GeneralAdminController {
 
     private final String groupsFilePath = "data/groups.json";
     private final String postsFilePath = "data/groupsPosts.json";
+    private final String membersFile = "data/group_members.json";
 
     public PrimaryAdmin(ILoadGroups loadGroups, IStorageHandler storageHandler) {
         super(loadGroups, storageHandler);
@@ -39,6 +41,21 @@ public class PrimaryAdmin extends GeneralAdminController {
         } else {
             System.out.println("Group not found.");
         }
+    }
+
+    public void updateDescription(String groupName , String description){
+        JSONArray Groups = storageHandler.loadDataAsArray(groupsFilePath);  // Load the JSON array
+        for (int i = 0; i < Groups.length(); i++) {
+            JSONObject group = Groups.getJSONObject(i);
+
+            // Check if the group name matches the one passed as a parameter
+            if (group.getString("groupName").equals(groupName)) {
+                group.put("description",description);
+               Groups.put(i, group);
+                break;
+            }
+        }
+        storageHandler.saveDataAsArray(Groups, groupsFilePath);
     }
 
     public void removeAdmin(String name, String userId) {
@@ -92,5 +109,14 @@ public class PrimaryAdmin extends GeneralAdminController {
                 break;
             }
         }
+        JSONArray groupMembers = storageHandler.loadDataAsArray(membersFile);  // Load the JSON array
+for(int i = 0; i < groupMembers.length(); i++) {
+    if (groupMembers.getJSONObject(i).getString("groupName").equals(name)) {
+        groupMembers.remove(i);
+        storageHandler.saveDataAsArray(groupMembers, groupsFilePath);
+        System.out.println("Group deleted successfully.");
+        break;
+    }
+}
     }
 }
