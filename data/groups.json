@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "groupName": "Tech Enthusiasts",
+    "description": "A group for discussing the latest in tech and gadgets.",
+    "primaryAdminId": "U1",
+    "groupId": "G1"
+  },
+  {
+    "groupName": "Book Club",
+    "description": "Sharing and discussing our favorite books.",
+    "primaryAdminId": "U2",
+    "groupId": "G2"
+  }
+]

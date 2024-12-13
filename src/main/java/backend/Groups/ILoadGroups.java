@@ -11,4 +11,5 @@ public interface ILoadGroups {
     public JSONObject loadGroupByName(String name);
     public List<String> loadGroupSuggestions(String userId);
     public JSONArray loadPosts(String groupId);
+    public JSONArray loadGroupPostsByName(String groupName);
 }

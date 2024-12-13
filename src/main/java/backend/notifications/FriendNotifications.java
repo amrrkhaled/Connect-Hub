@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriendNotifications implements IFriendNotifications {
     private final ILoadNotifications loadNotifications;
@@ -33,11 +35,20 @@ public class FriendNotifications implements IFriendNotifications {
 
         return userNotifications;
     }
-
+    public List<String> getNotificationMessages() {
+        JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
+        List<String> messages = new ArrayList<>();
+        for (int i = 0; i < notifications.length(); i++) {
+            String message =notifications.getJSONObject(i).getString("message");
+            messages.add(message);
+        }
+        return messages;
+    }
     @Override
-    public void createNotifications(String sender, String receiver , String timestamp) {
+    public void createNotifications(String notification,String sender, String receiver , String timestamp) {
         JSONObject newNotification = new JSONObject();
         JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
+        newNotification.put("notification", notification);
         newNotification.put("senderId", sender);
         newNotification.put("receiverId", receiver);
         newNotification.put("timestamp", timestamp);

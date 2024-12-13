@@ -29,7 +29,9 @@ import frontend.groupManagement.GroupsController;
 import backend.user.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static backend.user.User.userId;
@@ -54,16 +56,17 @@ public class NotificationController {
     private FriendNotifications friendNotifications;
     private PostNotification postNotification;
     private final String currentUserId = User.getUserId();
-    private JSONArray postNotificationList = new JSONArray();  // Changed to JSONArray
+    private JSONArray postNotificationList = new JSONArray();
     private JSONArray friendNotificationsList = new JSONArray();  // Changed to JSONArray
-
+    List<String>postNotificationsMessages ;
     @FXML
     private void initialize() {
         // Initialize the loaders and notification instances
         ILoadNotifications loader = LoadNotifications.getInstance();
         postNotification = new PostNotification(loader);
+        JSONArray posts = loader.LoadNotification(postsFilePath);
         friendNotifications = new FriendNotifications(loader);
-
+        postNotificationsMessages = postNotification.getNotificationMessages(userId);
         // Populate the JSONArray for friend requests
 
         // Load and populate the notifications
@@ -71,7 +74,7 @@ public class NotificationController {
         loadFriendNotifications();
 
         // Set list views
-        updatePostListView();
+        updatePostListView(postNotificationsMessages);
         updateFriendRequestListView();
 
         // Handle button actions
@@ -102,7 +105,7 @@ public class NotificationController {
         }
     }
 
-    // Helper method to display posts in the UI or console
+
     private void loadPostNotifications() {
         // Initialize the storage handler and group loader
         IStorageHandler storageHandler = new StorageHandler();
@@ -112,8 +115,12 @@ public class NotificationController {
         // Get the list of groups the user is a member of
         List<String> userGroups = userController.getGroupsForUser(currentUserId);
 
-        // Load previously saved notifications
-        postNotificationList = storageHandler.loadDataAsArray("data/PostNotifications.json");
+        // Create a PostNotification instance
+        ILoadNotifications loadNotifications = new LoadNotifications(); // Example: Implement this interface
+        PostNotification postNotification = new PostNotification(loadNotifications);
+
+        // Load previously saved notifications (this can now be done by PostNotification)
+        JSONArray postNotificationList = postNotification.getNotification();
 
         // Track content IDs already in the notification list to avoid duplicates
         List<String> existingContentIds = new ArrayList<>();
@@ -140,24 +147,26 @@ public class NotificationController {
                     String timestamp = post.optString("timestamp");
                     String displayText = username + " posted @: " + timestamp;
 
-                    // Create a new notification JSON object
+                    System.out.println("Before adding new notifications: " + postNotificationList);
+
+                    // Use the PostNotification to create a new notification
+                    postNotification.createNotifications(displayText, authorId, contentId, timestamp);
+
+                    // Create a new JSONObject for the new notification
                     JSONObject newNotification = new JSONObject();
                     newNotification.put("notification", displayText);
-                    newNotification.put("contentId", contentId);  // Track content ID to avoid duplicates
-                    newNotification.put("authorId", authorId);
-                    newNotification.put("timestamp", timestamp);
-                    // Add the new notification to the list
+                    System.out.println("After adding new notifications: " + postNotificationList);
+
+                    // Add the new notification to the in-memory list
                     postNotificationList.put(newNotification);
                 }
             }
         }
-
-        // Save the updated post notifications to the JSON file
-        storageHandler.saveDataAsArray(postNotificationList, "data/PostNotifications.json");
-
-        // Display the updated notifications in the UI
-        displayPostList(postNotificationList);
+        postNotificationsMessages = postNotification.getNotificationMessages(userId);
+        System.out.println("messages that will appear" + postNotificationsMessages.toString());
+        updatePostListView(postNotificationsMessages);
     }
+
 
 
     private void loadFriendNotifications() {
@@ -169,6 +178,7 @@ public class NotificationController {
         // Load new friend requests (usernames)
         List<String> friendRequestsList = service.getFriendRequests(currentUserId);
         System.out.println("Friend Requests: " + friendRequestsList);
+
         // Remove outdated notifications
         for (int i = 0; i < friendNotificationsList.length(); i++) {
             JSONObject existingNotification = friendNotificationsList.getJSONObject(i);
@@ -183,9 +193,11 @@ public class NotificationController {
                 i--; // Adjust index after removal
             }
         }
+
         // Add any new friend requests to the notification list if not already present
         for (String username : friendRequestsList) {
             boolean isAlreadyNotified = false;
+
             // Check if the request (username) is already present in the notification list
             for (int i = 0; i < friendNotificationsList.length(); i++) {
                 JSONObject existingNotification = friendNotificationsList.getJSONObject(i);
@@ -197,21 +209,33 @@ public class NotificationController {
                     break;
                 }
             }
+
             // If the request is not in the notification list, add it
             if (!isAlreadyNotified) {
                 String displayText = "Request from: " + username;
-                JSONObject newFriendNotification = new JSONObject();
-                newFriendNotification.put("notification", displayText);
-                friendNotificationsList.put(newFriendNotification);
+
+                // Use createNotifications to add the new notification to the system
+                ILoadUsers loadUsers = LoadUsers.getInstance();
+                IUserRepository userRepository = UserRepository.getInstance(loadUsers);
+                String senderId = userRepository.findUserIdByUsername(username);
+                friendNotifications.createNotifications(displayText,senderId,currentUserId, getCurrentTimestamp());
             }
         }
-        // Save the updated notification list to the database
-        loadNotifications.saveNotification(friendNotificationsList, "data/FriendNotifications.json");
+
         // Log the updated list
         System.out.println("Updated Notifications: " + friendNotificationsList);
+
         // Update the ListView
         updateFriendRequestListView();
     }
+
+    // Helper method to get the current timestamp (you can adjust this based on your date format)
+    private String getCurrentTimestamp() {
+        // Assuming you're using the current system time in a specific format
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date());
+    }
+
 
 
     private void handleAccept() {
@@ -282,16 +306,17 @@ public class NotificationController {
         }
     }
 
-    private void updatePostListView() {
+    private void updatePostListView(List<String> notifications) {
         // Clear and update the Post ListView with the new list of notifications
         postList.getItems().clear();
-        for (int i = 0; i < postNotificationList.length(); i++) {
-            JSONObject postNotificationJson = postNotificationList.getJSONObject(i);
-            String notification = postNotificationJson.optString("notification");
-            if (notification != null) {
-                postList.getItems().add(notification);
-            }
-        }
+        postList.getItems().addAll(notifications);
+//        for (int i = 0; i < PostNotification.length(); i++) {
+//            JSONObject postNotificationJson = postNotificationList.getJSONObject(i);
+//            String notification = postNotificationJson.optString("notification");
+//            if (notification != null && !notification.trim().isEmpty()) {
+//                postList.getItems().add(notification);
+//            }
+//        }
     }
 
     private void updateFriendRequestListView() {

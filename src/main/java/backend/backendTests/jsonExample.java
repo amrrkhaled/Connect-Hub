@@ -1,11 +1,14 @@
 package backend.backendTests;
 
+import backend.Groups.*;
 import backend.contentCreation.ContentFiles;
 import backend.contentCreation.IContentFiles;
 import backend.contentCreation.Post;
 import backend.contentCreation.PostFactory;
 import backend.friendship.*;
 import backend.notifications.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -130,22 +133,84 @@ public class jsonExample {
 //       List<String> friendRequests = manager.getFriendRequests("U1");
 //       List<String> pendingFriendRequests = manager.getPendingFriends("U1");
 //       List<String> friendSuggestions = manager.getFriendSuggestions("U1");
-        PostFactory postFactory = PostFactory.getInstance();
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedTimestamp = now.format(formatter);
-        List<String> imagePaths = new ArrayList<>();
-        imagePaths.add("/home/ahmed-sameh/Pictures/Screenshots/client1.jpg");
-        postFactory.createPost().createContent("P1","i am a big man",formattedTimestamp,imagePaths);
-        ILoadNotifications loadNotifications = new LoadNotifications();
-        PostNotification postNotification = new PostNotification(loadNotifications);
-        postNotification.createNotifications("U1","P1",formattedTimestamp);
-        FriendShip friendShip = FriendShipFactory.createFriendShip();
-        friendShip.addFriend("U1","sameh");
-        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
-        friendNotifications.createNotifications("U1","U2" , formattedTimestamp);
-        GroupNotifications groupNotifications = new GroupNotifications(loadNotifications);
-        groupNotifications.createNotifications("G1","P3" , formattedTimestamp);
+//        PostFactory postFactory = PostFactory.getInstance();
+//        LocalDateTime now = LocalDateTime.now();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        String formattedTimestamp = now.format(formatter);
+//        List<String> imagePaths = new ArrayList<>();
+//        imagePaths.add("/home/ahmed-sameh/Pictures/Screenshots/client1.jpg");
+//        postFactory.createPost().createContent("P1","i am a big man",formattedTimestamp,imagePaths);
+//        ILoadNotifications loadNotifications = new LoadNotifications();
+//        PostNotification postNotification = new PostNotification(loadNotifications);
+////        postNotification.createNotifications("U1","P1",formattedTimestamp);
+//        FriendShip friendShip = FriendShipFactory.createFriendShip();
+//        friendShip.addFriend("U1","sameh");
+//        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
+////        friendNotifications.createNotifications("U1","U2" , formattedTimestamp);
+//        GroupNotifications groupNotifications = new GroupNotifications(loadNotifications);
+//        groupNotifications.createNotifications("G1","P3" , formattedTimestamp);
+        // Initialize dependencies
+        ILoadNotifications loadNotifications = LoadNotifications.getInstance();
+        IStorageHandler storageHandler = new StorageHandler();
+        ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
+
+        // Create notification JSON data
+        JSONArray notifications = new JSONArray();
+        notifications.put(new JSONObject()
+                .put("notification", "U1 posted @: 2024-12-12 08:00:00")
+                .put("contentId", "P1")
+                .put("authorId", "U1")
+                .put("timestamp", "2024-12-12 08:00:00"));
+
+        // Create group post data
+        JSONArray group1Posts = new JSONArray();
+        group1Posts.put(new JSONObject()
+                .put("groupName", "Group 1")
+                .put("images", new JSONArray())
+                .put("contentId", "P1")
+                .put("authorId", "U1")
+                .put("content", "Hello World")
+                .put("timestamp", "2024-12-12 08:00:00"));
+        group1Posts.put(new JSONObject()
+                .put("groupName", "Group 1")
+                .put("images", new JSONArray())
+                .put("contentId", "P2")
+                .put("authorId", "U2")
+                .put("content", "New Post")
+                .put("timestamp", "2024-12-13 10:00:00"));
+
+        JSONArray group2Posts = new JSONArray();
+        group2Posts.put(new JSONObject()
+                .put("groupName", "Group 2")
+                .put("images", new JSONArray())
+                .put("contentId", "P3")
+                .put("authorId", "U3")
+                .put("content", "Group 2 Post")
+                .put("timestamp", "2024-12-13 12:00:00"));
+
+        // Instantiate and test
+        IPostNotifications notificationService = new PostNotification(loadNotifications);
+        List<String> expectedMessages = new ArrayList<>();
+        expectedMessages.add("amr posted @: 2024-12-12 08:00:00");
+        expectedMessages.add("ahmed posted @: 2024-12-13 10:00:00");
+        expectedMessages.add("sameh posted @: 2024-12-13 12:00:00");
+
+        List<String> actualMessages = notificationService.getNotificationMessages("U1");
+
+        // Print results
+        System.out.println("Actual Notifications:");
+        actualMessages.forEach(System.out::println);
+
+        System.out.println("\nExpected Notifications:");
+        expectedMessages.forEach(System.out::println);
+
+        // Compare results
+        if (actualMessages.equals(expectedMessages)) {
+            System.out.println("\nTest Passed: Notifications match expected output.");
+        } else {
+            System.out.println("\nTest Failed: Notifications do not match expected output.");
+        }
+
     }
 
 

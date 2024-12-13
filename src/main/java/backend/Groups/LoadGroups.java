@@ -68,6 +68,18 @@ public class LoadGroups implements ILoadGroups {
         }
         return null;
     }
+    public JSONArray loadGroupPostsByName(String groupName) {
+        JSONArray posts = loadPosts(null); // Load all posts
+        System.out.println(posts.toString());
+        JSONArray groupPosts = new JSONArray();
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.optJSONObject(i);
+            if (post != null && groupName.equalsIgnoreCase(post.getString("groupName"))) {
+                groupPosts.put(post);
+            }
+        }
+        return groupPosts;
+    }
 
     @Override
     public JSONArray loadPosts(String groupId) {
