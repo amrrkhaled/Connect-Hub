@@ -4,54 +4,46 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="713.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.notifications.NotificationController">
+<AnchorPane prefHeight="713.0" prefWidth="756.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.notifications.NotificationController">
 
-   <HBox prefHeight="24.0" prefWidth="456.0" spacing="20.0" style="-fx-background-color: #1877F2; -fx-padding: 10.0;">
-      <Button onAction="#onHome"
-              style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"
-              text="Home"/>
-      <Button onAction="#onProfile"
-              style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"
-              text="Profile"/>
-      <Button onAction="#onFriends"
-              style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"
-              text="Friends"/>
-      <Button onAction="#onLogout"
-              style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;"
-              text="Logout"/>
+   <!-- Top Navigation Bar -->
+   <HBox layoutX="0.0" layoutY="0.0" prefHeight="60.0" prefWidth="756.0" spacing="20.0" style="-fx-background-color: #1877F2; -fx-padding: 10.0;">
+      <Button onAction="#onHome" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Home" />
+      <Button onAction="#onProfile" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Profile" />
+      <Button onAction="#onFriends" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Friends" />
+      <Button onAction="#onLogout" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Logout" />
    </HBox>
 
-   <ListView fx:id="postList" layoutX="26.0" layoutY="225.0" prefHeight="434.0" prefWidth="200.0"/>
-   <Label layoutX="72.0" layoutY="175.0" prefHeight="38.0" prefWidth="108.0" text="Post notifications">
+   <!-- Post Notifications Section -->
+   <Label layoutX="54.0" layoutY="73.0" prefHeight="38.0" prefWidth="119.0" text="Post Notifications">
       <font>
-         <Font name="System Bold" size="12.0"/>
+         <Font name="System Bold" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="297.0" layoutY="175.0" prefHeight="38.0" prefWidth="125.0" text="Request notifications">
+   <ListView fx:id="postList" layoutX="14.0" layoutY="111.0" prefHeight="434.0" prefWidth="200.0" style="-fx-border-color: #1877F2;" />
+
+   <!-- Request Notifications Section -->
+   <Label layoutX="280.0" layoutY="73.0" prefHeight="38.0" prefWidth="154.0" text="Request Notifications">
       <font>
-         <Font name="System Bold" size="12.0"/>
+         <Font name="System Bold" size="14.0" />
       </font>
    </Label>
-   <Label layoutX="533.0" layoutY="175.0" prefHeight="38.0" prefWidth="119.0" text="Group notifications">
+   <ListView fx:id="requestList" layoutX="258.0" layoutY="111.0" prefHeight="434.0" prefWidth="200.0" style="-fx-border-color: #1877F2;" />
+
+   <!-- Group Notifications Section -->
+   <Label layoutX="541.0" layoutY="73.0" prefHeight="38.0" prefWidth="138.0" text="Group Notifications">
       <font>
-         <Font name="System Bold" size="12.0"/>
+         <Font name="System Bold" size="14.0" />
       </font>
    </Label>
-   <ListView fx:id="requestList" layoutX="260.0" layoutY="225.0" prefHeight="402.0" prefWidth="200.0"/>
-   <ListView fx:id="groupList" layoutX="493.0" layoutY="225.0" prefHeight="352.0" prefWidth="200.0"/>
-   <Button fx:id="acceptButton" layoutX="297.0" layoutY="641.0" mnemonicParsing="false"
-           style="-fx-background-color: #1877F2; -fx-text-fill: white;" text="Accept" textAlignment="CENTER"/>
-   <Button fx:id="rejectButton" layoutX="378.0" layoutY="641.0" mnemonicParsing="false"
-           style="-fx-background-color: #1877F2; -fx-text-fill: white;" text="Reject"/>
+   <ListView fx:id="groupList" layoutX="510.0" layoutY="111.0" prefHeight="434.0" prefWidth="200.0" style="-fx-border-color: #1877F2;" />
+
+   <!-- Action Buttons (Accept/Reject) -->
+   <HBox layoutX="297.0" layoutY="641.0" spacing="10.0" />
+   <Button fx:id="acceptButton" layoutX="281.0" layoutY="583.0" mnemonicParsing="false" style="-fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-size: 14.0; -fx-font-weight: bold; -fx-padding: 10px; -fx-border-radius: 5px;" text="Accept" />
+   <Button fx:id="rejectButton" layoutX="378.0" layoutY="583.0" mnemonicParsing="false" style="-fx-background-color: #E74C3C; -fx-text-fill: white; -fx-font-size: 14.0; -fx-font-weight: bold; -fx-padding: 10px; -fx-border-radius: 5px;" text="Reject" />
+
 </AnchorPane>

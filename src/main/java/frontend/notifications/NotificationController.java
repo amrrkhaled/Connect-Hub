@@ -89,10 +89,11 @@ public class NotificationController {
 
         for (int i = 0; i < notifications.length(); i++) {
             JSONObject notification = notifications.getJSONObject(i);
-            String author = notification.optString("id1", "Unknown Author");
-            String timestamp = notification.optString("timestamp", "Unknown Time");
+            String authorId = notification.optString("authorId", "Unknown Author");
 
-            String displayText =  author + "posted @: " + timestamp;
+            String timestamp = notification.optString("timestamp", "Unknown Time");
+            String author= friendShip.getUserRepository().getUsernameByUserId(authorId);
+            String displayText =  author + " posted @: " + timestamp;
             JSONObject postNotificationJson = new JSONObject();
             postNotificationJson.put("notification", displayText);
             postNotificationList.put(postNotificationJson);  // Store as JSON object
@@ -123,30 +124,42 @@ public class NotificationController {
             try {
                 // Split the string to extract the sender username
                 String[] parts = selectedRequest.split("-");
-                String sender = parts[1].trim();
-                // Find user ID by username
-                String newFriendId = friendShip.getUserRepository().findUserIdByUsername(sender);
-                System.out.println(sender);
-                if (newFriendId != null) {
+                String sender = parts[1].trim();  // Extract the token after "Request from:- "
+                System.out.println("Extracted sender: " + sender);  // Debugging line
+
+                // Check if the sender is actually found
+                JSONObject user = friendShip.getUserRepository().findUserByUsername(sender);
+
+                if (user != null) {
+                    String newFriendId = user.getString("userId");
+                    System.out.println("User found, User ID: " + newFriendId);  // Debugging line
+
                     // Accept the friend request
-                    friendShip.acceptFriend(currentUserId, sender);
+                    friendShip.acceptFriend(currentUserId, newFriendId);
+
                     // Remove the request from the JSONArray (assuming we use the request object)
                     removeRequestFromJSONArray(sender);
-                    // Save the updated list
+
+                    // Save the updated list to file
                     loadNotifications.saveNotification(friendNotificationsList, "data/FriendNotifications.json");
-                    // Refresh the ListView
+
+                    // Refresh the ListView with the updated list
                     updateFriendRequestListView();
                 } else {
-                    showAlert("Error", "Sender not found: " + sender);
+                    showAlert("Error", "User not found: " + sender);
+                    System.out.println("Error: User not found");
                 }
             } catch (Exception e) {
-                showAlert("Error", "Invalid request format: " );
-                System.out.println(e);
+                showAlert("Error", "An error occurred while accepting the request. Please try again.");
+                System.out.println("Exception during accept request: " + e.getMessage());
+                e.printStackTrace();
             }
         } else {
             showAlert("Error", "No request selected to accept.");
         }
     }
+
+
 
     private void handleReject() {
         String selectedRequest = requestList.getSelectionModel().getSelectedItem();
