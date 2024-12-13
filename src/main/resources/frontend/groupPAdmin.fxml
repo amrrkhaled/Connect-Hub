@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -32,6 +34,9 @@
                     <TextArea fx:id="groupDescription" prefHeight="150.0" prefWidth="471.0" />
                 </children>
             </HBox>
+
+         <Button fx:id="updateDescription" mnemonicParsing="false" text="Update Description" />
+
 
             <!-- Posts Section -->
             <Label style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Posts" />

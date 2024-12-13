@@ -20,6 +20,8 @@ module com.example.connecthub {
     exports frontend.groupManagement;
     opens frontend.groupManagement to javafx.fxml;
 
+    exports frontend.searchManagement;
+    opens frontend.searchManagement to javafx.fxml;
 
     exports frontend.contentCreation;
     opens frontend.contentCreation to javafx.fxml;

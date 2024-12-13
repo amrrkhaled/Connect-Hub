@@ -270,6 +270,7 @@ public class LoadGroups implements ILoadGroups {
         return new JSONArray();  // Return an empty array if no members are found
     }
 
+
 public JSONObject getPostById(String postId) {
         JSONArray posts = storageHandler.loadDataAsArray(POSTS_FILE_PATH);
         for (int i = 0; i < posts.length(); i++) {
@@ -282,6 +283,12 @@ public JSONObject getPostById(String postId) {
 }
 
 }
+
+
+
+
+
+
 
 
 
