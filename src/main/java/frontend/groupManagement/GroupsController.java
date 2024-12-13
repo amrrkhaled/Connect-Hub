@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -40,7 +41,10 @@ import java.util.List;
 
 public class GroupsController {
 
-
+    @FXML
+    public ImageView groupPhoto;
+    @FXML
+    public TextArea groupDescription;
     @FXML
     protected ListView<String> membersListView;
     @FXML
@@ -55,6 +59,7 @@ public class GroupsController {
     private final String userId = User.getUserId();
     private final String postsFilePath = "data/groupsPosts.json";
     private final String membersFilePath = "data/group_members.json";
+    private final String groupsFilePath = "data/groups.json";
     public FriendShip friendShip= FriendShipFactory.createFriendShip();
     public String GROUPNAME = Group.getGroupName();
     IStorageHandler storageHandler = new StorageHandler();
@@ -68,7 +73,32 @@ public class GroupsController {
         loadPosts(GROUPNAME);
         loadMembersList(GROUPNAME);
         GroupName.setText(GROUPNAME);
+        loadGroupInfo(GROUPNAME);
+    }
 
+
+
+    public void loadGroupInfo(String name){
+        JSONArray Groups = storageHandler.loadDataAsArray(groupsFilePath);  // Load the JSON array
+        for (int i = 0; i < Groups.length(); i++) {
+            JSONObject group = Groups.getJSONObject(i);
+            String image=null;
+            // Check if the group name matches the one passed as a parameter
+            if (group.getString("groupName").equals(name)) {
+                String description = group.getString("description");
+                if(group.has("groupImage"))
+                image = group.getString("groupImage");
+                System.out.println(image);
+                // Set the group image to the ImageView (if the image exists)
+                if (image != null && !image.isEmpty()) {
+                    System.out.println(image);
+
+                    groupPhoto.setImage(new Image("file:" + image)); // Use setImage instead of creating a new ImageView
+                }
+                // Set the group description to the TextArea
+               groupDescription.setText(description);
+            }
+        }
     }
   private void loadMembersList(String name){
 
@@ -88,7 +118,8 @@ public class GroupsController {
                   // Iterate through the members array, which contains the user IDs
                   for (int j = 0; j < members.length(); j++) {
                       String memberId = members.optString(j);  // Retrieve the userId (assuming it's a string)
-                      if (memberId != null && !memberId.isEmpty()) {
+                      if (memberId != null && !memberId.isEmpty() && !memberId.equals(userId)) {
+                          System.out.println(userId + memberId);
                           String userName = friendShip.getUserRepository().getUsernameByUserId(memberId);
                           groupMembers.add(userName);  // Add the member's ID to the list
                       }
@@ -107,7 +138,7 @@ public class GroupsController {
         return new File(path).exists();
     }
 
-    protected void loadPosts(String name) {
+    protected void  loadPosts(String name) {
         // Creating a mock JSONArray
         JSONArray allPosts = storageHandler.loadDataAsArray(postsFilePath);  // Load the JSON array
         JSONArray posts = new JSONArray();
@@ -238,6 +269,14 @@ public class GroupsController {
         postsListView.getItems().clear();
         loadPosts(GROUPNAME);
         loadMembersList(GROUPNAME);
+    }
+
+    @FXML
+    public void onLeaveGroup(ActionEvent event) {
+
+        NormalUserController user = new NormalUserController(loadGroups,storageHandler);
+        user.leaveGroup(GROUPNAME,userId);
+        onNewsFeed(event);
     }
 
     public void onHome(ActionEvent event) {

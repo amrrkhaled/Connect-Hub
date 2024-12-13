@@ -32,13 +32,16 @@ public class GroupManager {
         group.put("description", groupDescription);
         group.put("primaryAdminId", userId);
         group.put("groupId","G" +numberOfGroups);
-        String gImage = null;
-        try {
-            gImage = SaveImage.saveImageToFolder(groupImage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(groupImage != null) {
+            String gImage = null;
+            try {
+                gImage = SaveImage.saveImageToFolder(groupImage);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            group.put("groupImage", gImage);
+
         }
-        group.put("groupImage",gImage);
         groups.put(group);
         // Write the updated array back to the file
         try (FileWriter file = new FileWriter(filePath)) {

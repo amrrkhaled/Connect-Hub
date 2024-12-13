@@ -9,35 +9,37 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Post implements IContent , IContentRepository{
+public class Post implements IContent, IContentRepository {
 
     private final IContentFiles contentFiles;
-    private final  FriendRequestService friendRequestService ;
+    private final FriendRequestService friendRequestService;
     private final IFriendshipService friendShipService;
     private final String FILEPATH = "data/posts.json";
     private static Post instance;
 
-    private Post(IContentFiles contentFiles,IFriendshipService friendShipService , FriendRequestService friendRequestService) {
+    private Post(IContentFiles contentFiles, IFriendshipService friendShipService, FriendRequestService friendRequestService) {
         this.contentFiles = contentFiles;
-       this.friendRequestService = friendRequestService;
-       this.friendShipService = friendShipService;
+        this.friendRequestService = friendRequestService;
+        this.friendShipService = friendShipService;
     }
-    public static synchronized Post getInstance(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService) {
+
+    public static synchronized Post getInstance(IContentFiles contentFiles, IFriendshipService friendShipService, FriendRequestService friendRequestService) {
         if (instance == null) {
-            instance = new Post(contentFiles, friendShipService,friendRequestService);
+            instance = new Post(contentFiles, friendShipService, friendRequestService);
         }
         return instance;
     }
+
     @Override
     public void createContent(String authorId, String content, String timestamp, List<String> images) {
         JSONObject newPost = new JSONObject();
         JSONArray posts = contentFiles.loadContent(FILEPATH);
         newPost.put("authorId", authorId);
-        newPost.put("contentId", "P" + (posts.length()+1));
+        newPost.put("contentId", "P" + (posts.length() + 1));
         newPost.put("content", content);
         newPost.put("timestamp", timestamp);
-        List<String> newImages= new ArrayList<>();
-        for(String imagePath : images) {
+        List<String> newImages = new ArrayList<>();
+        for (String imagePath : images) {
             String newPath = null;
             try {
                 newPath = SaveImage.saveImageToFolder(imagePath);
@@ -47,8 +49,8 @@ public class Post implements IContent , IContentRepository{
             newImages.add(newPath);
         }
         newPost.put("images", newImages);
-        posts.put(posts.length(),newPost);
-        contentFiles.saveContent(posts,FILEPATH);
+        posts.put(posts.length(), newPost);
+        contentFiles.saveContent(posts, FILEPATH);
 
     }
 
@@ -101,16 +103,30 @@ public class Post implements IContent , IContentRepository{
         return feedPosts;
     }
 
-     public JSONObject getContentById(String id) {
-         JSONArray posts = contentFiles.loadContent(FILEPATH);
-        for(int i = 0; i < posts.length(); i++) {
-            System.out.println(posts.getJSONObject(i));
-            if(posts.getJSONObject(i).getString("contentId").equals(id)) {
+    public JSONObject getContentById(String id) {
+        JSONArray posts = contentFiles.loadContent(FILEPATH);
+        for (int i = 0; i < posts.length(); i++) {
+            if (posts.getJSONObject(i).getString("contentId").equals(id)) {
 
                 return posts.getJSONObject(i);
             }
         }
-         return null;
-     }
+        return null;
+    }
+
+    public JSONObject getContentIdByName(String content) {
+        JSONArray posts = contentFiles.loadContent("data/groupsPosts.json");
+        for (int i = 0; i < posts.length(); i++) {
+            try {
+                JSONObject post = posts.getJSONObject(i);
+                if (post.getString("content").equals(content)) {
+                    return post;
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing post at index " + i + ": " + e.getMessage());
+            }
+        }
+        return null;
+    }
 
 }

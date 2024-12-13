@@ -1,9 +1,13 @@
 package frontend.groupManagement;
 
 import backend.Groups.*;
-import backend.contentCreation.ContentFiles;
-import backend.contentCreation.PostFactory;
-import backend.user.User;
+import backend.contentCreation.*;
+import backend.friendship.*;
+import backend.notifications.ILoadNotifications;
+import backend.notifications.IPostNotifications;
+import backend.notifications.LoadNotifications;
+import backend.notifications.PostNotification;
+import backend.user.*;
 import frontend.newsFeed.FeedController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import backend.contentCreation.IContent;
-import backend.contentCreation.Post;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -41,13 +43,13 @@ public class GroupPostController {
     private Button back;
 
     @FXML
+
     private VBox imageContainer; // Container for displaying images
     private final String userId = User.getUserId();
     private List<String> selectedImagePaths = new ArrayList<>(); // Holds paths of selected images
     IStorageHandler storageHandler = new StorageHandler();
     public String GROUPNAME = Group.getGroupName();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
-
 
 
     @FXML
@@ -60,7 +62,6 @@ public class GroupPostController {
     public void setPreviousStage(Stage stage) {
         this.previousStage = stage;
     }
-
 
 
     @FXML
@@ -84,6 +85,7 @@ public class GroupPostController {
             }
         }
     }
+
     boolean isUserPrimaryAdmin(String name) {
         // Load the group details by name
         JSONObject group = loadGroups.loadGroupByName(name);
@@ -134,7 +136,7 @@ public class GroupPostController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) imageContainer.getScene().getWindow();
+            Stage currentStage = (Stage) imageContainer.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             // Set new scene and show the stage
@@ -147,7 +149,6 @@ public class GroupPostController {
             e.printStackTrace();
         }
     }
-
 
 
     @FXML
@@ -166,13 +167,22 @@ public class GroupPostController {
         // Assuming normalUserController.addPost does the actual saving of the post
         NormalUserController normalUserController = new NormalUserController(loadGroups, storageHandler);
         normalUserController.addPost(GROUPNAME, userId, content, now.format(formatter), selectedImagePaths);
+        IContentFiles postContent=ContentFiles.getInstance();
+        ILoadFriendShips loadFriendShips = LoadFriendShips.getInstance();
+        ILoadUsers loadUsers = LoadUsers.getInstance();
+        IUserRepository userRepository = UserRepository.getInstance(loadUsers);
+        IFriendshipService friendshipService = FriendshipService.getInstance(userRepository,loadFriendShips);
+        FriendRequestService friendRequestService = FriendRequestServiceFactory.getInstance().createFriendRequestService();
+        IContent content1=Post.getInstance(postContent,friendshipService, friendRequestService);
+        JSONObject post = content1.getContentIdByName(content);
 
-        // Navigate back after creating the post
+        ILoadNotifications loadNotification = new LoadNotifications();
+        IPostNotifications postNotification = new PostNotification(loadNotification);
+        postNotification.createNotifications(userId, post.getString("contentId"), now.format(formatter));
+
         returnBack();
+
     }
-
-
-
 
 
     private void showAlert(String message) {

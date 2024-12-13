@@ -25,7 +25,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class editPostController implements Initializable {
+public  class editPostController {
     private Stage previousStage; // A reference to the previous stage
 
     @FXML
@@ -50,7 +50,7 @@ public abstract class editPostController implements Initializable {
         uploadImage.setOnAction(event -> handleUploadImages());
         createPost.setOnAction(event -> handleCreatePost());
         back.setOnAction(event -> returnBack());
-   
+
     }
 
     public static void setPostId(String contentId) {
@@ -154,8 +154,8 @@ public abstract class editPostController implements Initializable {
     private void handleCreatePost() {
         String content = contentArea.getText();
 
-        if (content.isEmpty()) {
-            showAlert("Please enter content and upload an image.");
+        if (content.isEmpty() && selectedImagePaths.isEmpty() ) {
+            showAlert("Please edit content or upload an image.");
             return;
         }
 

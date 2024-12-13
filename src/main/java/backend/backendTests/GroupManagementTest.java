@@ -24,10 +24,10 @@ public class GroupManagementTest {
 
                 // Simulating sending join requests
                 System.out.println("Sending join requests...");
-                requestController.sendJoinRequest("Group 1", "user1", "I want to join this group");
-                requestController.sendJoinRequest("Group 1", "user2", "I'd love to be part of this group!");
-                requestController.sendJoinRequest("Group 1", "user3", "Can I join as well?");
-                requestController.sendJoinRequest("Group 1", "user4", "I'm interested in joining!");
+//                requestController.sendJoinRequest("Group 1", "user1", "I want to join this group");
+//                requestController.sendJoinRequest("Group 1", "user2", "I'd love to be part of this group!");
+//                requestController.sendJoinRequest("Group 1", "user3", "Can I join as well?");
+//                requestController.sendJoinRequest("Group 1", "user4", "I'm interested in joining!");
 
                 // Simulating adding posts by members
                 System.out.println("Adding posts...");
@@ -76,6 +76,6 @@ public class GroupManagementTest {
 
                 // Simulating sending another join request (user5)
                 System.out.println("Sending another join request (user5)...");
-                requestController.sendJoinRequest("Group 1", "user5", "Can I join again?");
+//                requestController.sendJoinRequest("Group 1", "user5", "Can I join again?");
         }
 }

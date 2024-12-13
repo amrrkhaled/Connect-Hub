@@ -5,7 +5,7 @@
         "userId": "U1",
         "email": "amr@gmail.com",
         "username": "amr",
-        "status": "offline"
+        "status": "online"
     },
     {
         "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
@@ -30,5 +30,13 @@
         "email": "omar@gmail.com",
         "username": "fran",
         "status": "online"
+    },
+    {
+        "password": "73l8gRjwLftklgfdXT+MdiMEjJwGPVMsyVxe16iYpk8=",
+        "dateOfBirth": "2004-10-09",
+        "userId": "U5",
+        "email": "omar1@gmail.com",
+        "username": "omar1",
+        "status": "offline"
     }
 ]

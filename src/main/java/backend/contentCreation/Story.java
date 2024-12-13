@@ -126,5 +126,18 @@ public class Story implements IContent , IContentRepository{
         }
         return null;
     }
-
+    public JSONObject getContentIdByName(String content) {
+        JSONArray posts = contentFiles.loadContent("data/groupsPosts.json");
+        for (int i = 0; i < posts.length(); i++) {
+            try {
+                JSONObject post = posts.getJSONObject(i);
+                if (post.getString("content").equals(content)) {
+                    return post;
+                }
+            } catch (Exception e) {
+                System.err.println("Error processing post at index " + i + ": " + e.getMessage());
+            }
+        }
+        return null;
+    }
 }

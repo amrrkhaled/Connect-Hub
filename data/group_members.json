@@ -1,7 +1,13 @@
-[{
-    "groupName": "Group 1",
-    "members": [
-        "user3",
-        "user4"
-    ]
-}]
+[
+    {
+        "groupName": "Group 1",
+        "members": [
+            "U1",
+            "U2"
+        ]
+    },
+    {
+        "groupName": "swimming",
+        "members": ["U5"]
+    }
+]

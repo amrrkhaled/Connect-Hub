@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane prefHeight="762.0" prefWidth="916.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.groupManagement.PrimaryAdminController">
     <top>
         <HBox prefHeight="24.0" prefWidth="456.0" spacing="20.0" style="-fx-background-color: #1877F2; -fx-padding: 10.0;">
@@ -24,6 +26,12 @@
 
     <center>
         <VBox prefHeight="608.0" prefWidth="674.0" spacing="20.0" style="-fx-padding: 10.0;">
+            <HBox prefHeight="100.0" prefWidth="200.0">
+                <children>
+                    <ImageView fx:id="groupPhoto" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                    <TextArea fx:id="groupDescription" prefHeight="150.0" prefWidth="471.0" />
+                </children>
+            </HBox>
 
             <!-- Posts Section -->
             <Label style="-fx-font-weight: bold; -fx-font-size: 16.0;" text="Posts" />
@@ -33,11 +41,11 @@
 
         </VBox>
     </center>
-
     <bottom>
         <HBox prefHeight="67.0" prefWidth="456.0" spacing="10.0" style="-fx-padding: 10.0; -fx-background-color: #ffffff;">
             <Button onAction="#onCreatePost" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Create Post" />
             <Button onAction="#onRefresh" style="-fx-pref-width: 100.0; -fx-background-color: #1877F2; -fx-text-fill: white; -fx-font-weight: bold;" text="Refresh" />
+         <Button onAction="#onDelete" style="-fx-pref-width: 100.0; -fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold;" text="Delete Group" />
         </HBox>
     </bottom>
 

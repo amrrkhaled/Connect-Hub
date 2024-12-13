@@ -9,6 +9,7 @@ public interface IContent {
     JSONArray getUserContent(String userId);
     JSONArray getNewsFeedContent(String userId);
     JSONObject getContentById(String id);
+    JSONObject getContentIdByName(String content);
     }
 
 

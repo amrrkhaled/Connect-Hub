@@ -56,6 +56,8 @@ public class AdminController extends GroupsController {
         // Initialize mouse click listener for requestsListView
         requestsListView.setOnMouseClicked(this::handleRequestClick);
         membersListView.setOnMouseClicked(this::handleMemberClick);
+
+
     }
 
     private void handleRequestClick(MouseEvent event) {
@@ -102,7 +104,11 @@ public class AdminController extends GroupsController {
         }
         return false;
     }
-
+    @FXML
+    public void onRefresh() {
+       super.onRefresh();
+       loadRequests();
+    }
     protected void showMemberDialog(String userId) {
         // Check if the user is an admin or primary member
         if ((isUserAdmin(userId) || isUserPrimaryAdmin(userId))) {
@@ -339,19 +345,20 @@ public class AdminController extends GroupsController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) postsListView.getScene().getWindow();
+            Stage currentStage =(Stage) requestsListView.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
-
+            editPostController.setPostId(postId);
             // Set new scene and show the stage
             currentStage.setScene(loginScene);
             currentStage.setTitle("Edit Post");
             currentStage.show();
 
-        
+
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

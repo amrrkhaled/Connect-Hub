@@ -55,12 +55,10 @@ public class GeneralAdminController extends NormalUserController {
                 break;
             }
         }
-
         if (!userFound) {
             System.out.println("User " + userId + " not found in join requests for group: " + groupName);
             return;
         }
-
         boolean groupFound = false;
         for (int j = 0; j < groupsMembers.length(); j++) {
             JSONObject groupMember = groupsMembers.getJSONObject(j);
@@ -77,12 +75,10 @@ public class GeneralAdminController extends NormalUserController {
             newGroupMember.put("members", new JSONArray().put(userId));
             groupsMembers.put(newGroupMember);
         }
-
         storageHandler.saveDataAsArray(joinRequestsData, joinRequestsFilePath);
         storageHandler.saveDataAsArray(groupsMembers, membersFilePath);
         System.out.println("User " + userId + " added to group: " + groupName);
     }
-
     public void rejectMember(String groupName, String userId) {
         JSONArray joinRequestsData = storageHandler.loadDataAsArray(joinRequestsFilePath);
 

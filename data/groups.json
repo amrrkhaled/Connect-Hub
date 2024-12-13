@@ -1,12 +1,6 @@
 [{
-    "groupName": "Group 1",
+    "groupName": "swimming",
     "groupId": "G1",
-    "description": "This is a test group",
-    "groupImage": "images\\I24.jpg",
-    "primaryAdminId": "U1",
-    "admins": [
-        "user2",
-        "user1",
-        "U2"
-    ]
+    "description": "i love swimming",
+    "primaryAdminId": "U4"
 }]
