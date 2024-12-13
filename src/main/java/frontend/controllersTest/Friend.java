@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Friend extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Friend.class.getResource("friend.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Friend.class.getResource("/frontend/search.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 700);
         stage.setTitle("Friend");
 
