@@ -56,6 +56,8 @@ public class AdminController extends GroupsController {
         // Initialize mouse click listener for requestsListView
         requestsListView.setOnMouseClicked(this::handleRequestClick);
         membersListView.setOnMouseClicked(this::handleMemberClick);
+
+
     }
 
     private void handleRequestClick(MouseEvent event) {
@@ -102,7 +104,11 @@ public class AdminController extends GroupsController {
         }
         return false;
     }
-
+    @FXML
+    public void onRefresh() {
+       super.onRefresh();
+       loadRequests();
+    }
     protected void showMemberDialog(String userId) {
         // Check if the user is an admin or primary member
         if ((isUserAdmin(userId) || isUserPrimaryAdmin(userId))) {

@@ -480,6 +480,8 @@ public class FeedController {
         System.out.println("Refresh Newsfeed button clicked");
         postsListView.getItems().clear();
         loadPosts();
+        loadMyGroupsList();
+        loadSuggestions();
     }
 
     public void onHome(ActionEvent event) {
