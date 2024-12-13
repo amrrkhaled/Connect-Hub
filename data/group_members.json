@@ -1,15 +1,16 @@
-
-[{
-    "groupName": "Group 1",
-    "members": [
-        "user3",
-        "user4"
-    ]
-},{
-    "groupName": "amm",
-    "members": [
-        "user3",
-        "user4"
-    ]
-}]
-
+[
+    {
+        "groupName": "Group 1",
+        "members": [
+            "user3",
+            "user4"
+        ]
+    },
+    {
+        "groupName": "amm",
+        "members": [
+            "user3",
+            "user4"
+        ]
+    }
+]

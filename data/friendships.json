@@ -13,5 +13,10 @@
         "userId1": "U3",
         "userId2": "U2",
         "status": "accepted"
+    },
+    {
+        "userId1": "U1",
+        "userId2": "U1",
+        "status": "pending"
     }
 ]
