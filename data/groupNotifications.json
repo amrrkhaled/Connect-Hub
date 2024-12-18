@@ -1,4 +1,10 @@
-[{
-    "groupName": "Programming",
-    "notificationName": "Updated description"
-}]
+[
+    {
+        "groupName": "Programming",
+        "notificationName": "Updated description"
+    },
+    {
+        "groupName": "Math",
+        "notificationName": "Updated description"
+    }
+]

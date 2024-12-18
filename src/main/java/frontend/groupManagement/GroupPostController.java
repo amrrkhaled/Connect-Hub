@@ -8,7 +8,6 @@ import backend.notifications.IPostNotifications;
 import backend.notifications.LoadNotifications;
 import backend.notifications.PostNotification;
 import backend.user.*;
-import frontend.newsFeed.FeedController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,7 +23,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -128,7 +126,7 @@ public class GroupPostController {
         } else if (admin) {
             path = "/frontend/groupAdmin.fxml";  // User is a regular admin
         } else {
-            path = "/frontend/groups.fxml";  // User is not an admin
+            path = "/frontend/groupNUser.fxml";  // User is not an admin
         }
 
 
@@ -167,13 +165,13 @@ public class GroupPostController {
 
         // Assuming normalUserController.addPost does the actual saving of the post
         facade.addPost(GROUPNAME, userId, content, now.format(formatter), selectedImagePaths);
-        IContentFiles postContent=ContentFiles.getInstance();
+        IContentFiles postContent = ContentFiles.getInstance();
         ILoadFriendShips loadFriendShips = LoadFriendShips.getInstance();
         ILoadUsers loadUsers = LoadUsers.getInstance();
         IUserRepository userRepository = UserRepository.getInstance(loadUsers);
-        IFriendshipService friendshipService = FriendshipService.getInstance(userRepository,loadFriendShips);
+        IFriendshipService friendshipService = FriendshipService.getInstance(userRepository, loadFriendShips);
         FriendRequestService friendRequestService = FriendRequestServiceFactory.getInstance().createFriendRequestService();
-        IContent content1=Post.getInstance(postContent,friendshipService, friendRequestService);
+        IContent content1 = Post.getInstance(postContent, friendshipService, friendRequestService);
         JSONObject post = content1.getContentIdByName(content);
 
         ILoadNotifications loadNotification = new LoadNotifications();

@@ -10,18 +10,23 @@ import java.util.List;
 public class FriendshipService implements IFriendshipService {
     IUserRepository userRepository;
     ILoadFriendShips loadFriendShips;
-    private  static FriendshipService instance;
-    private FriendshipService(IUserRepository userRepository,ILoadFriendShips loadFriendShips) {
+    private static FriendshipService instance;
+    private JSONArray friendships;
+
+    private FriendshipService(IUserRepository userRepository, ILoadFriendShips loadFriendShips) {
         this.userRepository = userRepository;
         this.loadFriendShips = loadFriendShips;
+        this.friendships = loadFriendShips.loadFriendships();
 
     }
-    public static FriendshipService getInstance(IUserRepository userRepository,ILoadFriendShips loadFriendShips) {
+
+    public static FriendshipService getInstance(IUserRepository userRepository, ILoadFriendShips loadFriendShips) {
         if (instance == null) {
-            instance = new FriendshipService(userRepository,loadFriendShips);
+            instance = new FriendshipService(userRepository, loadFriendShips);
         }
         return instance;
     }
+
     // return username(state)
     public List<String> getPendingFriends(String userId) {
         JSONArray friendships = loadFriendShips.loadFriendships();
@@ -38,6 +43,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return pendingFriends;
     }
+
     // return usernames of friends of friends.
     public List<String> getFriendsOfFriends(String FriendId, String myId) {
         List<String> myFriends = getFriends(myId);
@@ -83,6 +89,7 @@ public class FriendshipService implements IFriendshipService {
 
         return friendsOfFriends;
     }
+
     private List<String> convertIdsToUsernames(List<String> userIds) {
         List<String> usernames = new ArrayList<>();
         for (String userId : userIds) {
@@ -93,6 +100,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return usernames;
     }
+
     // return usenames of pendingFriends
     public List<String> extractUsernames(List<String> pendingFriends) {
         List<String> usernames = new ArrayList<>();
@@ -105,6 +113,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return usernames;
     }
+
     // return ids of blocked friends
     public List<String> getBlockedFriends(String userId) {
         JSONArray friendships = loadFriendShips.loadFriendships();
@@ -124,6 +133,7 @@ public class FriendshipService implements IFriendshipService {
 
         return friends;
     }
+
     //return ids of friends
     public List<String> getFriends(String userId) {
         JSONArray friendships = loadFriendShips.loadFriendships();
@@ -143,6 +153,7 @@ public class FriendshipService implements IFriendshipService {
 
         return friends;
     }
+
     // return usernames(status)
     @Override
     public List<String> getFriendsWithStatus(String userId) {
@@ -167,6 +178,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return friends;
     }
+
     // remove friendShip
     @Override
     public boolean RemoveFriendShip(String userId1, String userId2, JSONArray friendships) {
@@ -180,6 +192,7 @@ public class FriendshipService implements IFriendshipService {
         }
         return false;
     }
+
     // find friendShip
     @Override
     public JSONObject FindFriendShip(String userId1, String userId2, JSONArray friendships) {
@@ -193,6 +206,30 @@ public class FriendshipService implements IFriendshipService {
         return null;
     }
 
+    public boolean areTheyFriends(String userId1, String userId2) {
+        friendships = loadFriendShips.loadFriendships();
+        for (int i = 0; i < friendships.length(); i++) {
+            JSONObject friendship = friendships.getJSONObject(i);
+            if ((friendship.getString("userId1").equals(userId1) && friendship.getString("userId2").equals(userId2)) && friendship.getString("status").equals("accepted") ||
+                    (friendship.getString("userId1").equals(userId2) && friendship.getString("userId2").equals(userId1) && friendship.getString("status").equals("accepted"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean areTheyPending(String userId1, String userId2) {
+        friendships = loadFriendShips.loadFriendships();
+        for (int i = 0; i < friendships.length(); i++) {
+            JSONObject friendship = friendships.getJSONObject(i);
+            System.out.println(friendship);
+            if ((friendship.getString("userId1").equals(userId1) && friendship.getString("userId2").equals(userId2) && friendship.getString("status").equals("pending")) ||
+                    (friendship.getString("userId1").equals(userId2) && friendship.getString("userId2").equals(userId1) && friendship.getString("status").equals("pending"))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }

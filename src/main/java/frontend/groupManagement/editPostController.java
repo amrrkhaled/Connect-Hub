@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class editPostController {
+public class editPostController {
     private Stage previousStage; // A reference to the previous stage
 
     @FXML
@@ -44,6 +44,7 @@ public  class editPostController {
     public String GROUPNAME = Group.getGroupName();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
     static String postId;
+
     @FXML
     public void initialize() {
         uploadImage.setOnAction(event -> handleUploadImages());
@@ -59,7 +60,6 @@ public  class editPostController {
     public void setPreviousStage(Stage stage) {
         this.previousStage = stage;
     }
-
 
 
     @FXML
@@ -83,6 +83,7 @@ public  class editPostController {
             }
         }
     }
+
     boolean isUserPrimaryAdmin(String name) {
         // Load the group details by name
         JSONObject group = loadGroups.loadGroupByName(name);
@@ -124,7 +125,7 @@ public  class editPostController {
         } else if (admin) {
             path = "/frontend/groupAdmin.fxml";  // User is a regular admin
         } else {
-            path = "/frontend/groups.fxml";  // User is not an admin
+            path = "/frontend/groupNUser.fxml";  // User is not an admin
         }
 
 
@@ -133,7 +134,7 @@ public  class editPostController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) imageContainer.getScene().getWindow();
+            Stage currentStage = (Stage) imageContainer.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             // Set new scene and show the stage
@@ -148,12 +149,11 @@ public  class editPostController {
     }
 
 
-
     @FXML
     private void handleCreatePost() {
         String content = contentArea.getText();
 
-        if (content.isEmpty() && selectedImagePaths.isEmpty() ) {
+        if (content.isEmpty() && selectedImagePaths.isEmpty()) {
             showAlert("Please edit content or upload an image.");
             return;
         }
@@ -164,14 +164,11 @@ public  class editPostController {
 
         // Assuming normalUserController.addPost does the actual saving of the post
         GeneralAdmin generalAdminController = new GeneralAdmin(loadGroups, storageHandler);
-        generalAdminController.editPostContent(postId,content);
-        generalAdminController.editPostImages(postId,selectedImagePaths);
+        generalAdminController.editPostContent(postId, content);
+        generalAdminController.editPostImages(postId, selectedImagePaths);
         // Navigate back after creating the post
         returnBack();
     }
-
-
-
 
 
     private void showAlert(String message) {
