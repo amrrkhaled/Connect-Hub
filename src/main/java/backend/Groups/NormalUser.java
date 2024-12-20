@@ -1,6 +1,9 @@
 package backend.Groups;
 
 import backend.SaveImage;
+import backend.notifications.IPostNotifications;
+import backend.notifications.LoadNotifications;
+import backend.notifications.PostNotification;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -44,7 +47,26 @@ public class NormalUser {
             }
             newPost.put("images", newImages);  // Add images to the post
         }
+        IGroupRepository groupRepository = new GroupRepository(loadGroups,storageHandler);
+        System.out.println("i am here");
+        JSONArray members =  groupRepository.getGroupMembersByGroupName(groupName);
+        System.out.println(members.toString());
+        if (members == null) {
+            System.err.println("Error: Group with name " + groupName + " does not exist or has no members.");
+            return; // Exit the method to prevent further errors
+        }
+        if(members.length() > 0) {
+            for (int i = 0; i < members.length(); i++) {
+                String member = members.getString(i);
+                System.out.println("entered");
+                if(!member.equals(authorId)) {
+                    System.out.println(" Member " + member + ",Author Id : " + authorId );
 
+                    IPostNotifications postNotifications = new PostNotification(LoadNotifications.getInstance());
+//                    postNotifications.createNotifications(authorId,"P" + (posts.length() + 1),timestamp);
+                }
+            }
+        }
         posts.put(posts.length(), newPost);  // Add the new post to the posts array
         storageHandler.saveDataAsArray(posts, postsFilePath);  // Save the updated posts
     }

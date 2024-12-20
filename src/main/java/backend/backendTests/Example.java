@@ -2,7 +2,9 @@ package backend.backendTests;
 import backend.friendship.FriendShip;
 import backend.friendship.FriendShipFactory;
 import backend.notifications.FriendNotifications;
+import backend.notifications.IPostNotifications;
 import backend.notifications.LoadNotifications;
+import backend.notifications.PostNotification;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,7 +24,10 @@ public class Example {
 //        List<String> actualMessages = notificationService.getNotificationMessages("U1");
 
         // Print results
+        IPostNotifications postNotifications = new PostNotification(loadNotifications);
+        String authorId = "U1";
 
+        postNotifications.createNotifications(authorId,"P5",getCurrentTimestamp());
     }
     public static String getCurrentTimestamp() {
         ZonedDateTime now = ZonedDateTime.now();

@@ -10,12 +10,12 @@
         "status": "pending"
     },
     {
-        "userId1": "U1",
+        "userId1": "U4",
         "userId2": "U2",
         "status": "accepted"
     },
     {
-        "userId1": "U4",
+        "userId1": "U1",
         "userId2": "U2",
         "status": "accepted"
     }

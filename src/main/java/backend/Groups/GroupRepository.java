@@ -123,6 +123,22 @@ public class GroupRepository implements IGroupRepository {
         }
         return new JSONArray();  // Return an empty array if no members are found
     }
+    public JSONArray getGroupMembersByGroupName(String groupName) {
+        for (int i = 0; i < groups.length(); i++) {
+            System.out.println(groups.optJSONObject(i).optString("groupName"));
+            System.out.println(groupName);
+            JSONObject group = groups.optJSONObject(i);
+            if (group.optString("groupName").equals(groupName)) {
+                for (int j = 0; j < groupsMembers.length(); j++) {
+                    JSONObject member = groupsMembers.optJSONObject(j);
+                    if (member.optString("groupName").equals(groupName)) {
+                        return member.optJSONArray("members");
+                    }
+                }
+            }
+        }
+        return new JSONArray();
+    }
 
 
     public JSONObject getPostById(String postId) {

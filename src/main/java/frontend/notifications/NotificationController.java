@@ -91,7 +91,6 @@ public class NotificationController {
             String content = notification.optString("contentId");
             String timestamp = notification.optString("timestamp");
             String authorName = friendShip.getUserRepository().getUsernameByUserId(author);
-
             String displayText = authorName + " posted " + content + " @: " + timestamp;
             JSONObject postNotificationJson = new JSONObject();
             postNotificationJson.put("notification", displayText);
