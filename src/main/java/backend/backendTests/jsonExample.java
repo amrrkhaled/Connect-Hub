@@ -155,23 +155,7 @@ public class jsonExample {
 //        GroupNotifications groupNotifications = new GroupNotifications(loadNotifications);
 //        groupNotifications.createNotifications("G1","P3" , formattedTimestamp);
         // Initialize dependencies
-        FriendShip friendShip = FriendShipFactory.createFriendShip();
-        LoadNotifications loadNotifications = LoadNotifications.getInstance();
-        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
-        friendShip.addFriend("U1","sameh");
-        friendShip.addFriend("U3","sameh");
-        friendShip.addFriend("U4","sameh");
-        friendNotifications.removeNotification("U3","U2");
-//        List<String> actualMessages = notificationService.getNotificationMessages("U1");
 
-        // Print results
 
     }
-    public static String getCurrentTimestamp() {
-        ZonedDateTime now = ZonedDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
-        return now.format(formatter);
-    }
-
-
 }

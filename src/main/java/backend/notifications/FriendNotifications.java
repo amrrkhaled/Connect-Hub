@@ -69,9 +69,10 @@ public class FriendNotifications implements IFriendNotifications {
         // Iterate backwards to safely remove items without affecting the indices
         for (int i = notifications.length() - 1; i >= 0; i--) {
             JSONObject notification = notifications.getJSONObject(i);
-
             // Check if the current notification matches the userId and senderId
-            if (notification.getString("receiverId").equals(userId) && notification.getString("senderId").equals(senderId)) {
+            if ((notification.getString("receiverId").equals(userId) && notification.getString("senderId").equals(senderId))
+            || (notification.getString("senderId").equals(userId) && notification.getString("receiverId").equals(senderId))
+            ) {
                 System.out.println("Removing notification with ID: " + notification.getString("notificationId"));
                 // Remove the notification
                 notifications.remove(i);
@@ -82,8 +83,6 @@ public class FriendNotifications implements IFriendNotifications {
             }
         }
     }
-
-
     @Override
     public void createNotifications(String sender, String receiver, String timestamp) {
         JSONObject newNotification = new JSONObject();

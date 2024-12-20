@@ -57,7 +57,6 @@ public class FriendShip {
         ILoadNotifications loadNotifications = new LoadNotifications();
         FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         String userId2 = user.getString("userId");
-        friendNotifications.createNotifications(userId1,userId2,getCurrentTimestamp());
         JSONObject FriendShip = new JSONObject();
         FriendShip.put("userId1", userId1);
         FriendShip.put("userId2", userId2);
@@ -67,6 +66,7 @@ public class FriendShip {
             return;
         }
         friendships.put(FriendShip);
+        friendNotifications.createNotifications(userId1,userId2,getCurrentTimestamp());
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(friendships.toString(4));
             System.out.println("Successfully written to the file.");
@@ -89,10 +89,13 @@ public class FriendShip {
         FriendShip.put("userId1", userId2);
         FriendShip.put("userId2", userId1);
         FriendShip.put("status", "accepted");
+        ILoadNotifications loadNotifications = new LoadNotifications();
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         JSONArray friendships = loadFriendShips.loadFriendships();
         if (friendShipValidation.checkDuplicates(userId1, userId2, friendships)) {
             friendshipFound =friendshipService.RemoveFriendShip(userId1, userId2, friendships);
         }
+        friendNotifications.removeNotification(userId1, userId2);
         friendships.put(FriendShip);
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(friendships.toString(4));
@@ -107,8 +110,11 @@ public class FriendShip {
         System.out.println(username);
         String userId2 = user.getString("userId");
         JSONArray friendships = loadFriendShips.loadFriendships();
+        ILoadNotifications loadNotifications = new LoadNotifications();
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         boolean friendshipFound = friendshipService.RemoveFriendShip(userId1, userId2, friendships);
         if (friendshipFound) {
+            friendNotifications.removeNotification(userId1, userId2);
             try (FileWriter file = new FileWriter(filePath)) {
                 file.write(friendships.toString(4));
                 System.out.println("Friendship successfully removed.");

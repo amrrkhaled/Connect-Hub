@@ -1,18 +1,32 @@
+package backend.backendTests;
+import backend.friendship.FriendShip;
+import backend.friendship.FriendShipFactory;
+import backend.notifications.FriendNotifications;
+import backend.notifications.LoadNotifications;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.Arrays;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 public class Example {
     public static void main(String[] args) {
-        JSONObject sameh = new JSONObject();
+        FriendShip friendShip = FriendShipFactory.createFriendShip();
+        LoadNotifications loadNotifications = LoadNotifications.getInstance();
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
+        friendShip.addFriend("U1","sameh");
+        friendShip.addFriend("U3","sameh");
+        friendShip.addFriend("U4","sameh");
 
-        // Convert the list into a JSONArray
-        JSONArray numbersArray = new JSONArray(Arrays.asList(1, 3, 5));
+        friendShip.acceptFriend("U2","amr");
+//        List<String> actualMessages = notificationService.getNotificationMessages("U1");
 
-        // Add the JSONArray to the JSONObject
-        sameh.put("numbers", numbersArray);
+        // Print results
 
-        // Print the JSON object
-        System.out.println(sameh.toString());
     }
-}
+    public static String getCurrentTimestamp() {
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        return now.format(formatter);
+    }
+    }

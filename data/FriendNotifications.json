@@ -1,20 +1,6 @@
-[
-    {
-        "senderId": "U4",
-        "receiverId": "U2",
-        "notificationId": "NF3",
-        "timestamp": "2024-12-18 04:02:24 EET"
-    },
-    {
-        "senderId": "U3",
-        "receiverId": "U2",
-        "notificationId": "NF2",
-        "timestamp": "2024-12-18 04:02:24 EET"
-    },
-    {
-        "senderId": "U1",
-        "receiverId": "U2",
-        "notificationId": "NF1",
-        "timestamp": "2024-12-18 04:02:24 EET"
-    }
-]
+[{
+    "senderId": "U3",
+    "receiverId": "U2",
+    "notificationId": "NF2",
+    "timestamp": "2024-12-20 14:09:06 EET"
+}]

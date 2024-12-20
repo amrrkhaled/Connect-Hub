@@ -9,16 +9,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class LoadNotifications implements ILoadNotifications{
+public class LoadNotifications implements ILoadNotifications {
     private static LoadNotifications instance;
+
     public LoadNotifications() {
     }
+
     public static synchronized LoadNotifications getInstance() {
         if (instance == null) {
             instance = new LoadNotifications();
         }
         return instance;
     }
+
     @Override
     public JSONArray LoadNotification(String filePath) {
         File file = new File(filePath);
@@ -41,49 +44,12 @@ public class LoadNotifications implements ILoadNotifications{
             return new JSONArray(); // Return an empty array to prevent crashes
         }
     }
+
     @Override
-
     public void saveNotification(JSONArray newContent, String filePath) {
-        File file = new File(filePath);
-
-        // Read the existing notifications
-        JSONArray existingContent = new JSONArray();
-        if (file.exists()) {
-            try (FileReader reader = new FileReader(file)) {
-                existingContent = new JSONArray(new JSONTokener(reader));
-            } catch (JSONException | IOException e) {
-                System.err.println("Error reading existing notifications: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
-
-        // Check for duplicates and merge newContent with existingContent
-        JSONArray updatedContent = new JSONArray();
-        for (int i = 0; i < newContent.length(); i++) {
-            boolean isDuplicate = false;
-            for (int j = 0; j < existingContent.length(); j++) {
-                if (newContent.getJSONObject(i).getString("notificationId")
-                        .equals(existingContent.getJSONObject(j).getString("notificationId"))) {
-                    isDuplicate = true;
-                    break;
-                }
-            }
-            if (!isDuplicate) {
-                updatedContent.put(newContent.getJSONObject(i));
-            }
-        }
-
-        // Add all existing notifications
-        for (int i = 0; i < existingContent.length(); i++) {
-            updatedContent.put(existingContent.getJSONObject(i));
-        }
-
-        // Save the updated notifications back to the file
-        try (FileWriter fileWriter = new FileWriter(filePath)) {
-            fileWriter.write(updatedContent.toString(4)); // 4 for pretty printing
-            System.out.println("Notifications saved successfully.");
+        try (FileWriter file = new FileWriter(filePath)) {
+            file.write(newContent.toString(4));
         } catch (IOException e) {
-            System.err.println("Error saving notifications: " + e.getMessage());
             e.printStackTrace();
         }
     }
