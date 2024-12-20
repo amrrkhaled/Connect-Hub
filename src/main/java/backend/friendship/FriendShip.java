@@ -1,11 +1,16 @@
 package backend.friendship;
 
+import backend.notifications.FriendNotifications;
+import backend.notifications.ILoadNotifications;
+import backend.notifications.LoadNotifications;
 import backend.user.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class FriendShip {
     Validation validation;
@@ -49,6 +54,8 @@ public class FriendShip {
     }
     public void addFriend(String userId1, String username) {
         JSONObject user = userRepository.findUserByUsername(username);
+        ILoadNotifications loadNotifications = new LoadNotifications();
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         String userId2 = user.getString("userId");
         JSONObject FriendShip = new JSONObject();
         FriendShip.put("userId1", userId1);
@@ -59,6 +66,7 @@ public class FriendShip {
             return;
         }
         friendships.put(FriendShip);
+        friendNotifications.createNotifications(userId1,userId2,getCurrentTimestamp());
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(friendships.toString(4));
             System.out.println("Successfully written to the file.");
@@ -66,6 +74,11 @@ public class FriendShip {
             e.printStackTrace();
         }
 
+    }
+    public static String getCurrentTimestamp() {
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        return now.format(formatter);
     }
 
     public void acceptFriend(String userId1, String username) {
@@ -76,10 +89,13 @@ public class FriendShip {
         FriendShip.put("userId1", userId2);
         FriendShip.put("userId2", userId1);
         FriendShip.put("status", "accepted");
+        ILoadNotifications loadNotifications = new LoadNotifications();
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         JSONArray friendships = loadFriendShips.loadFriendships();
         if (friendShipValidation.checkDuplicates(userId1, userId2, friendships)) {
             friendshipFound =friendshipService.RemoveFriendShip(userId1, userId2, friendships);
         }
+        friendNotifications.removeNotification(userId1, userId2);
         friendships.put(FriendShip);
         try (FileWriter file = new FileWriter(filePath)) {
             file.write(friendships.toString(4));
@@ -94,8 +110,11 @@ public class FriendShip {
         System.out.println(username);
         String userId2 = user.getString("userId");
         JSONArray friendships = loadFriendShips.loadFriendships();
+        ILoadNotifications loadNotifications = new LoadNotifications();
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         boolean friendshipFound = friendshipService.RemoveFriendShip(userId1, userId2, friendships);
         if (friendshipFound) {
+            friendNotifications.removeNotification(userId1, userId2);
             try (FileWriter file = new FileWriter(filePath)) {
                 file.write(friendships.toString(4));
                 System.out.println("Friendship successfully removed.");

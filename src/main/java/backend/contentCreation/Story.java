@@ -12,34 +12,36 @@ import java.util.List;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class Story implements IContent , IContentRepository{
+public class Story implements IContent, IContentRepository {
     private final IContentFiles contentFiles;
-    private final IFriendshipService friendShipService ;
-    private  final FriendRequestService friendRequestService;
+    private final IFriendshipService friendShipService;
+    private final FriendRequestService friendRequestService;
     private final String FILEPATH = "data/stories.json";
     private static Story instance;
-    private Story(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService)
-    {
+
+    private Story(IContentFiles contentFiles, IFriendshipService friendShipService, FriendRequestService friendRequestService) {
         this.contentFiles = contentFiles;
         this.friendShipService = friendShipService;
         this.friendRequestService = friendRequestService;
     }
-    public static synchronized Story getInstance(IContentFiles contentFiles, IFriendshipService friendShipService , FriendRequestService friendRequestService) {
+
+    public static synchronized Story getInstance(IContentFiles contentFiles, IFriendshipService friendShipService, FriendRequestService friendRequestService) {
         if (instance == null) {
-            instance = new Story(contentFiles, friendShipService , friendRequestService);
+            instance = new Story(contentFiles, friendShipService, friendRequestService);
         }
         return instance;
     }
+
     @Override
-    public void createContent(String authorId,  String content, String timestamp, List<String> images) {
+    public void createContent(String authorId, String content, String timestamp, List<String> images) {
         JSONObject newStory = new JSONObject();
         JSONArray stories = contentFiles.loadContent(FILEPATH);
         newStory.put("authorId", authorId);
-        newStory.put("contentId", "S" + (stories.length()+1));
+        newStory.put("contentId", "S" + (stories.length() + 1));
         newStory.put("content", content);
         newStory.put("timestamp", timestamp);
-        List<String> newImages= new ArrayList<>();
-        for(String imagePath : images) {
+        List<String> newImages = new ArrayList<>();
+        for (String imagePath : images) {
             String newPath = null;
             try {
                 newPath = SaveImage.saveImageToFolder(imagePath);
@@ -50,8 +52,8 @@ public class Story implements IContent , IContentRepository{
         }
         newStory.put("images", newImages);
 
-        stories.put(stories.length(),newStory);
-        contentFiles.saveContent(stories,FILEPATH);
+        stories.put(stories.length(), newStory);
+        contentFiles.saveContent(stories, FILEPATH);
 
     }
 
@@ -106,7 +108,7 @@ public class Story implements IContent , IContentRepository{
                 JSONArray friendStories = getUserContent(friendId); // Get stories for each friend
                 for (int i = 0; i < friendStories.length(); i++) {
                     JSONObject story = friendStories.getJSONObject(i);
-                        feedStories.put(story);
+                    feedStories.put(story);
 
                 }
             } catch (Exception e) {
@@ -119,13 +121,14 @@ public class Story implements IContent , IContentRepository{
 
     public JSONObject getContentById(String id) {
         JSONArray posts = contentFiles.loadContent(FILEPATH);
-        for(int i = 0; i < posts.length(); i++) {
-            if(posts.getJSONObject(i).getString("id").equals(id)) {
+        for (int i = 0; i < posts.length(); i++) {
+            if (posts.getJSONObject(i).getString("id").equals(id)) {
                 return posts.getJSONObject(i);
             }
         }
         return null;
     }
+
     public JSONObject getContentIdByName(String content) {
         JSONArray posts = contentFiles.loadContent("data/groupsPosts.json");
         for (int i = 0; i < posts.length(); i++) {
@@ -137,6 +140,52 @@ public class Story implements IContent , IContentRepository{
             } catch (Exception e) {
                 System.err.println("Error processing post at index " + i + ": " + e.getMessage());
             }
+        }
+        return null;
+    }
+
+    public void addComment(String storyId, String comment) {
+        JSONArray stories = contentFiles.loadContent("data/stories.json");
+        for (int i = 0; i < stories.length(); i++) {
+            JSONObject story = stories.getJSONObject(i);
+
+            if (story.getString("contentId").equals(storyId)) {
+                // Check if "comments" key exists and is a JSONArray
+                if (story.has("comments") && story.get("comments") instanceof JSONArray) {
+                    // Add the new comment to the existing array
+                    story.getJSONArray("comments").put(comment);
+                } else {
+                    // Create a new JSONArray with the comment
+                    JSONArray commentsArray = new JSONArray();
+                    commentsArray.put(comment);
+                    story.put("comments", commentsArray);
+                }
+                stories.put(i, story); // Update the post in the array
+                break;
+            }
+        }
+
+        contentFiles.saveContent(stories, FILEPATH);
+    }
+
+    public JSONArray getCommentsById(String storyId) {
+        JSONArray stories = contentFiles.loadContent("data/stories.json");
+
+        for (int i = 0; i < stories.length(); i++) {
+            JSONObject story = stories.getJSONObject(i);
+
+            if (story.getString("contentId").equals(storyId)) {
+                // Check if "comments" key exists and is a JSONArray
+                if (story.has("comments")) {
+                    // Add the new comment to the existing array
+                    return story.getJSONArray("comments");
+                } else {
+                    return null;
+                }
+
+
+            }
+
         }
         return null;
     }

@@ -3,14 +3,18 @@ package frontend.newsFeed;
 import backend.Groups.*;
 import backend.contentCreation.*;
 import backend.friendship.*;
+import backend.notifications.*;
 import backend.profile.*;
+import backend.threads.storiesThread;
 import backend.user.*;
+import frontend.notifications.notificationsThread;
 import frontend.searchManagement.SearchController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,8 +40,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FeedController {
 
@@ -74,6 +81,8 @@ public class FeedController {
     // Creating instances of controllers
     GroupManager groupManager = new GroupManager(loadGroups);
     Request requestController = new Request(loadGroups, storageHandler);
+    private IContentFiles contentFiles = ContentFiles.getInstance();
+    ;
 
     @FXML
     public void initialize() {
@@ -335,49 +344,35 @@ public class FeedController {
         return new File(path).exists();
     }
 
-    private void loadPosts() {
-        // Creating a mock JSONArray
-
+    protected void loadPosts() {
 
         PostFactory postFactory = PostFactory.getInstance();
         IContent contentCreation = postFactory.createPost();
         JSONArray posts = contentCreation.getNewsFeedContent(userId);
 
-        // Iterate over the posts JSONArray
+
         for (int i = 0; i < posts.length(); i++) {
-            JSONObject post = posts.getJSONObject(i);  // Get each post
+            JSONObject post = posts.getJSONObject(i);
 
             VBox postBox = new VBox();
             postBox.setSpacing(10);
+            postBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 10px; -fx-padding: 15px; -fx-background-color: #f9f9f9;");
 
-            // Add content (caption)
-
+            // Add author
             String authorId = post.optString("authorId", "");
             String author = friendShip.getUserRepository().getUsernameByUserId(authorId);
 
             if (!author.isEmpty()) {
                 Label authorLabel = new Label("Author: " + author);
-
-                // Apply enhanced styles
-                authorLabel.setStyle("-fx-font-size: 12px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-text-fill: #3b5998; " +
-                        "-fx-background-color: #e7f3ff; " +
-                        "-fx-border-radius: 5px; " +
-                        "-fx-padding: 8px 15px; " +
-                        "-fx-border-color: #a1c4e9; " +
-                        "-fx-border-width: 1px; " +
-                        "-fx-background-insets: 0, 1;");
-
-                authorLabel.setEffect(new javafx.scene.effect.DropShadow(5, Color.GRAY));
-
+                authorLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #3b5998;");
                 postBox.getChildren().add(authorLabel);
             }
 
+            // Add content
             String content = post.optString("content", "");
             if (!content.isEmpty()) {
                 Text postText = new Text(content);
-                postText.setStyle("-fx-font-size: 14px;");
+                postText.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
                 postBox.getChildren().add(postText);
             }
 
@@ -386,10 +381,9 @@ public class FeedController {
             if (images != null) {
                 HBox imageContainer = new HBox();
                 imageContainer.setSpacing(10);
-                imageContainer.setStyle("-fx-padding: 10;");
 
                 for (int j = 0; j < images.length(); j++) {
-                    String imagePath = images.getString(j); // Get the image path
+                    String imagePath = images.getString(j);
                     if (isFileValid(imagePath)) {
                         Image image = new Image("file:" + imagePath.trim());
                         ImageView imageView = new ImageView(image);
@@ -403,28 +397,108 @@ public class FeedController {
 
                 postBox.getChildren().add(imageContainer);
             }
+
+            // Add timestamp
             String time = post.optString("timestamp", "");
             if (!time.isEmpty()) {
-                // Create a Label for the time
                 Label timeLabel = new Label(time);
-
-                // Style the Label for a distinct look
-                timeLabel.setStyle("-fx-font-size: 12px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-text-fill: #555555; " +
-                        "-fx-background-color: #f2f2f2; " +  // Light background
-                        "-fx-border-radius: 5px; " +           // Rounded corners
-                        "-fx-padding: 5px 10px; " +            // Padding inside the label
-                        "-fx-border-color: #dddddd; " +        // Border color
-                        "-fx-border-width: 1px;");             // Border width
-
-                // Optional: Add a subtle shadow effect
-                timeLabel.setEffect(new javafx.scene.effect.DropShadow(10, Color.GRAY));
-
-                // Add the styled time label to the postBox
+                timeLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #555;");
                 postBox.getChildren().add(timeLabel);
             }
 
+            // Add Like/Unlike Button
+            JSONArray likedBy = post.optJSONArray("likedBy");
+            if (likedBy == null) {
+                likedBy = new JSONArray();
+                post.put("likedBy", likedBy);
+            }
+
+            // Use AtomicBoolean to track if the current user liked the post
+            AtomicBoolean userLiked = new AtomicBoolean(likedBy.toList().contains(userId));
+
+            Label likesLabel = new Label("Likes: " + likedBy.length());
+            likesLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+
+            Button likeButton = new Button(userLiked.get() ? "Unlike" : "Like");
+            likeButton.setStyle("-fx-font-size: 12px; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-padding: 5 10;");
+            JSONArray finalLikedBy = likedBy;
+            likeButton.setOnAction(event -> {
+                if (userLiked.get()) {
+                    // Remove user's like
+                    for (int j = 0; j < finalLikedBy.length(); j++) {
+                        if (finalLikedBy.getString(j).equals(userId)) {
+                            finalLikedBy.remove(j);
+                            break;
+                        }
+                    }
+                    userLiked.set(false);
+                } else {
+                    // Add user's like
+                    finalLikedBy.put(userId);
+                    ILikeNotifications likeNotifications = new LikeNotifications(LoadNotifications.getInstance());
+                    likeNotifications.createNotifications(userId,post.getString("contentId"),getCurrentTimestamp());
+                    userLiked.set(true);
+                }
+
+                // Update the like button and label
+                likeButton.setText(userLiked.get() ? "Unlike" : "Like");
+                likesLabel.setText("Likes: " + finalLikedBy.length());
+
+                // Save updated likes to the backend
+                contentFiles.saveContent(posts, "data/posts.json");
+
+
+            });
+
+            HBox likeBox = new HBox(10, likeButton, likesLabel);
+            likeBox.setAlignment(Pos.CENTER_LEFT);
+            postBox.getChildren().add(likeBox);
+
+            // Add Comment Section
+            TextField commentField = new TextField();
+            commentField.setPromptText("Write a comment...");
+            Button addCommentButton = new Button("Add Comment");
+
+            addCommentButton.setOnAction(event -> {
+                String comment = commentField.getText();
+                if (!comment.isEmpty()) {
+                    contentCreation.addComment(post.getString("contentId"), comment);
+                    ICommentNotifications commentNotifications = new CommentNotifications(LoadNotifications.getInstance());
+                    commentNotifications.createNotifications(userId,post.getString("contentId"),getCurrentTimestamp());
+                    commentField.clear();
+                    System.out.println("Comment added to post: " + comment);
+                }
+            });
+
+            Button viewCommentsButton = new Button("View Comments");
+            viewCommentsButton.setOnAction(event -> {
+                JSONArray comments = contentCreation.getCommentsById(post.getString("contentId"));
+
+                if (comments != null) {
+                    VBox commentsBox = new VBox();
+                    commentsBox.setSpacing(5);
+
+                    for (int j = 0; j < comments.length(); j++) {
+                        String comment = comments.getString(j);
+                        Label commentLabel = new Label(comment);
+                        commentLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333;");
+                        commentsBox.getChildren().add(commentLabel);
+                    }
+
+                    Stage commentsStage = new Stage();
+                    commentsStage.setTitle("Comments");
+
+                    ScrollPane scrollPane = new ScrollPane(commentsBox);
+                    scrollPane.setFitToWidth(true);
+
+                    Scene scene = new Scene(scrollPane, 300, 400);
+                    commentsStage.setScene(scene);
+                    commentsStage.show();
+                }
+            });
+
+            HBox commentBox = new HBox(10, commentField, addCommentButton, viewCommentsButton);
+            postBox.getChildren().add(commentBox);
 
             // Add the post box to the posts list view
             postsListView.getItems().add(postBox);
@@ -450,6 +524,11 @@ public class FeedController {
         }
     }
 
+    public static String getCurrentTimestamp() {
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        return now.format(formatter);
+    }
     @FXML
     private void onCreateStory() {
         try {

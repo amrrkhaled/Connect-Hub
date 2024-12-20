@@ -49,20 +49,21 @@ public class PostController {
         createPost.setOnAction(event -> handleCreatePost());
         back.setOnAction(event -> navigateToPreviousStage());
     }
+
     public void setPreviousStage(Stage stage) {
         this.previousStage = stage;
     }
 
-        private void navigateToPreviousStage() {
-            if (previousStage != null) {
-                // Close the current stage and show the previous stage
-                Stage currentStage = (Stage) back.getScene().getWindow();
-                currentStage.close();
-                previousStage.show();
-            }
-            else navigateToNewsFeed();
+    private void navigateToPreviousStage() {
+        if (previousStage != null) {
+            // Close the current stage and show the previous stage
+            Stage currentStage = (Stage) back.getScene().getWindow();
+            currentStage.close();
+            previousStage.show();
+        } else navigateToNewsFeed();
 
     }
+
     @FXML
     private void handleUploadImages() {
         FileChooser fileChooser = new FileChooser();
@@ -101,7 +102,7 @@ public class PostController {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        contentCreation.createContent(userId,content, now.format(formatter), selectedImagePaths);
+        contentCreation.createContent(userId, content, now.format(formatter), selectedImagePaths);
         navigateToNewsFeed();
     }
 
@@ -111,7 +112,7 @@ public class PostController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage = (Stage) imageContainer.getScene().getWindow();
+            Stage currentStage = (Stage) contentArea.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             // Set new scene and show the stage

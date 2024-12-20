@@ -14,7 +14,7 @@ public class GroupNotifications implements IGroupNotifications{
         JSONObject newNotification = new JSONObject();
         JSONArray notifications = loadNotifications.LoadNotification(FILEPATH);
         newNotification.put("groupName", groupName);
-        newNotification.put("notificationName", notificationName);
+        newNotification.put("notification", notificationName);
 
         notifications.put(newNotification);
         loadNotifications.saveNotification(notifications,FILEPATH);
