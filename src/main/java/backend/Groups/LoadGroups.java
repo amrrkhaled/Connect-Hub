@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class LoadGroups implements ILoadGroups {
     private static final String GROUPS_FILE_PATH = "data/groups.json";
     private static final String POSTS_FILE_PATH = "data/groupsPosts.json";
@@ -19,8 +20,11 @@ public class LoadGroups implements ILoadGroups {
     private static final String REQUESTS_FILE_PATH = "data/groups_join_requests.json";
     private static volatile LoadGroups instance;
     private IStorageHandler storageHandler;
+    private IGroupRepository groupRep;
+
     private LoadGroups(IStorageHandler storageHandler) {
         this.storageHandler = storageHandler;
+        this.groupRep = new GroupRepository(this, storageHandler);
     }
 
     public static synchronized LoadGroups getInstance(IStorageHandler storageHandler) {
@@ -68,6 +72,7 @@ public class LoadGroups implements ILoadGroups {
         }
         return null;
     }
+
     public JSONArray loadGroupPostsByName(String groupName) {
         JSONArray posts = loadPosts(null); // Load all posts
         System.out.println(posts.toString());
@@ -109,7 +114,7 @@ public class LoadGroups implements ILoadGroups {
     }
 
     @Override
-    public JSONArray loadGroupsbyUserId(String userId) {
+    public JSONArray loadGroupsByUserId(String userId) {
         JSONArray groups = loadGroups();  // Load all groups
         JSONArray userGroups = new JSONArray();  // This will store the groups that the user is associated with
         JSONArray groupsMembers = storageHandler.loadDataAsArray(MEMBERS_FILE_PATH);  // Load group members
@@ -210,16 +215,15 @@ public class LoadGroups implements ILoadGroups {
         // Check if user is a primary admin of the group
 
 
-            if (group.optString("groupName").equals(groupName)) {
-                String primaryAdminId = group.optString("primaryAdminId", "");
-                if (primaryAdminId.equals(userId)) {
-                    return true;  // User is the primary admin
-                }
+        if (group.optString("groupName").equals(groupName)) {
+            String primaryAdminId = group.optString("primaryAdminId", "");
+            if (primaryAdminId.equals(userId)) {
+                return true;  // User is the primary admin
             }
-
+        }
 
         // Check if user is a member of the group by passing groupsMembers
-        JSONArray members = getGroupMembers(groupName, groupsMembers);
+        JSONArray members = groupRep.getGroupMembers(groupName, groupsMembers);
         for (int j = 0; j < members.length(); j++) {
             if (members.optString(j).equals(userId)) {
                 return true;  // User is a member of the group
@@ -255,32 +259,6 @@ public class LoadGroups implements ILoadGroups {
         return false;  // User hasn't sent a request to join this group
     }
 
-    private JSONArray getGroupMembers(String groupName, JSONArray groupsMembers) {
-        // This method will fetch and return the members of a given group
-        // Iterate through the groupsMembers to find the group by name
-        for (int i = 0; i < groupsMembers.length(); i++) {
-            JSONObject group = groupsMembers.optJSONObject(i);
-            if (group == null) {
-                continue; // Skip invalid or null group data
-            }
-            if (group.optString("groupName").equals(groupName)) {
-                return group.optJSONArray("members");
-            }
-        }
-        return new JSONArray();  // Return an empty array if no members are found
-    }
-
-
-     public JSONObject getPostById(String postId) {
-        JSONArray posts = storageHandler.loadDataAsArray(POSTS_FILE_PATH);
-        for (int i = 0; i < posts.length(); i++) {
-            JSONObject post = posts.optJSONObject(i);
-            if(post.getString("contentId").equals(postId)) {
-                return post;
-            }
-        }
-        return null;
-}
 
 }
 

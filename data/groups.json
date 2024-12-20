@@ -4,12 +4,15 @@
         "groupId": "G1",
         "description": "Programming 2",
         "primaryAdminId": "U1",
-        "admins": ["U2"]
+        "admins": [
+            "U2",
+            "U2"
+        ]
     },
     {
         "groupName": "Math",
         "groupId": "G2",
-        "description": "h",
+        "description": "Diffrentiall",
         "primaryAdminId": "U2"
     }
 ]
