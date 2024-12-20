@@ -3,8 +3,11 @@ package frontend.newsFeed;
 import backend.Groups.*;
 import backend.contentCreation.*;
 import backend.friendship.*;
+import backend.notifications.*;
 import backend.profile.*;
+import backend.threads.storiesThread;
 import backend.user.*;
+import frontend.notifications.notificationsThread;
 import frontend.searchManagement.SearchController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,6 +40,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -430,6 +435,8 @@ public class FeedController {
                 } else {
                     // Add user's like
                     finalLikedBy.put(userId);
+                    ILikeNotifications likeNotifications = new LikeNotifications(LoadNotifications.getInstance());
+                    likeNotifications.createNotifications(userId,post.getString("contentId"),getCurrentTimestamp());
                     userLiked.set(true);
                 }
 
@@ -456,8 +463,8 @@ public class FeedController {
                 String comment = commentField.getText();
                 if (!comment.isEmpty()) {
                     contentCreation.addComment(post.getString("contentId"), comment);
-
-
+                    ICommentNotifications commentNotifications = new CommentNotifications(LoadNotifications.getInstance());
+                    commentNotifications.createNotifications(userId,post.getString("contentId"),getCurrentTimestamp());
                     commentField.clear();
                     System.out.println("Comment added to post: " + comment);
                 }
@@ -517,6 +524,11 @@ public class FeedController {
         }
     }
 
+    public static String getCurrentTimestamp() {
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        return now.format(formatter);
+    }
     @FXML
     private void onCreateStory() {
         try {

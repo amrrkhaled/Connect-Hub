@@ -1,0 +1,38 @@
+[
+    {
+        "contentId": "P2",
+        "notificationId": "NC1",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:01:47 EET"
+    },
+    {
+        "contentId": "P2",
+        "notificationId": "NC2",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:32:37 EET"
+    },
+    {
+        "contentId": "P3",
+        "notificationId": "NC3",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:32:43 EET"
+    },
+    {
+        "contentId": "P4",
+        "notificationId": "NC4",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:32:53 EET"
+    },
+    {
+        "contentId": "P2",
+        "notificationId": "NC5",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:34:59 EET"
+    },
+    {
+        "contentId": "P2",
+        "notificationId": "NC6",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:37:20 EET"
+    }
+]

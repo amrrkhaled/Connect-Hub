@@ -1,0 +1,26 @@
+[
+    {
+        "contentId": "P4",
+        "notificationId": "NL1",
+        "authorId": "U2",
+        "timestamp": "2024-12-20 20:05:08 EET"
+    },
+    {
+        "contentId": "P2",
+        "notificationId": "NL2",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:08:10 EET"
+    },
+    {
+        "contentId": "P2",
+        "notificationId": "NL3",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:34:53 EET"
+    },
+    {
+        "contentId": "P2",
+        "notificationId": "NL4",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 20:37:15 EET"
+    }
+]

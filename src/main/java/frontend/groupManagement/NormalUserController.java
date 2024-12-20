@@ -2,6 +2,9 @@ package frontend.groupManagement;
 
 import backend.Groups.*;
 import backend.friendship.*;
+import backend.notifications.CommentNotifications;
+import backend.notifications.ICommentNotifications;
+import backend.notifications.LoadNotifications;
 import backend.user.User;
 import backend.user.UserFactory;
 import backend.user.UserManager;
@@ -27,6 +30,8 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -255,6 +260,8 @@ public class NormalUserController {
                 String comment = commentField.getText();
                 if (!comment.isEmpty()) {
                     facade.addCommentToPost(post.getString("contentId"), comment);
+                    ICommentNotifications commentNotifications = new CommentNotifications(LoadNotifications.getInstance());
+                    commentNotifications.createNotifications(userId,post.getString("contentId"),getCurrentTimestamp());
                     commentField.clear();
                     System.out.println("Comment added to post: " + comment);
                 }
@@ -293,7 +300,11 @@ public class NormalUserController {
             postsListView.getItems().add(postBox);
         }
     }
-
+    public static String getCurrentTimestamp() {
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        return now.format(formatter);
+    }
 
     @FXML
     private void onCreatePost() {

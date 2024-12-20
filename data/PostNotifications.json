@@ -1,6 +1,14 @@
-[{
-    "contentId": "P1",
-    "notificationId": "NP1",
-    "authorId": "U1",
-    "timestamp": "2024-12-20 14:54:06"
-}]
+[
+    {
+        "contentId": "P1",
+        "notificationId": "NP1",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 14:54:06"
+    },
+    {
+        "contentId": "P5",
+        "notificationId": "NP2",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 18:37:41"
+    }
+]

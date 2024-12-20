@@ -49,6 +49,8 @@ public class NotificationController {
     private Button rejectButton;
 
     private FriendNotifications friendNotifications;
+    private CommentNotifications commentNotifications;
+    private LikeNotifications likeNotifications;
     private PostNotification postNotification;
     private GroupNotifications groupNotifications;
     private final String currentUserId = User.getUserId();
@@ -62,9 +64,9 @@ public class NotificationController {
         postNotification = new PostNotification(loader);
         friendNotifications = new FriendNotifications(loader);
         groupNotifications = new GroupNotifications(loader);
-
+        commentNotifications = new CommentNotifications(loader);
+        likeNotifications = new LikeNotifications(loader);
         // Populate the JSONArray for friend requests
-
         // Load and populate the notifications
         loadPostNotifications();
         loadFriendNotifications();
@@ -77,11 +79,26 @@ public class NotificationController {
         // Handle button actions
         acceptButton.setOnAction(event -> handleAccept());
         rejectButton.setOnAction(event -> handleReject());
+        notificationsThread notificationsTh = new notificationsThread();
+        notificationsTh.start();
+
+    }
+    public void updateNotifications() {
+        System.out.println("updated");
+        loadPostNotifications();
+        loadFriendNotifications();
+        loadGroupNotifications();
+
+        // Set list views
+        updatePostListView();
+        updateFriendRequestListView();
     }
 
     private void loadPostNotifications() {
 
         JSONArray notifications = postNotification.getNotification();
+        JSONArray commentsNotifications = commentNotifications.getNotification();
+        JSONArray likesNotifications = likeNotifications.getNotification();
         System.out.println("Notifications: " + notifications);
         postNotificationList = new JSONArray();
 
@@ -96,7 +113,36 @@ public class NotificationController {
             postNotificationJson.put("notification", displayText);
             postNotificationList.put(postNotificationJson);
         }
+        for(int i = 0; i < commentsNotifications.length(); i++) {
+            JSONObject notification = commentsNotifications.getJSONObject(i);
+            String author = notification.optString("authorId");
+            String contentId = notification.optString("contentId");
+            String timestamp = notification.optString("timestamp");
+            String authorName = friendShip.getUserRepository().getUsernameByUserId(author);
+            if(author.equals(currentUserId)) {
+                continue;
+            }
+            String displayText = authorName + " commented on the post of Id : " + contentId + " @: " + timestamp;
+            JSONObject postNotificationJson = new JSONObject();
+            postNotificationJson.put("notification", displayText);
+            postNotificationList.put(postNotificationJson);
+        }
+        for(int i = 0; i < likesNotifications.length(); i++) {
+            JSONObject notification = likesNotifications.getJSONObject(i);
+            String author = notification.optString("authorId");
+            String contentId = notification.optString("contentId");
+            String timestamp = notification.optString("timestamp");
+            String authorName = friendShip.getUserRepository().getUsernameByUserId(author);
+            if(author.equals(currentUserId)) {
+                continue;
+            }
+            String displayText = authorName + " liked the post of Id : " + contentId + " @: " + timestamp;
+            JSONObject postNotificationJson = new JSONObject();
+            postNotificationJson.put("notification", displayText);
+            postNotificationList.put(postNotificationJson);
+        }
         updatePostListView();
+
     }
 
     private void loadGroupNotifications() {
