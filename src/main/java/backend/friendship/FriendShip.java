@@ -1,11 +1,16 @@
 package backend.friendship;
 
+import backend.notifications.FriendNotifications;
+import backend.notifications.ILoadNotifications;
+import backend.notifications.LoadNotifications;
 import backend.user.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class FriendShip {
     Validation validation;
@@ -49,7 +54,10 @@ public class FriendShip {
     }
     public void addFriend(String userId1, String username) {
         JSONObject user = userRepository.findUserByUsername(username);
+        ILoadNotifications loadNotifications = new LoadNotifications();
+        FriendNotifications friendNotifications = new FriendNotifications(loadNotifications);
         String userId2 = user.getString("userId");
+        friendNotifications.createNotifications(userId1,userId2,getCurrentTimestamp());
         JSONObject FriendShip = new JSONObject();
         FriendShip.put("userId1", userId1);
         FriendShip.put("userId2", userId2);
@@ -66,6 +74,11 @@ public class FriendShip {
             e.printStackTrace();
         }
 
+    }
+    public static String getCurrentTimestamp() {
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+        return now.format(formatter);
     }
 
     public void acceptFriend(String userId1, String username) {

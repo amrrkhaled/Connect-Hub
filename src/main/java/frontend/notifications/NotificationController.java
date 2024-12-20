@@ -33,7 +33,7 @@ public class NotificationController {
     public FriendShip friendShip = FriendShipFactory.createFriendShip();
     public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
     public FriendRequestService service = factory.createFriendRequestService();
-   @FXML
+    @FXML
     public ListView groupList;
 
     @FXML
@@ -78,6 +78,7 @@ public class NotificationController {
         acceptButton.setOnAction(event -> handleAccept());
         rejectButton.setOnAction(event -> handleReject());
     }
+
     private void loadPostNotifications() {
 
         JSONArray notifications = postNotification.getNotification();
@@ -89,15 +90,16 @@ public class NotificationController {
             String author = notification.optString("authorId");
             String content = notification.optString("contentId");
             String timestamp = notification.optString("timestamp");
-            String authorName=friendShip.getUserRepository().getUsernameByUserId(author);
+            String authorName = friendShip.getUserRepository().getUsernameByUserId(author);
 
-            String displayText = authorName + " posted "+ content+ " @: "+ timestamp;
+            String displayText = authorName + " posted " + content + " @: " + timestamp;
             JSONObject postNotificationJson = new JSONObject();
             postNotificationJson.put("notification", displayText);
             postNotificationList.put(postNotificationJson);
         }
-   updatePostListView();
+        updatePostListView();
     }
+
     private void loadGroupNotifications() {
         JSONArray notifications = groupNotifications.getNotification();
         List<String> groupNot = new ArrayList<>();
@@ -114,61 +116,11 @@ public class NotificationController {
 
 
     private void loadFriendNotifications() {
-        ILoadNotifications loadNotifications = LoadNotifications.getInstance();
-        // Load the existing notifications from the database
-        JSONArray notifications = loadNotifications.LoadNotification("data/FriendNotifications.json");
-        // Initialize friendNotificationsList with existing notifications
-        friendNotificationsList = new JSONArray(notifications.toString());
-        // Load new friend requests (usernames)
-        List<String> friendRequestsList = service.getFriendRequests(currentUserId);
-        System.out.println("Friend Requests: " + friendRequestsList);
-
-        // Remove outdated notifications
-        for (int i = 0; i < friendNotificationsList.length(); i++) {
-            JSONObject existingNotification = friendNotificationsList.getJSONObject(i);
-            String existingNotificationText = existingNotification.optString("notification", "");
-
-            // Extract username from notification text (e.g., "Request from: username")
-            String usernameInNotification = existingNotificationText.replace("Request from: ", "").trim();
-
-            // If the username is not in the friend request list, remove the notification
-            if (!friendRequestsList.contains(usernameInNotification)) {
-                friendNotificationsList.remove(i);
-                i--; // Adjust index after removal
-            }
-        }
-
-        // Add any new friend requests to the notification list if not already present
-        for (String username : friendRequestsList) {
-            boolean isAlreadyNotified = false;
-
-            // Check if the request (username) is already present in the notification list
-            for (int i = 0; i < friendNotificationsList.length(); i++) {
-                JSONObject existingNotification = friendNotificationsList.getJSONObject(i);
-                String existingNotificationText = existingNotification.optString("notification", "");
-
-                // Check if the notification already contains this username
-                if (existingNotificationText.contains(username)) {
-                    isAlreadyNotified = true;
-                    break;
-                }
-            }
-
-            // If the request is not in the notification list, add it
-            if (!isAlreadyNotified) {
-                String displayText = "Request from: " + username;
-
-                // Use createNotifications to add the new notification to the system
-                ILoadUsers loadUsers = LoadUsers.getInstance();
-                IUserRepository userRepository = UserRepository.getInstance(loadUsers);
-                String senderId = userRepository.findUserIdByUsername(username);
-                friendNotifications.createNotifications(displayText, senderId, currentUserId, getCurrentTimestamp());
-            }
-        }
-
+        ILoadNotifications loader = LoadNotifications.getInstance();
+        FriendNotifications friendNotifications = new FriendNotifications(loader);
+        friendNotificationsList = friendNotifications.getNotificationsForUser(currentUserId);
         // Log the updated list
         System.out.println("Updated Notifications: " + friendNotificationsList);
-
         // Update the ListView
         updateFriendRequestListView();
     }
@@ -185,9 +137,9 @@ public class NotificationController {
         ILoadNotifications loadNotifications = LoadNotifications.getInstance();
         if (selectedRequest != null) {
             try {
-
-                String sender = selectedRequest.replace("Request from: ", "").trim(); // "Request from: sender"
-
+                String trimmedMessage = selectedRequest.trim();  // "mohamed has sent a friend request for you."
+                String[] parts = trimmedMessage.split(" has sent a friend request for you.");
+                String sender = parts[0].trim();
                 // Find user ID by username
                 String newFriendId = friendShip.getUserRepository().findUserIdByUsername(sender);
                 System.out.println(sender);
@@ -195,8 +147,8 @@ public class NotificationController {
                     // Accept the friend request
                     friendShip.acceptFriend(currentUserId, sender);
                     // Remove the request from the friend notifications list
-                    removeRequestFromJSONArray(sender);
-
+                    String senderId = friendShip.getUserRepository().findUserIdByUsername(sender);
+                    removeRequestFromJSONArray(senderId);
                     // Save the updated notifications list
                     loadNotifications.saveNotification(friendNotificationsList, "data/FriendNotifications.json");
 
@@ -219,13 +171,14 @@ public class NotificationController {
 
         if (selectedRequest != null) {
             try {
-
-                String sender = selectedRequest.replace("Request from: ", "").trim();
+                String trimmedMessage = selectedRequest.trim();  // "mohamed has sent a friend request for you."
+                String[] parts = trimmedMessage.split(" has sent a friend request for you.");
+                String sender = parts[0].trim();
                 showAlert("Rejected", "You rejected a friend request from: " + sender);
                 friendShip.removeFriend(currentUserId, sender);
                 // Remove the rejected request from the JSONArray
-                removeRequestFromJSONArray(sender);
-
+                String senderId = friendShip.getUserRepository().findUserIdByUsername(sender);
+                removeRequestFromJSONArray(senderId);
                 // Refresh the ListView with the updated list
                 updateFriendRequestListView();
 
@@ -237,15 +190,14 @@ public class NotificationController {
         }
     }
 
-    private void removeRequestFromJSONArray(String sender) {
+    private void removeRequestFromJSONArray(String senderId) {
         for (int i = 0; i < friendNotificationsList.length(); i++) {
             JSONObject request = friendNotificationsList.getJSONObject(i);
-            String requestString = request.optString("notification");
-            if (requestString != null && requestString.contains(sender)) {
+            if (request.getString("senderId").equals(senderId)) {
                 friendNotificationsList.remove(i);
+                friendNotifications.removeNotification(currentUserId, senderId);
                 break;
             }
-
         }
     }
 
@@ -265,10 +217,13 @@ public class NotificationController {
         // Clear and update the ListView with the new list of friend notifications
         requestList.getItems().clear();
         for (int i = 0; i < friendNotificationsList.length(); i++) {
-            JSONObject friendNotificationJson = friendNotificationsList.getJSONObject(i);
-            String notification = friendNotificationJson.optString("notification");
-            if (notification != null) {
-                requestList.getItems().add(notification);
+            JSONObject friendNotificationJ = friendNotificationsList.getJSONObject(i);
+            String senderId = friendNotificationJ.getString("senderId");
+            IUserRepository userRepository = friendShip.getUserRepository();
+            String usernameOfUserId = userRepository.getUsernameByUserId(senderId);
+            String message = usernameOfUserId + " has sent a friend request for you.";
+            if (message != null) {
+                requestList.getItems().add(message);
             }
         }
     }

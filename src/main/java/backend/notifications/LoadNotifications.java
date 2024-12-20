@@ -42,12 +42,48 @@ public class LoadNotifications implements ILoadNotifications{
         }
     }
     @Override
-    public void saveNotification(JSONArray content , String filePath){
 
-        try (FileWriter file = new FileWriter(filePath)) {
-            file.write(content.toString(4));
-            System.out.println("Successfully written to the file.");
+    public void saveNotification(JSONArray newContent, String filePath) {
+        File file = new File(filePath);
+
+        // Read the existing notifications
+        JSONArray existingContent = new JSONArray();
+        if (file.exists()) {
+            try (FileReader reader = new FileReader(file)) {
+                existingContent = new JSONArray(new JSONTokener(reader));
+            } catch (JSONException | IOException e) {
+                System.err.println("Error reading existing notifications: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        // Check for duplicates and merge newContent with existingContent
+        JSONArray updatedContent = new JSONArray();
+        for (int i = 0; i < newContent.length(); i++) {
+            boolean isDuplicate = false;
+            for (int j = 0; j < existingContent.length(); j++) {
+                if (newContent.getJSONObject(i).getString("notificationId")
+                        .equals(existingContent.getJSONObject(j).getString("notificationId"))) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (!isDuplicate) {
+                updatedContent.put(newContent.getJSONObject(i));
+            }
+        }
+
+        // Add all existing notifications
+        for (int i = 0; i < existingContent.length(); i++) {
+            updatedContent.put(existingContent.getJSONObject(i));
+        }
+
+        // Save the updated notifications back to the file
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write(updatedContent.toString(4)); // 4 for pretty printing
+            System.out.println("Notifications saved successfully.");
         } catch (IOException e) {
+            System.err.println("Error saving notifications: " + e.getMessage());
             e.printStackTrace();
         }
     }
