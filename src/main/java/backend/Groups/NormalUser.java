@@ -81,6 +81,7 @@ public class NormalUser {
             System.out.println("Group or user not found.");
         }
     }
+
     // Get the list of group names a user is a member of
     public List<String> getGroupsForUser(String userId) {
         JSONArray groupsMembers = storageHandler.loadDataAsArray(membersFilePath);
@@ -103,4 +104,52 @@ public class NormalUser {
 
         return userGroups;  // Return the list of group names
     }
+
+    public void addComment(String postId, String comment) {
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+
+            if (post.getString("contentId").equals(postId)) {
+                // Check if "comments" key exists and is a JSONArray
+                if (post.has("comments") && post.get("comments") instanceof JSONArray) {
+                    // Add the new comment to the existing array
+                    post.getJSONArray("comments").put(comment);
+                } else {
+                    // Create a new JSONArray with the comment
+                    JSONArray commentsArray = new JSONArray();
+                    commentsArray.put(comment);
+                    post.put("comments", commentsArray);
+                }
+                posts.put(i, post); // Update the post in the array
+                break;
+            }
+        }
+
+        storageHandler.saveDataAsArray(posts, postsFilePath);
+    }
+
+    public JSONArray getCommentsByPost(String postId) {
+        JSONArray posts = storageHandler.loadDataAsArray(postsFilePath);
+
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+
+            if (post.getString("contentId").equals(postId)) {
+                // Check if "comments" key exists and is a JSONArray
+                if (post.has("comments")) {
+                    // Add the new comment to the existing array
+                    return post.getJSONArray("comments");
+                } else {
+                    return null;
+                }
+
+
+            }
+
+        }
+        return null;
+    }
+
 }

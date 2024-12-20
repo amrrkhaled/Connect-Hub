@@ -129,4 +129,50 @@ public class Post implements IContent, IContentRepository {
         return null;
     }
 
+    public void addComment(String postId, String comment) {
+        JSONArray posts = contentFiles.loadContent(FILEPATH);
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+
+            if (post.getString("contentId").equals(postId)) {
+                // Check if "comments" key exists and is a JSONArray
+                if (post.has("comments") && post.get("comments") instanceof JSONArray) {
+                    // Add the new comment to the existing array
+                    post.getJSONArray("comments").put(comment);
+                } else {
+                    // Create a new JSONArray with the comment
+                    JSONArray commentsArray = new JSONArray();
+                    commentsArray.put(comment);
+                    post.put("comments", commentsArray);
+                }
+                posts.put(i, post); // Update the post in the array
+                break;
+            }
+        }
+
+        contentFiles.saveContent(posts, FILEPATH);
+    }
+
+    public JSONArray getCommentsById(String postId) {
+        JSONArray posts = contentFiles.loadContent(FILEPATH);
+
+        for (int i = 0; i < posts.length(); i++) {
+            JSONObject post = posts.getJSONObject(i);
+
+            if (post.getString("contentId").equals(postId)) {
+                // Check if "comments" key exists and is a JSONArray
+                if (post.has("comments")) {
+                    // Add the new comment to the existing array
+                    return post.getJSONArray("comments");
+                } else {
+                    return null;
+                }
+
+
+            }
+
+        }
+        return null;
+    }
+
 }

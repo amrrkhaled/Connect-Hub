@@ -8,13 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -29,6 +27,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AdminController extends NormalUserController {
 
@@ -46,7 +45,7 @@ public class AdminController extends NormalUserController {
 
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
     GroupManager groupManager = new GroupManager(loadGroups);
-    GeneralAdmin admin = new GeneralAdmin(loadGroups,storageHandler); // Make sure this class is properly imported and exists
+    GeneralAdmin admin = new GeneralAdmin(loadGroups, storageHandler); // Make sure this class is properly imported and exists
 
     @FXML
     public void initialize() {
@@ -67,6 +66,7 @@ public class AdminController extends NormalUserController {
             showAcceptRejectDialog(selectedRequestUserId);
         }
     }
+
     private void handleMemberClick(MouseEvent event) {
         String userName = membersListView.getSelectionModel().getSelectedItem();
         String selectedRequestUserId = friendShip.getUserRepository().findUserIdByUsername(userName);
@@ -75,6 +75,7 @@ public class AdminController extends NormalUserController {
             System.out.println("Removing user..... " + selectedRequestUserId);
         }
     }
+
     boolean isUserPrimaryAdmin(String name) {
         // Load the group details by name
         JSONObject group = loadGroups.loadGroupByName(name);
@@ -104,11 +105,13 @@ public class AdminController extends NormalUserController {
         }
         return false;
     }
+
     @FXML
     public void onRefresh() {
-       super.onRefresh();
-       loadRequests();
+        super.onRefresh();
+        loadRequests();
     }
+
     protected void showMemberDialog(String userId) {
         // Check if the user is an admin or primary member
         if ((isUserAdmin(userId) || isUserPrimaryAdmin(userId))) {
@@ -135,7 +138,6 @@ public class AdminController extends NormalUserController {
     }
 
 
-
     // Show an error dialog (for when a user is an admin or primary member)
     protected void showErrorDialog(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -144,7 +146,6 @@ public class AdminController extends NormalUserController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
 
 
     private void showAcceptRejectDialog(String userId) {
@@ -157,10 +158,10 @@ public class AdminController extends NormalUserController {
         // Show accept and reject buttons
         dialog.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                facade.handleMemberJoinRequest(GROUPNAME, userId,true); // Accept request
+                facade.handleMemberJoinRequest(GROUPNAME, userId, true); // Accept request
                 showInfoDialog("Request Accepted", "User " + userId + " has been added to the group.");
             } else if (response == javafx.scene.control.ButtonType.CANCEL) {
-                facade.handleMemberJoinRequest(GROUPNAME, userId,false);
+                facade.handleMemberJoinRequest(GROUPNAME, userId, false);
                 showInfoDialog("Request Rejected", "User " + userId + "'s request has been rejected.");
             }
         });
@@ -208,54 +209,40 @@ public class AdminController extends NormalUserController {
         requestsListView.getItems().clear(); // Clear existing items
         requestsListView.getItems().addAll(requestsUserNames); // Add new requests
     }
-    @Override
-    protected void loadPosts(String name) {
-        // Creating a mock JSONArray
-        JSONArray allPosts = storageHandler.loadDataAsArray(postsFilePath);  // Load the JSON array
-        JSONArray posts = new JSONArray();
-        for (int i = 0; i < allPosts.length(); i++) {
-            JSONObject post = allPosts.getJSONObject(i);  // Get each post
 
-            // Check if the post's "groupName" matches the given name
+    protected void loadPosts(String name) {
+        JSONArray allPosts = storageHandler.loadDataAsArray(postsFilePath);
+        JSONArray posts = new JSONArray();
+
+        for (int i = 0; i < allPosts.length(); i++) {
+            JSONObject post = allPosts.getJSONObject(i);
             if (post.getString("groupName").equals(name)) {
-                posts.put(post);  // Add the post to the filteredPosts JSONArray
+                posts.put(post);
             }
         }
-        // Iterate over the posts JSONArray
+
         for (int i = 0; i < posts.length(); i++) {
-            JSONObject post = posts.getJSONObject(i);  // Get each post
+            JSONObject post = posts.getJSONObject(i);
 
             VBox postBox = new VBox();
             postBox.setSpacing(10);
+            postBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 10px; -fx-padding: 15px; -fx-background-color: #f9f9f9;");
 
-            // Add content (caption)
-
+            // Add author
             String authorId = post.optString("authorId", "");
             String author = friendShip.getUserRepository().getUsernameByUserId(authorId);
 
             if (!author.isEmpty()) {
                 Label authorLabel = new Label("Author: " + author);
-
-                // Apply enhanced styles
-                authorLabel.setStyle("-fx-font-size: 12px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-text-fill: #3b5998; " +
-                        "-fx-background-color: #e7f3ff; " +
-                        "-fx-border-radius: 5px; " +
-                        "-fx-padding: 8px 15px; " +
-                        "-fx-border-color: #a1c4e9; " +
-                        "-fx-border-width: 1px; " +
-                        "-fx-background-insets: 0, 1;");
-
-                authorLabel.setEffect(new javafx.scene.effect.DropShadow(5, Color.GRAY));
-
+                authorLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #3b5998;");
                 postBox.getChildren().add(authorLabel);
             }
 
+            // Add content
             String content = post.optString("content", "");
             if (!content.isEmpty()) {
                 Text postText = new Text(content);
-                postText.setStyle("-fx-font-size: 14px;");
+                postText.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
                 postBox.getChildren().add(postText);
             }
 
@@ -264,11 +251,10 @@ public class AdminController extends NormalUserController {
             if (images != null) {
                 HBox imageContainer = new HBox();
                 imageContainer.setSpacing(10);
-                imageContainer.setStyle("-fx-padding: 10;");
 
                 for (int j = 0; j < images.length(); j++) {
-                    String imagePath = images.getString(j); // Get the image path
-                    if (super.isFileValid(imagePath)) {
+                    String imagePath = images.getString(j);
+                    if (isFileValid(imagePath)) {
                         Image image = new Image("file:" + imagePath.trim());
                         ImageView imageView = new ImageView(image);
                         imageView.setFitWidth(200);
@@ -281,38 +267,111 @@ public class AdminController extends NormalUserController {
 
                 postBox.getChildren().add(imageContainer);
             }
+
+            // Add timestamp
             String time = post.optString("timestamp", "");
             if (!time.isEmpty()) {
-                // Create a Label for the time
                 Label timeLabel = new Label(time);
-
-                // Style the Label for a distinct look
-                timeLabel.setStyle("-fx-font-size: 12px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-text-fill: #555555; " +
-                        "-fx-background-color: #f2f2f2; " +  // Light background
-                        "-fx-border-radius: 5px; " +           // Rounded corners
-                        "-fx-padding: 5px 10px; " +            // Padding inside the label
-                        "-fx-border-color: #dddddd; " +        // Border color
-                        "-fx-border-width: 1px;");             // Border width
-
-                // Optional: Add a subtle shadow effect
-                timeLabel.setEffect(new javafx.scene.effect.DropShadow(10, Color.GRAY));
-
-                // Add the styled time label to the postBox
+                timeLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #555;");
                 postBox.getChildren().add(timeLabel);
             }
 
+            // Add Like/Unlike Button
+            JSONArray likedBy = post.optJSONArray("likedBy");
+            if (likedBy == null) {
+                likedBy = new JSONArray();
+                post.put("likedBy", likedBy);
+            }
+
+            // Use AtomicBoolean to track if the current user liked the post
+            AtomicBoolean userLiked = new AtomicBoolean(likedBy.toList().contains(userId));
+
+            Label likesLabel = new Label("Likes: " + likedBy.length());
+            likesLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+
+            Button likeButton = new Button(userLiked.get() ? "Unlike" : "Like");
+            likeButton.setStyle("-fx-font-size: 12px; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-padding: 5 10;");
+            JSONArray finalLikedBy = likedBy;
+            likeButton.setOnAction(event -> {
+                if (userLiked.get()) {
+                    // Remove user's like
+                    for (int j = 0; j < finalLikedBy.length(); j++) {
+                        if (finalLikedBy.getString(j).equals(userId)) {
+                            finalLikedBy.remove(j);
+                            break;
+                        }
+                    }
+                    userLiked.set(false);
+                } else {
+                    // Add user's like
+                    finalLikedBy.put(userId);
+                    userLiked.set(true);
+                }
+
+                // Update the like button and label
+                likeButton.setText(userLiked.get() ? "Unlike" : "Like");
+                likesLabel.setText("Likes: " + finalLikedBy.length());
+
+                // Save updated likes to the backend
+                storageHandler.saveDataAsArray(allPosts, postsFilePath);
+            });
+
+            HBox likeBox = new HBox(10, likeButton, likesLabel);
+            likeBox.setAlignment(Pos.CENTER_LEFT);
+            postBox.getChildren().add(likeBox);
+
+            // Add Comment Section
+            TextField commentField = new TextField();
+            commentField.setPromptText("Write a comment...");
+            Button addCommentButton = new Button("Add Comment");
+
+            addCommentButton.setOnAction(event -> {
+                String comment = commentField.getText();
+                if (!comment.isEmpty()) {
+                    facade.addCommentToPost(post.getString("contentId"), comment);
+                    commentField.clear();
+                    System.out.println("Comment added to post: " + comment);
+                }
+            });
+
+            Button viewCommentsButton = new Button("View Comments");
+            viewCommentsButton.setOnAction(event -> {
+                JSONArray comments = facade.getCommentsByPost(post.getString("contentId"));
+
+                VBox commentsBox = new VBox();
+                commentsBox.setSpacing(5);
+
+                for (int j = 0; j < comments.length(); j++) {
+                    String comment = comments.getString(j);
+                    Label commentLabel = new Label(comment);
+                    commentLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333;");
+                    commentsBox.getChildren().add(commentLabel);
+                }
+
+                Stage commentsStage = new Stage();
+                commentsStage.setTitle("Comments");
+
+                ScrollPane scrollPane = new ScrollPane(commentsBox);
+                scrollPane.setFitToWidth(true);
+
+                Scene scene = new Scene(scrollPane, 300, 400);
+                commentsStage.setScene(scene);
+                commentsStage.show();
+            });
+
+            HBox commentBox = new HBox(10, commentField, addCommentButton, viewCommentsButton);
+            postBox.getChildren().add(commentBox);
             postBox.setOnMouseClicked(event -> {
                 // Action when post is clicked, for example, print the postId
                 System.out.println("Post clicked: " + post.optString("contentId"));
 
-               showEditDeleteDialog(post);
+                showEditDeleteDialog(post);
             });
             // Add the post box to the posts list view
             postsListView.getItems().add(postBox);
         }
     }
+
 
     private void showEditDeleteDialog(JSONObject post) {
         String postId = post.optString("contentId", "");  // Get the post ID
@@ -329,7 +388,7 @@ public class AdminController extends NormalUserController {
                 // Handle Edit action
                 System.out.println("Editing post: " + postId);
                 // Open an edit view or trigger edit logic
-               navigateToEditPost(postId);
+                navigateToEditPost(postId);
             } else if ("Delete".equals(action)) {
                 // Handle Delete action
                 System.out.println("Deleting post: " + postId);
@@ -339,21 +398,20 @@ public class AdminController extends NormalUserController {
             }
         });
     }
+
     public void navigateToEditPost(String postId) {
         try {
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/editPost.fxml"));
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) requestsListView.getScene().getWindow();
+            Stage currentStage = (Stage) requestsListView.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
             editPostController.setPostId(postId);
             // Set new scene and show the stage
             currentStage.setScene(loginScene);
             currentStage.setTitle("Edit Post");
             currentStage.show();
-
-
 
 
         } catch (IOException e) {

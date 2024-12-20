@@ -1,5 +1,32 @@
-[{
-    "contentId": "P1",
-    "authorId": "U2",
-    "timestamp": "2024-12-13 23:18:20"
-}]
+[
+    {
+        "contentId": "P1",
+        "authorId": "U2",
+        "timestamp": "2024-12-13 23:18:20"
+    },
+    {
+        "contentId": "P1",
+        "authorId": "U1",
+        "timestamp": "2024-12-19 17:43:03"
+    },
+    {
+        "contentId": "P2",
+        "authorId": "U1",
+        "timestamp": "2024-12-19 19:54:44"
+    },
+    {
+        "contentId": "P3",
+        "authorId": "U1",
+        "timestamp": "2024-12-19 19:56:58"
+    },
+    {
+        "contentId": "P4",
+        "authorId": "U1",
+        "timestamp": "2024-12-19 19:59:45"
+    },
+    {
+        "contentId": "P4",
+        "authorId": "U1",
+        "timestamp": "2024-12-20 02:11:51"
+    }
+]

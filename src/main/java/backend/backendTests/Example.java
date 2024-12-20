@@ -1,5 +1,8 @@
+package backend.backendTests;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.Arrays;
 
 public class Example {
@@ -12,7 +15,12 @@ public class Example {
         // Add the JSONArray to the JSONObject
         sameh.put("numbers", numbersArray);
 
-        // Print the JSON object
-        System.out.println(sameh.toString());
+        System.out.println(sameh);
+
+        JSONArray samehArray = sameh.getJSONArray("numbers");
+        samehArray.remove(1);
+
+        System.out.println(sameh);
+
     }
 }
