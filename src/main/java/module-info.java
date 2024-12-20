@@ -8,6 +8,8 @@ module com.example.connecthub {
     requires java.base;
     opens frontend to javafx.fxml;
     exports frontend;
+    exports backend.chatManagement;
+    exports backend.user;
 
 
 
@@ -16,6 +18,9 @@ module com.example.connecthub {
 
     exports frontend.friendshipManagement;
     opens frontend.friendshipManagement to javafx.fxml;
+
+    exports frontend.chatManagement;
+    opens frontend.chatManagement to javafx.fxml;
 
     exports frontend.groupManagement;
     opens frontend.groupManagement to javafx.fxml;

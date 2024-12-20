@@ -530,6 +530,24 @@ public class FeedController {
         }
     }
 
+    public void onMessages(ActionEvent event) {
+        try {
+            Parent MessagesPage = FXMLLoader.load(getClass().getResource("/frontend/messages.fxml"));
+            Scene MessagesScene = new Scene(MessagesPage);
+
+            // Get current stage
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
+
+            // Set new scene and show the stage
+            currentStage.setScene(MessagesScene);
+            currentStage.setTitle("Messages");
+            currentStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void onFriends(ActionEvent event) {
 
         try {

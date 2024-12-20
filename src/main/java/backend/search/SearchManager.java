@@ -61,7 +61,6 @@ public class SearchManager implements IUserSearch, IGroupSearch {
         return matchingGroups;
     }
 
-
     @Override
     public String addFriend(String userId, String friendId) {
         friendShip.addFriend(userId, friendId);

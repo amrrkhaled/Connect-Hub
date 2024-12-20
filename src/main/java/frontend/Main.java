@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("signup.fxml"));
@@ -22,7 +21,6 @@ public class Main extends Application {
             System.out.println("Program is closing, shutting down...");
             System.exit(0);
         });
-
         primaryStage.show();
     }
 
@@ -37,9 +35,6 @@ public class Main extends Application {
 
         launch(args);
         // Keep the main program running if necessary (for example, using a loop)
-
-
-
 
     }
 }

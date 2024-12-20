@@ -1,5 +1,22 @@
-[{
-    "contentId": "P1",
-    "authorId": "U2",
-    "timestamp": "2024-12-13 23:18:20"
-}]
+[
+    {
+        "contentId": "P1",
+        "authorId": "U2",
+        "timestamp": "2024-12-13 23:18:20"
+    },
+    {
+        "contentId": "P2",
+        "authorId": "U3",
+        "timestamp": "2024-12-18 02:08:14"
+    },
+    {
+        "contentId": "P3",
+        "authorId": "U1",
+        "timestamp": "2024-12-18 02:39:34"
+    },
+    {
+        "contentId": "P4",
+        "authorId": "U6",
+        "timestamp": "2024-12-18 11:50:56"
+    }
+]

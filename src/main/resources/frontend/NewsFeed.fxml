@@ -18,6 +18,7 @@
          <Button onAction="#onProfile" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Profile" />
          <Button onAction="#onFriends" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Friends" />
          <Button onAction="#navigateToNotifications" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Notifications" />
+         <Button onAction="#onMessages" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Messages" />
          <Button onAction="#onLogout" style="-fx-text-fill: white; -fx-background-color: transparent; -fx-font-size: 14.0; -fx-font-weight: bold;" text="Logout" />
          <Region HBox.hgrow="ALWAYS" />
          <TextField fx:id="searchBar" promptText="Search users or groups" style="-fx-pref-width: 200; -fx-background-radius: 5; -fx-border-radius: 5;" />

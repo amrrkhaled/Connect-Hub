@@ -30,7 +30,7 @@
         "ProfilePicture": "images\\I5.png"
     },
     {
-        "Bio": "",
+        "Bio": "xfsdgsgsrg",
         "userId": "U3",
         "ProfilePicture": "images\\I7.jpg"
     },
@@ -47,6 +47,11 @@
     {
         "Bio": "",
         "userId": "U5",
+        "ProfilePicture": "images/defualtPp.jpg"
+    },
+    {
+        "Bio": "",
+        "userId": "U6",
         "ProfilePicture": "images/defualtPp.jpg"
     }
 ]
