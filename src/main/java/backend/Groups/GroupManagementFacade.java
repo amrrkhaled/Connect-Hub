@@ -1,6 +1,8 @@
 package backend.Groups;
 
 
+import org.json.JSONArray;
+
 import java.util.List;
 
 public class GroupManagementFacade {
@@ -30,6 +32,7 @@ public class GroupManagementFacade {
     public void addPost(String groupName, String authorId, String content, String timestamp, List<String> images) {
         normalUser.addPost(groupName, authorId, content, timestamp, images);
     }
+
     public void deletePost(String postId) {
         generalAdmin.deletePost(postId);
     }
@@ -48,6 +51,14 @@ public class GroupManagementFacade {
 
     public void updateGroupDescription(String groupName, String description) {
         primaryAdmin.updateDescription(groupName, description);
+    }
+
+    public void addCommentToPost(String postId, String comment) {
+        normalUser.addComment(postId, comment);
+    }
+
+    public JSONArray getCommentsByPost(String postId) {
+        return normalUser.getCommentsByPost(postId);
     }
 
     public void removeAdminFromGroup(String groupName, String userId) {

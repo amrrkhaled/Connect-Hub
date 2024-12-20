@@ -10,13 +10,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -31,6 +29,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class NormalUserController {
 
@@ -53,7 +53,7 @@ public class NormalUserController {
     private final String postsFilePath = "data/groupsPosts.json";
     private final String membersFilePath = "data/group_members.json";
     private final String groupsFilePath = "data/groups.json";
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    public FriendShip friendShip = FriendShipFactory.createFriendShip();
     public String GROUPNAME = Group.getGroupName();
     IStorageHandler storageHandler = new StorageHandler();
 
@@ -64,6 +64,7 @@ public class NormalUserController {
 
     // Create facade instance
     GroupManagementFacade facade = new GroupManagementFacade(loadGroups, storageHandler);
+
     @FXML
     public void initialize() {
         loadPosts(GROUPNAME);
@@ -73,17 +74,16 @@ public class NormalUserController {
     }
 
 
-
-    public void loadGroupInfo(String name){
+    public void loadGroupInfo(String name) {
         JSONArray Groups = storageHandler.loadDataAsArray(groupsFilePath);  // Load the JSON array
         for (int i = 0; i < Groups.length(); i++) {
             JSONObject group = Groups.getJSONObject(i);
-            String image=null;
+            String image = null;
             // Check if the group name matches the one passed as a parameter
             if (group.getString("groupName").equals(name)) {
                 String description = group.getString("description");
-                if(group.has("groupImage"))
-                image = group.getString("groupImage");
+                if (group.has("groupImage"))
+                    image = group.getString("groupImage");
                 System.out.println(image);
                 // Set the group image to the ImageView (if the image exists)
                 if (image != null && !image.isEmpty()) {
@@ -92,95 +92,83 @@ public class NormalUserController {
                     groupPhoto.setImage(new Image("file:" + image)); // Use setImage instead of creating a new ImageView
                 }
                 // Set the group description to the TextArea
-               groupDescription.setText(description);
+                groupDescription.setText(description);
             }
         }
     }
-  private void loadMembersList(String name){
 
-      JSONArray myGroups = storageHandler.loadDataAsArray(membersFilePath);  // Load the JSON array
-      List<String> groupMembers = new ArrayList<>();  // Initialize an empty list for group members
+    private void loadMembersList(String name) {
 
-      for (int i = 0; i < myGroups.length(); i++) {
-          JSONObject myGroup = myGroups.getJSONObject(i);  // Get the current group object
-          // Check if the group name matches the one we're looking for
-          if (myGroup.getString("groupName").equals(name)) {
+        JSONArray myGroups = storageHandler.loadDataAsArray(membersFilePath);  // Load the JSON array
+        List<String> groupMembers = new ArrayList<>();  // Initialize an empty list for group members
 
-              // Get the "members" array from the group
-              JSONArray members = myGroup.optJSONArray("members");
+        for (int i = 0; i < myGroups.length(); i++) {
+            JSONObject myGroup = myGroups.getJSONObject(i);  // Get the current group object
+            // Check if the group name matches the one we're looking for
+            if (myGroup.getString("groupName").equals(name)) {
 
-              // If members is not null and is a JSONArray, process it
-              if (members != null) {
-                  // Iterate through the members array, which contains the user IDs
-                  for (int j = 0; j < members.length(); j++) {
-                      String memberId = members.optString(j);  // Retrieve the userId (assuming it's a string)
-                      if (memberId != null && !memberId.isEmpty() && !memberId.equals(userId)) {
-                          System.out.println(userId + memberId);
-                          String userName = friendShip.getUserRepository().getUsernameByUserId(memberId);
-                          groupMembers.add(userName);  // Add the member's ID to the list
-                      }
-                  }
-              }
-          break;
-          }
-      }
-      membersListView.getItems().clear(); // Clear existing items (if any)
-      membersListView.getItems().addAll(groupMembers); // Add all friends from the array
-  }
+                // Get the "members" array from the group
+                JSONArray members = myGroup.optJSONArray("members");
 
+                // If members is not null and is a JSONArray, process it
+                if (members != null) {
+                    // Iterate through the members array, which contains the user IDs
+                    for (int j = 0; j < members.length(); j++) {
+                        String memberId = members.optString(j);  // Retrieve the userId (assuming it's a string)
+                        if (memberId != null && !memberId.isEmpty() && !memberId.equals(userId)) {
+                            System.out.println(userId + memberId);
+                            String userName = friendShip.getUserRepository().getUsernameByUserId(memberId);
+                            groupMembers.add(userName);  // Add the member's ID to the list
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        membersListView.getItems().clear(); // Clear existing items (if any)
+        membersListView.getItems().addAll(groupMembers); // Add all friends from the array
+    }
 
 
     protected boolean isFileValid(String path) {
         return new File(path).exists();
     }
 
-    protected void  loadPosts(String name) {
-        // Creating a mock JSONArray
-        JSONArray allPosts = storageHandler.loadDataAsArray(postsFilePath);  // Load the JSON array
-        JSONArray posts = new JSONArray();
-        for (int i = 0; i < allPosts.length(); i++) {
-            JSONObject post = allPosts.getJSONObject(i);  // Get each post
 
-            // Check if the post's "groupName" matches the given name
+    // Inside the loadPosts method
+    protected void loadPosts(String name) {
+        JSONArray allPosts = storageHandler.loadDataAsArray(postsFilePath);
+        JSONArray posts = new JSONArray();
+
+        for (int i = 0; i < allPosts.length(); i++) {
+            JSONObject post = allPosts.getJSONObject(i);
             if (post.getString("groupName").equals(name)) {
-                posts.put(post);  // Add the post to the filteredPosts JSONArray
+                posts.put(post);
             }
         }
-        // Iterate over the posts JSONArray
+
         for (int i = 0; i < posts.length(); i++) {
-            JSONObject post = posts.getJSONObject(i);  // Get each post
+            JSONObject post = posts.getJSONObject(i);
 
             VBox postBox = new VBox();
             postBox.setSpacing(10);
+            postBox.setStyle("-fx-border-color: #ccc; -fx-border-radius: 10px; -fx-padding: 15px; -fx-background-color: #f9f9f9;");
 
-            // Add content (caption)
-
+            // Add author
             String authorId = post.optString("authorId", "");
             String author = friendShip.getUserRepository().getUsernameByUserId(authorId);
 
             if (!author.isEmpty()) {
                 Label authorLabel = new Label("Author: " + author);
-
-                // Apply enhanced styles
-                authorLabel.setStyle("-fx-font-size: 12px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-text-fill: #3b5998; " +
-                        "-fx-background-color: #e7f3ff; " +
-                        "-fx-border-radius: 5px; " +
-                        "-fx-padding: 8px 15px; " +
-                        "-fx-border-color: #a1c4e9; " +
-                        "-fx-border-width: 1px; " +
-                        "-fx-background-insets: 0, 1;");
-
-                authorLabel.setEffect(new javafx.scene.effect.DropShadow(5, Color.GRAY));
-
+                authorLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #3b5998;");
                 postBox.getChildren().add(authorLabel);
             }
 
+            // Add content
             String content = post.optString("content", "");
             if (!content.isEmpty()) {
                 Text postText = new Text(content);
-                postText.setStyle("-fx-font-size: 14px;");
+                postText.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
                 postBox.getChildren().add(postText);
             }
 
@@ -189,10 +177,9 @@ public class NormalUserController {
             if (images != null) {
                 HBox imageContainer = new HBox();
                 imageContainer.setSpacing(10);
-                imageContainer.setStyle("-fx-padding: 10;");
 
                 for (int j = 0; j < images.length(); j++) {
-                    String imagePath = images.getString(j); // Get the image path
+                    String imagePath = images.getString(j);
                     if (isFileValid(imagePath)) {
                         Image image = new Image("file:" + imagePath.trim());
                         ImageView imageView = new ImageView(image);
@@ -206,33 +193,107 @@ public class NormalUserController {
 
                 postBox.getChildren().add(imageContainer);
             }
+
+            // Add timestamp
             String time = post.optString("timestamp", "");
             if (!time.isEmpty()) {
-                // Create a Label for the time
                 Label timeLabel = new Label(time);
-
-                // Style the Label for a distinct look
-                timeLabel.setStyle("-fx-font-size: 12px; " +
-                        "-fx-font-weight: bold; " +
-                        "-fx-text-fill: #555555; " +
-                        "-fx-background-color: #f2f2f2; " +  // Light background
-                        "-fx-border-radius: 5px; " +           // Rounded corners
-                        "-fx-padding: 5px 10px; " +            // Padding inside the label
-                        "-fx-border-color: #dddddd; " +        // Border color
-                        "-fx-border-width: 1px;");             // Border width
-
-                // Optional: Add a subtle shadow effect
-                timeLabel.setEffect(new javafx.scene.effect.DropShadow(10, Color.GRAY));
-
-                // Add the styled time label to the postBox
+                timeLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #555;");
                 postBox.getChildren().add(timeLabel);
             }
 
+            // Add Like/Unlike Button
+            JSONArray likedBy = post.optJSONArray("likedBy");
+            if (likedBy == null) {
+                likedBy = new JSONArray();
+                post.put("likedBy", likedBy);
+            }
+
+            // Use AtomicBoolean to track if the current user liked the post
+            AtomicBoolean userLiked = new AtomicBoolean(likedBy.toList().contains(userId));
+
+            Label likesLabel = new Label("Likes: " + likedBy.length());
+            likesLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+
+            Button likeButton = new Button(userLiked.get() ? "Unlike" : "Like");
+            likeButton.setStyle("-fx-font-size: 12px; -fx-background-color: #3b5998; -fx-text-fill: white; -fx-padding: 5 10;");
+            JSONArray finalLikedBy = likedBy;
+            likeButton.setOnAction(event -> {
+                if (userLiked.get()) {
+                    // Remove user's like
+                    for (int j = 0; j < finalLikedBy.length(); j++) {
+                        if (finalLikedBy.getString(j).equals(userId)) {
+                            finalLikedBy.remove(j);
+                            break;
+                        }
+                    }
+                    userLiked.set(false);
+                } else {
+                    // Add user's like
+                    finalLikedBy.put(userId);
+                    userLiked.set(true);
+                }
+
+                // Update the like button and label
+                likeButton.setText(userLiked.get() ? "Unlike" : "Like");
+                likesLabel.setText("Likes: " + finalLikedBy.length());
+
+                // Save updated likes to the backend
+                storageHandler.saveDataAsArray(allPosts, postsFilePath);
+            });
+
+            HBox likeBox = new HBox(10, likeButton, likesLabel);
+            likeBox.setAlignment(Pos.CENTER_LEFT);
+            postBox.getChildren().add(likeBox);
+
+            // Add Comment Section
+            TextField commentField = new TextField();
+            commentField.setPromptText("Write a comment...");
+            Button addCommentButton = new Button("Add Comment");
+
+            addCommentButton.setOnAction(event -> {
+                String comment = commentField.getText();
+                if (!comment.isEmpty()) {
+                    facade.addCommentToPost(post.getString("contentId"), comment);
+                    commentField.clear();
+                    System.out.println("Comment added to post: " + comment);
+                }
+            });
+
+            Button viewCommentsButton = new Button("View Comments");
+            viewCommentsButton.setOnAction(event -> {
+                JSONArray comments = facade.getCommentsByPost(post.getString("contentId"));
+                if (comments != null) {
+                    VBox commentsBox = new VBox();
+                    commentsBox.setSpacing(5);
+
+                    for (int j = 0; j < comments.length(); j++) {
+                        String comment = comments.getString(j);
+                        Label commentLabel = new Label(comment);
+                        commentLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #333;");
+                        commentsBox.getChildren().add(commentLabel);
+                    }
+
+                    Stage commentsStage = new Stage();
+                    commentsStage.setTitle("Comments");
+
+                    ScrollPane scrollPane = new ScrollPane(commentsBox);
+                    scrollPane.setFitToWidth(true);
+
+                    Scene scene = new Scene(scrollPane, 300, 400);
+                    commentsStage.setScene(scene);
+                    commentsStage.show();
+                }
+            });
+
+            HBox commentBox = new HBox(10, commentField, addCommentButton, viewCommentsButton);
+            postBox.getChildren().add(commentBox);
 
             // Add the post box to the posts list view
             postsListView.getItems().add(postBox);
         }
     }
+
 
     @FXML
     private void onCreatePost() {
@@ -270,8 +331,8 @@ public class NormalUserController {
     @FXML
     public void onLeaveGroup(ActionEvent event) {
 
-        NormalUser user = new NormalUser(loadGroups,storageHandler);
-        facade.userLeaveGroup(GROUPNAME,userId);
+        NormalUser user = new NormalUser(loadGroups, storageHandler);
+        facade.userLeaveGroup(GROUPNAME, userId);
         onNewsFeed(event);
     }
 
@@ -349,6 +410,7 @@ public class NormalUserController {
             e.printStackTrace();
         }
     }
+
     public void onNewsFeed(ActionEvent event) {
         try {
             UserManager manager = UserFactory.getInstance().createUserManager();
