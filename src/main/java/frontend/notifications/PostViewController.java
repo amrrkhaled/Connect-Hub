@@ -1,9 +1,6 @@
 package frontend.notifications;
 
-import backend.Groups.ILoadGroups;
-import backend.Groups.IStorageHandler;
-import backend.Groups.LoadGroups;
-import backend.Groups.StorageHandler;
+import backend.Groups.*;
 import backend.contentCreation.IContent;
 import backend.contentCreation.PostFactory;
 import backend.friendship.FriendShip;
@@ -48,11 +45,13 @@ public class PostViewController {
     static JSONObject post = new JSONObject();
     IStorageHandler storageHandler = new StorageHandler();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
+    private IGroupRepository groupRep = new GroupRepository(loadGroups,storageHandler);
+
 
     public void initialize() {
         String contentId = post.getString("contentId");
         String timestamp = post.getString("timestamp");
-        JSONObject postbyId = loadGroups.getPostById(contentId);
+        JSONObject postbyId = groupRep.getPostById(contentId);
         System.out.println(postbyId);
         String postText = "Content: " + postbyId.getString("content");
         String postTimestamp = "Posted at: " + postbyId.getString("timestamp");

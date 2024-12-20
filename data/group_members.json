@@ -5,6 +5,9 @@
     },
     {
         "groupName": "Math",
-        "members": ["U5"]
+        "members": [
+            "U5",
+            "U1"
+        ]
     }
 ]

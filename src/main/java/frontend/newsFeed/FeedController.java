@@ -1,12 +1,10 @@
 package frontend.newsFeed;
 
-import frontend.*;
 import backend.Groups.*;
 import backend.contentCreation.*;
 import backend.friendship.*;
 import backend.profile.*;
 import backend.user.*;
-import frontend.groupManagement.NormalUserController;
 import frontend.searchManagement.SearchController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -60,7 +58,7 @@ public class FeedController {
     @FXML
     private ScrollPane storiesScrollPane;
 
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    public FriendShip friendShip = FriendShipFactory.createFriendShip();
     private final IFriendshipService friendShipService = friendShip.getFriendshipService();
 
     public FriendRequestServiceFactory factory = FriendRequestServiceFactory.getInstance();
@@ -72,14 +70,14 @@ public class FeedController {
 
     IStorageHandler storageHandler = new StorageHandler();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
-    NormalUser user = new NormalUser(loadGroups,storageHandler);
+    NormalUser user = new NormalUser(loadGroups, storageHandler);
     // Creating instances of controllers
     GroupManager groupManager = new GroupManager(loadGroups);
     Request requestController = new Request(loadGroups, storageHandler);
 
     @FXML
     public void initialize() {
-       // suggestedGroups.setItems(FXCollections.observableArrayList("Suggested Group 1", "Suggested Group 2"));
+        // suggestedGroups.setItems(FXCollections.observableArrayList("Suggested Group 1", "Suggested Group 2"));
         loadStories();
         loadPosts();
         loadFriendsList();
@@ -91,13 +89,14 @@ public class FeedController {
 
     }
 
-    public void handleSearch(){
+    public void handleSearch() {
         String searchText = searchBar.getText().toLowerCase();
-        if (!searchText.isEmpty()){
-        SearchController.setKeyword(searchText);
-        navigateSearchPage();
+        if (!searchText.isEmpty()) {
+            SearchController.setKeyword(searchText);
+            navigateSearchPage();
         }
     }
+
     public void navigateSearchPage() {
         try {
             Parent loginPage = FXMLLoader.load(getClass().getResource("/frontend/search.fxml"));
@@ -124,24 +123,25 @@ public class FeedController {
             showRequestDialog(groupName);
         }
     }
+
     private void showRequestDialog(String groupName) {
         // Create a dialog box or alert for admin to accept or reject
         Alert dialog = new Alert(Alert.AlertType.CONFIRMATION);
         dialog.setTitle("Request Action");
-        dialog.setHeaderText("Do you want to join" + groupName +" group?");
+        dialog.setHeaderText("Do you want to join" + groupName + " group?");
 //        dialog.setContentText("User: " + userId);
 
         // Show accept and reject buttons
         dialog.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-               requestController.sendJoinRequest(groupName,userId);
-                showInfoDialog("Request","Request to join to group will be reviewed by admins");
+                requestController.sendJoinRequest(groupName, userId);
+                showInfoDialog("Request", "Request to join to group will be reviewed by admins");
             } else if (response == javafx.scene.control.ButtonType.CANCEL) {
                 return;
 
             }
         });
-      loadSuggestions();
+        loadSuggestions();
     }
 
     protected void showInfoDialog(String title, String message) {
@@ -152,6 +152,7 @@ public class FeedController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     private void loadFriendsList() {
         // Example friends array
 
@@ -163,15 +164,16 @@ public class FeedController {
 
     private void loadSuggestions() {
         // Example friends array
-       List<String> suggestions = loadGroups.loadGroupSuggestions(userId);
+        List<String> suggestions = loadGroups.loadGroupSuggestions(userId);
         // Add friends to the ListView
         suggestedGroupsListView.getItems().clear(); // Clear existing items (if any)
         suggestedGroupsListView.getItems().addAll(suggestions); // Add all friends from the array
     }
+
     private void loadMyGroupsList() {
         // Example friends array
 
-        JSONArray myGroups = loadGroups.loadGroupsbyUserId(userId);
+        JSONArray myGroups = loadGroups.loadGroupsByUserId(userId);
         List<String> myGroupsNames = new ArrayList<>();  // Initialize the list
 
         for (int i = 0; i < myGroups.length(); i++) {
@@ -185,6 +187,7 @@ public class FeedController {
         myGroupsListView.getItems().clear(); // Clear existing items (if any)
         myGroupsListView.getItems().addAll(myGroupsNames); // Add all friends from the array
     }
+
     private void loadStories() {
 
         StoryFactory storyFactory = StoryFactory.getInstance();
@@ -241,6 +244,7 @@ public class FeedController {
         }
 
     }
+
     boolean isUserPrimaryAdmin(String name) {
         // Load the group details by name
         JSONObject group = loadGroups.loadGroupByName(name);
@@ -274,7 +278,7 @@ public class FeedController {
     private void openGroup(MouseEvent event) {
         // Get selected group name from the ListView
         String selectedGroup = myGroupsListView.getSelectionModel().getSelectedItem();
-        if(selectedGroup==null)
+        if (selectedGroup == null)
             return;
         Group.setGroupName(selectedGroup);  // Set the group name for global access
 
@@ -289,7 +293,7 @@ public class FeedController {
         } else if (admin) {
             path = "/frontend/groupAdmin.fxml";  // User is a regular admin
         } else {
-            path = "/frontend/groups.fxml";  // User is not an admin
+            path = "/frontend/groupNUser.fxml";  // User is not an admin
         }
 
         // Load and switch to the corresponding scene
@@ -333,7 +337,6 @@ public class FeedController {
 
     private void loadPosts() {
         // Creating a mock JSONArray
-
 
 
         PostFactory postFactory = PostFactory.getInstance();
@@ -435,7 +438,7 @@ public class FeedController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) postsListView.getScene().getWindow();
+            Stage currentStage = (Stage) postsListView.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             // Set new scene and show the stage
@@ -446,6 +449,7 @@ public class FeedController {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void onCreateStory() {
         try {
@@ -453,7 +457,7 @@ public class FeedController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) postsListView.getScene().getWindow();
+            Stage currentStage = (Stage) postsListView.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             // Set new scene and show the stage
@@ -464,6 +468,7 @@ public class FeedController {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void onCreateGroup() {
         try {
@@ -471,7 +476,7 @@ public class FeedController {
             Scene loginScene = new Scene(loginPage);
 
             // Get current stage
-            Stage currentStage =(Stage) postsListView.getScene().getWindow();
+            Stage currentStage = (Stage) postsListView.getScene().getWindow();
             currentStage.getIcons().add(new Image(getClass().getResourceAsStream("/frontend/icon.png")));
 
             // Set new scene and show the stage
@@ -482,7 +487,6 @@ public class FeedController {
             e.printStackTrace();
         }
     }
-
 
 
     @FXML
@@ -587,6 +591,7 @@ public class FeedController {
             e.printStackTrace();
         }
     }
+
     public void navigateToNotifications(ActionEvent event) {
         try {
             // Load the Notifications page

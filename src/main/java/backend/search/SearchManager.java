@@ -2,8 +2,7 @@ package backend.search;
 
 import backend.Groups.*;
 import backend.friendship.FriendShipFactory;
-import backend.user.ILoadUsers;
-import backend.user.LoadUsers;
+import backend.user.*;
 import backend.friendship.FriendShip;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,17 +13,18 @@ import java.util.List;
 
 public class SearchManager implements IUserSearch, IGroupSearch {
     private final ILoadUsers loadUsers = new LoadUsers();
+    IUserRepository userRepository = UserRepository.getInstance(loadUsers);
     IStorageHandler storageHandler = new StorageHandler();
     ILoadGroups loadGroups = LoadGroups.getInstance(storageHandler);
+    private final String userId = User.getUserId();
 
     // Creating instances of controllers
     GroupManager groupManager = new GroupManager(loadGroups);
     NormalUser normalUser = new NormalUser(loadGroups, storageHandler);
     PrimaryAdmin primaryAdminController = new PrimaryAdmin(loadGroups, storageHandler);
     Request requestController = new Request(loadGroups, storageHandler);
-
-
-    public FriendShip friendShip= FriendShipFactory.createFriendShip();
+    String userName = userRepository.getUsernameByUserId(userId);
+    public FriendShip friendShip = FriendShipFactory.createFriendShip();
 
 
     public SearchManager(GroupManager groupManager) {
@@ -38,7 +38,7 @@ public class SearchManager implements IUserSearch, IGroupSearch {
         List<String> userList = new ArrayList<>();
         for (int i = 0; i < users.length(); i++) {
             JSONObject user = users.getJSONObject(i);
-            if(user.getString("username").toLowerCase().contains(keyword.toLowerCase())) {
+            if (user.getString("username").toLowerCase().contains(keyword.toLowerCase()) && !user.getString("username").equals(userName)) {
                 userList.add(user.getString("username"));
             }
         }
